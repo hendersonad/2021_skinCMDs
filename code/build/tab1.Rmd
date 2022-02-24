@@ -1,0 +1,49 @@
+---
+title: "Tab1"
+author: "Alasdair Henderson"
+date: "27/07/2021"
+output: html_document
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+theme_set(theme_minimal())
+df_tab1 <- read_rds("/Users/lsh1510922/Documents/Postdoc/2021_extract/out/df_tab1.rds")
+```
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+df_tab1 %>% 
+	head()
+
+df_tab1 %>% 
+	ggplot(aes(indexdate, fill = exposed)) + 
+	geom_histogram() +
+	labs(title = "index date")
+
+df_tab1 %>% 
+	ggplot(aes(enddate, fill = exposed)) + 
+	geom_histogram() +
+	labs(title = "end date")
+
+df_tab1 %>% 
+	select(patid, exposed, dep, anx, depdate, anxdate) %>%
+	pivot_longer(cols = c(dep, anx), names_to = "outcome") %>%
+	ggplot(aes(fill = exposed)) + 
+	geom_histogram(aes(depdate)) +
+	geom_histogram(aes(anxdate)) +
+	facet_wrap(~outcome) + 
+	labs(title = "Diagnosis date")
+```
