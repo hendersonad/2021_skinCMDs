@@ -1,12 +1,13 @@
 library(tidyverse)
 library(here)
 library(magrittr)
+library(survival)
 library(gt)
 
 if (Sys.info()["user"] == "lsh1510922") {
 	if (Sys.info()["sysname"] == "Darwin") {
-		datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
 		datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
+		datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
 	}
 	if (Sys.info()["sysname"] == "Windows") {
 		datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
@@ -19,6 +20,7 @@ XX <- c("psoriasis", "eczema")
 #YY <- c("anxiety", "depression")
 #exposure <- XX[2]
 #outcome <- YY[1]
+dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
 
 make_regression_tab <- function(exposure){
 	ABBRVexp <- str_sub(exposure, 1 , 3)
@@ -423,17 +425,19 @@ plot_df <- plot_df %>%
 							 names_to = c("metric", "model"),
 							 names_pattern = "(.*)([0-9])") %>% 
 	pivot_wider(id_cols = c(outcome, exposure, model), names_from = metric)
+
 ##  models as factors 
 plot_df <- plot_df %>%
 	mutate(model = factor(model, labels = c("Crude", "Confounder Adjusted", "Mediator adjusted")))
+
 ## add alpha parameter to grey out other models
-plot_df$a <- 1
+plot_df$a <- 0.5
 plot_df$a[plot_df$model == "Mediator adjusted"] <- 1
 
 plot_df$ciU %>% max()
 
 pd <- position_dodge(width = 0.3)
-ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure, colour = exposure)) +
+ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure, colour = exposure, alpha = a)) +
 	geom_point(position = pd, size = 3, shape = 1) +
 	geom_errorbar(position = pd, width = 0.25) +
 	geom_hline(yintercept = 1, lty=2) +  
@@ -445,17 +449,11 @@ ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure,
 	guides(colour = guide_legend("Exposure"), 
 				 alpha = "none") +
 	labs(y = "Hazard ratio", x = "Model") +
+  scale_alpha_identity() +
 	theme_bw() +
 	theme(strip.background = element_blank(),
 				strip.text = element_text(face = "bold"),
 				legend.position = "bottom")
 
 dev.copy(pdf, here::here("out/analysis/forest_plot1.pdf"), width = 6, height = 4); dev.off()
-
-
-
-# Get full model output for supplementary ---------------------------------
-
-
-
 
