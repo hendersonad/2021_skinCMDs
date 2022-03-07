@@ -121,7 +121,7 @@ saveRDS(
   )
 )
 
-int_table %>% 
+gt_int_table <- int_table %>% 
   mutate(ecz_anx = as.numeric(ecz_anx),
          ecz_dep = as.numeric(ecz_dep),
          pso_anx = as.numeric(pso_anx),
@@ -144,3 +144,14 @@ int_table %>%
               columns = c(ecz_anx, ecz_dep)) %>% 
   tab_spanner(label = md("**Psoriasis**"),
               columns = c(pso_anx, pso_dep)) 
+gt_int_table
+gt::gtsave(
+  gt_int_table,
+  filename =  paste0("interaction_pvals.rtf"),
+  path = here::here("out/supplementary/")
+)
+gt::gtsave(
+  gt_int_table,
+  filename =  paste0("interaction_pvals.html"),
+  path = here::here("out/supplementary/")
+)
