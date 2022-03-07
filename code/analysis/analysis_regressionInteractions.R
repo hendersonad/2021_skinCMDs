@@ -1,15 +1,23 @@
 library(gtsummary)
 library(survival)
 library(lmtest)
+library(broom)
 
-exposure <- "psoriasis"
-ABBRVexp <- substr(exposure, 1, 3)
-outcome <- "depression"
-
+if (Sys.info()["user"] == "lsh1510922") {
+  if (Sys.info()["sysname"] == "Darwin") {
+    #datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
+    datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
+  }
+  if (Sys.info()["sysname"] == "Windows") {
+    datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
+  }
+}
+dir.create(paste0(datapath, "out/supplementary/"))
+           
 YY <- c("depression", "anxiety")
 XX <- c("psoriasis", "eczema")
 
-pval_interactions <- function(exposure, outcome) {
+pval_interactions <- function(exposure, outcome, simple_model) {
   ABBRVexp <- substr(exposure, 1, 3)
   
   df_model <-
@@ -64,29 +72,14 @@ pval_interactions <- function(exposure, outcome) {
   #   )
   
   # lrtest ------------------------------------------------------------------
-  mod2 <-
-    coxph(Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + strata(setid),
-          data = df_model)
-  
-  mod_simple <-
-    readRDS(
-      paste0(
-        datapath,
-        "out/models_data/",
-        ABBRVexp,
-        "_",
-        outcome,
-        "_mod2_modeldata.rds"
-      )
-    )
-  summary(mod_simple, conf.int = F)
+  summary(simple_model, conf.int = F)
   summary(mod5, conf.int = F)
   summary(mod6, conf.int = F)
   summary(mod7, conf.int = F)
-  browser()
-  lr1 <- lrtest(mod_simple, mod5)
-  lr2 <- lrtest(mod_simple, mod6)
-  lr3 <- lrtest(mod_simple, mod7)
+  
+  lr1 <- lrtest(simple_model, mod5)
+  lr2 <- lrtest(simple_model, mod6)
+  lr3 <- lrtest(simple_model, mod7)
   
   interactions <- c("Age group", "Comorbidity", "Calendar period")
   inter_pval <- cbind.data.frame(interactions = interactions,
@@ -102,16 +95,33 @@ pval_interactions <- function(exposure, outcome) {
   inter_pval %>%
     mutate_at(2, ~ prettyNum(.))
 }
+mod2 <-
+  coxph(Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + strata(setid),
+        data = df_model)
 
-int1 <- pval_interactions("eczema", "depression")
-int2 <- pval_interactions("eczema", "anxiety")
-int3 <- pval_interactions("psoriasis", "depression")
-int4 <- pval_interactions("psoriasis", "anxiety")
+int1 <- pval_interactions("eczema", "depression", simple_model = mod2)
+int2 <- pval_interactions("eczema", "anxiety", simple_model = mod2)
+int3 <- pval_interactions("psoriasis", "depression", simple_model = mod2)
+int4 <- pval_interactions("psoriasis", "anxiety", simple_model = mod2)
 
-int2 %>% 
+int_table <- int2 %>% 
   left_join(int1, by = "interactions") %>% 
   left_join(int4, by = "interactions") %>% 
-  left_join(int3, by = "interactions") %>% 
+  left_join(int3, by = "interactions")
+
+saveRDS(
+  int_table,
+  file = paste0(
+    datapath,
+    "out/models_data/",
+    ABBRVexp,
+    "_",
+    outcome,
+    "_mod1_modeldata.rds"
+  )
+)
+
+int_table %>% 
   gt() %>% 
   cols_label(
     interactions = "",
@@ -125,7 +135,6 @@ int2 %>%
   tab_spanner(label = md("**Psoriasis**"),
               columns = c(pso_anx, pso_dep)) 
 mod5 %>% summary()
-library(broom)
 
-ggforest2(mod_simple, data = df_model)
+ggforest2(simple_model, data = df_model)
 ggforest2(mod5, data = df_model)
