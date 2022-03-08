@@ -47,15 +47,15 @@ print("Matches the exposedPsoriasis+exposedPsoriasis:agegroup18-39 paramaterisat
 
 
 # testing predicted vals stuff --------------------------------------------
-predicted_vals <- predict(mod5, type = "expected", se.fit = T)
-predicted_vals$fit <- as.vector(predicted_vals$fit)
+predicted_vals <- predict(mod5, type = "expected", se.fit = F)
+predicted_vals <- as.vector(predicted_vals)
 
 dim(df_model)
-df_cox <- df_sample %>% 
+df_cox <- df_model %>% 
   dplyr::select(setid, patid, t, out, exposed, agegroup, carstairs, cal_period, comorbid, cci) %>% 
   drop_na()
 dim(df_cox)
-df_cox$pred <- predicted_vals$fit
+df_cox$pred <- predicted_vals
 df_pred <- df_cox %>% 
   left_join(dplyr::select(df_sample, setid, patid, age)) %>% 
   filter(pred > 0.001)
