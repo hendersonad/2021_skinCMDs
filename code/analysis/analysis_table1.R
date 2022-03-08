@@ -130,10 +130,10 @@ table1 <- tbl_merge(
 table1
 table1 %>%
 	as_flex_table() %>%
-	flextable::save_as_docx(path = here::here("out", paste0("tab1_",ABBRVexp,".docx")))
+	flextable::save_as_docx(path = here::here("out/tables", paste0("tab1_",ABBRVexp,".docx")))
 table1 %>%
 	as_gt() %>%
-	gt::gtsave(filename = paste0("tab1_",ABBRVexp,".html"), path = here::here("out"))
+	gt::gtsave(filename = paste0("tab1_",ABBRVexp,".html"), path = here::here("out/tables"))
 
 
 # Build table 2 - any exposure during follow up ---------------------------
@@ -234,10 +234,10 @@ table2 <- tbl_merge(
 table2
 table2 %>%
 	as_flex_table() %>%
-	flextable::save_as_docx(path = here::here("out", paste0("tab2_",ABBRVexp,"_fup.docx")))
+	flextable::save_as_docx(path = here::here("out/tables", paste0("tab2_",ABBRVexp,"_fup.docx")))
 table2 %>%
 	as_gt() %>%
-	gt::gtsave(filename = paste0("tab2_",ABBRVexp,"_fup.html"), path = here::here("out"))
+	gt::gtsave(filename = paste0("tab2_",ABBRVexp,"_fup.html"), path = here::here("out/tables"))
 
 
 # Build table 3 - person years ---------------------------------------------------
@@ -351,9 +351,9 @@ table3_anx <- build_pyears(df_in=df_anx_split)
 table3_dep <- build_pyears(df_in=df_dep_split)
 
 table3_anx %>%
-	gt::gtsave(filename = paste0("tab3_",ABBRVexp,"_pyars_anxiety.html"), path = here::here("out")) 
+	gt::gtsave(filename = paste0("tab3_",ABBRVexp,"_pyars_anxiety.html"), path = here::here("out/tables")) 
 
 table3_dep %>%
-	gt::gtsave(filename = paste0("tab3_",ABBRVexp,"_pyars_depression.html"), path = here::here("out")) 
+	gt::gtsave(filename = paste0("tab3_",ABBRVexp,"_pyars_depression.html"), path = here::here("out/tables")) 
 
 }
