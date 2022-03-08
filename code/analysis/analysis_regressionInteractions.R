@@ -1,10 +1,11 @@
 library(here)
+library(tidyverse)
 library(gtsummary)
 library(gt)
 library(survival)
 library(lmtest)
 library(broom)
-library(tidyverse)
+library(biostat3)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
@@ -15,7 +16,7 @@ if (Sys.info()["user"] == "lsh1510922") {
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
 }
-dir.create(paste0(datapath, "out/supplementary/"))
+dir.create(paste0(datapath, "out/supplementary/"), showWarnings = FALSE)
            
 YY <- c("depression", "anxiety")
 XX <- c("psoriasis", "eczema")
@@ -28,7 +29,9 @@ pval_interactions <- function(exposure, outcome) {
       datapath,
       "out/models_data/df_model",
       ABBRVexp,
-      "_anxiety.rds"
+      "_",
+      outcome, 
+      ".rds"
     ))
   
   mod5 <-
@@ -155,3 +158,155 @@ gt::gtsave(
   filename =  paste0("interaction_pvals.html"),
   path = here::here("out/supplementary/")
 )
+
+# calculating the effect modification of the hazard ratios ----------------
+tibble_out <- NULL
+for(exposure in XX) {
+  ABBRVexp <- substr(exposure, 1, 3)
+  for (outcome in YY) {
+    df_model <-
+      readRDS(paste0(
+        datapath,
+        "out/models_data/df_model",
+        ABBRVexp, 
+        "_",
+        outcome, 
+        ".rds"
+      ))
+    
+    for (ZZ in c("agegroup", "comorbid", "cal_period")) {
+      
+      if(ZZ == "agegroup"){
+        data_name <- "_mod5_interaction_age_modeldata"
+      }
+      if(ZZ == "comorbid"){
+        data_name <- "_mod6_interaction_comorbid_modeldata"
+      }
+      if(ZZ == "cal_period"){
+        data_name <- "_mod7_interaction_calendar_modeldata"
+      }
+      # take a model: pso - dep modified by age group
+      interaction_model <-
+        readRDS(
+          paste0(
+            datapath,
+            "out/models_data/",
+            ABBRVexp,
+            "_",
+            outcome, 
+            data_name, 
+            ".rds"
+          )
+        )
+
+      # interaction_model %>%
+      #   broom::tidy(conf.int = T, conf.level = 0.99) %>%
+      #   print(n = Inf)
+      # 
+      # interaction_results <- interaction_model %>%
+      #   broom::tidy(conf.int = T, conf.level = 0.99) %>%
+      #   filter(str_detect(term, paste0("exposed|",ZZ)))
+      # 
+      # exp(0.268) # HR in nonemorbid  = 1.307
+      # exp(0.268+0.107+-0.0589) # HR in comorbid 1.371767
+      
+      coeffs <- interaction_model$coefficients %>% names()
+      int_var <- ZZ
+      int_levels <- df_model[, int_var] %>% levels()
+      n_int_levels <- length(int_levels) - 1 # -1 because of reference category
+      coeffs_interaction <- coeffs[str_detect(coeffs, int_var)]
+      
+      interactions <- c(coeffs[1])
+      for (ii in 1:n_int_levels) {
+        X <-
+          paste0(c(coeffs[1], coeffs_interaction[ii + n_int_levels]),
+                 collapse = "+")
+        interactions <- c(interactions, X)
+      }
+      interactions
+      lincom_out <- lincom(interaction_model,
+                           interactions,
+                           eform = TRUE,
+                           level = 0.99)
+      rownames(lincom_out)[1] <-
+        paste0(rownames(lincom_out)[1], "+", int_var, int_levels[1])
+      
+      lincom_out <- as_tibble(lincom_out, rownames = "lincom")
+      tibble_int <- lincom_out %>%
+        janitor::clean_names() %>%
+        dplyr::select(lincom,
+                      estimate,
+                      conf.low = x0_5_percent,
+                      conf.high = x99_5_percent) %>%
+        mutate_at(c("estimate", "conf.low", "conf.high"), ~ unlist(.)) %>% 
+        mutate(y = outcome, x = exposure, z = ZZ)
+      
+      tibble_out <- tibble_out %>% 
+        bind_rows(tibble_int)
+    }
+  }
+}
+
+tibble_plot <- tibble_out %>% 
+  mutate_at("lincom", ~str_remove(., "Psoriasis")) %>% 
+  mutate_at("lincom", ~str_remove(., "Eczema")) %>% 
+  mutate_at("lincom", ~str_remove(., "exposed")) %>% 
+  mutate_at("lincom", ~str_remove(., "exposedPsoriasis")) %>% 
+  mutate_at("lincom", ~str_remove(., "exposedEczema")) %>% 
+  mutate_at("lincom", ~str_remove(., "^+.")) 
+pd <- position_dodge(width = 0.3)
+
+ybase <- -0.1 + tibble_plot$conf.low %>% min() %>% round(digits = 2) 
+yheight <- 0.1 + tibble_plot$conf.high %>% max() %>% round(digits = 2) 
+
+ggplot(tibble_plot, aes(x = lincom, y = estimate, ymin = conf.low, ymax = conf.high, group = y, colour = y)) + 
+  geom_point(position = pd, size = 3, shape = 1) +
+  geom_errorbar(position = pd, width = 0.25) +
+  geom_hline(yintercept = 1, lty=2) +  
+  #ylim(c(0,NA)) +
+  scale_y_log10(breaks=seq(0,4,0.1)) +
+  scale_x_discrete(limits=rev) +
+  coord_flip() +
+  facet_wrap(~x, ncol = 2) +
+  guides(colour = guide_legend("Outcome")) +
+  labs(y = "Hazard ratio", x = "Level") +
+  scale_alpha_identity() +
+  theme_bw() +
+  theme(strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.position = "bottom")
+
+dev.copy(pdf, here::here("out/analysis/forest_plot3_interactions.pdf"), width = 8, height = 6); dev.off()
+
+
+tibble_plot2 <- tibble_out %>% 
+  mutate(lincom2 = lincom) %>% 
+  mutate_at("lincom2", ~str_replace_all(lincom, "\\+", ",")) %>% 
+  mutate_at("lincom2", ~str_replace_all(lincom2, "80,", "80+"))  %>% 
+  separate(lincom2, into = c("exposed", "z_level"), sep = ",") %>% 
+  mutate_at("z_level", ~str_remove(., "exposedPsoriasis:")) %>% 
+  mutate_at("z_level", ~str_remove(., "exposedEczema:")) %>% 
+  dplyr::select(-exposed) %>%
+  mutate(z_level = as.factor(z_level)) %>% 
+  mutate_at(c("x", "y", "z"), ~stringr::str_to_title(.)) %>% 
+  mutate(nice_z = ifelse(z == "Cal_period", "Calendar period", ifelse(z == "Comorbid" & x == "Psoriasis", "Arthritis", ifelse(z == "Comorbid" & x == "Eczema", "Asthma", "Age group")))) %>% 
+  mutate(nice_z_level= paste0(nice_z, ": ", str_remove(z_level, str_to_lower(z)))) 
+
+ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax = conf.high, group = z, colour = z)) + 
+  geom_point(position = pd, size = 3) +
+  geom_errorbar(position = pd, width = 0.25) +
+  geom_hline(yintercept = 1, lty=2) +  
+  #ylim(c(0,NA)) +
+  scale_y_log10(breaks=seq(0,4,0.1), limits = c(0.9, NA)) +
+  scale_x_discrete(limits=rev) +
+  coord_flip() +
+  facet_grid(y~x, drop = TRUE, space = "free", scales = "free") +
+  guides(colour = "none") +
+  labs(y = "Hazard ratio", x = "Level") +
+  scale_alpha_identity() +
+  theme_bw() +
+  theme(strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.position = "bottom")
+dev.copy(pdf, here::here("out/analysis/forest_plot3_interactions_v2.pdf"), width = 8, height = 6); dev.off()
+
