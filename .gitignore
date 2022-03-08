@@ -3,3 +3,4 @@ code/.DS_Store
 .Rproj.user
 *.pdf
 code/analysis/.DS_Store
+out/analysis/.DS_Store
