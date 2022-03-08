@@ -74,7 +74,6 @@ severity_results <- severity_results %>%
 
 pd <- position_dodge(width = 0.3)
 
-roundUp <- function(x) 10^ceiling(log10(x))
 ybase <- -0.1 + severity_results$conf.low %>% min() %>% round(digits = 2) 
 yheight <- 0.1 + severity_results$conf.high %>% max() %>% round(digits = 2) 
 
