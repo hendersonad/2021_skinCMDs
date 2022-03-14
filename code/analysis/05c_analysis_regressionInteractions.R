@@ -21,6 +21,8 @@ dir.create(paste0(datapath, "out/supplementary/"), showWarnings = FALSE)
 YY <- c("depression", "anxiety")
 XX <- c("psoriasis", "eczema")
 
+# exposure <- XX[1]
+# outcome <- YY[1]
 pval_interactions <- function(exposure, outcome) {
   ABBRVexp <- substr(exposure, 1, 3)
   
@@ -68,6 +70,17 @@ pval_interactions <- function(exposure, outcome) {
         "_mod7_interaction_calendar_modeldata.rds"
       )
     )
+  mod8 <-
+    readRDS(
+      paste0(
+        datapath,
+        "out/models_data/",
+        ABBRVexp,
+        "_",
+        outcome,
+        "_mod8_interaction_carstairs_modeldata.rds"
+      )
+    )
   
   # lrtest ------------------------------------------------------------------
   simple_model <-
@@ -85,17 +98,20 @@ pval_interactions <- function(exposure, outcome) {
   summary(mod5, conf.int = F)
   summary(mod6, conf.int = F)
   summary(mod7, conf.int = F)
+  summary(mod8, conf.int = F)
   
   lr1 <- lrtest(simple_model, mod5)
   lr2 <- lrtest(simple_model, mod6)
   lr3 <- lrtest(simple_model, mod7)
+  lr4 <- lrtest(simple_model, mod8)
   
-  interactions <- c("Age group", "Comorbidity", "Calendar period")
+  interactions <- c("Age group", "Comorbidity", "Calendar period", "Carstairs")
   inter_pval <- cbind.data.frame(interactions = interactions,
                                  pval = rbind(
                                    signif(lr1$`Pr(>Chisq)`[2], digits = 2),
                                    signif(lr2$`Pr(>Chisq)`[2], digits = 2),
-                                   signif(lr3$`Pr(>Chisq)`[2], digits = 2)
+                                   signif(lr3$`Pr(>Chisq)`[2], digits = 2),
+                                   signif(lr4$`Pr(>Chisq)`[2], digits = 2)
                                  )) %>%
     as_tibble()
   names(inter_pval)[2] <-
@@ -174,7 +190,7 @@ for(exposure in XX) {
         ".rds"
       ))
     
-    for (ZZ in c("agegroup", "comorbid", "cal_period")) {
+    for (ZZ in c("agegroup", "comorbid", "cal_period", "carstairs")) {
       
       if(ZZ == "agegroup"){
         data_name <- "_mod5_interaction_age_modeldata"
@@ -184,6 +200,9 @@ for(exposure in XX) {
       }
       if(ZZ == "cal_period"){
         data_name <- "_mod7_interaction_calendar_modeldata"
+      }
+      if(ZZ == "carstairs"){
+        data_name <- "_mod8_interaction_carstairs_modeldata"
       }
       # take a model: pso - dep modified by age group
       interaction_model <-
@@ -289,7 +308,11 @@ tibble_plot2 <- tibble_out %>%
   dplyr::select(-exposed) %>%
   mutate(z_level = as.factor(z_level)) %>% 
   mutate_at(c("x", "y", "z"), ~stringr::str_to_title(.)) %>% 
-  mutate(nice_z = ifelse(z == "Cal_period", "Calendar period", ifelse(z == "Comorbid" & x == "Psoriasis", "Arthritis", ifelse(z == "Comorbid" & x == "Eczema", "Asthma", "Age group")))) %>% 
+  mutate(nice_z = ifelse(z == "Carstairs", "Carstairs (deprivation)", 
+                         ifelse(z == "Cal_period", "Calendar period", 
+                                ifelse(z == "Comorbid" & x == "Psoriasis", "Arthritis", 
+                                       ifelse(z == "Comorbid" & x == "Eczema", "Asthma", 
+                                              "Age group"))))) %>% 
   mutate(nice_z_level= paste0(nice_z, ": ", str_remove(z_level, str_to_lower(z)))) 
 
 ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax = conf.high, group = z, colour = z)) + 
