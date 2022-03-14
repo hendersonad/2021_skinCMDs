@@ -389,6 +389,8 @@ ethnicity_table_long %>%
     style = cell_text(weight = "bold"),
     locations = cells_row_groups(groups = everything())
   ) %>%
+  cols_align(align = "right", 
+             columns = c("n", "n_event", "estimate")) %>% 
   cols_label(
     n = md("**N**"),
     n_event = md("**No. events**"),
