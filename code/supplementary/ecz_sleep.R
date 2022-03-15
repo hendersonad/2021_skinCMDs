@@ -40,36 +40,6 @@ df_dep_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-depression_split.rd
 cohort <- haven::read_dta(paste0(datapath, "out/getmatchedcohort-", exposure, "-main-mhealth.dta"))
 severity <- haven::read_dta(paste0(datapath, "out/variables-ecz-severity.dta"))
 
-# merge on sleep codes to get Source of sleep diagnosis -------------------
-# ecz_sleep_everything <- haven::read_dta(paste0(datapath, "out/variables-ecz-sleep-all-additionalinfo.dta"))
-# ecz_sleep_def <- haven::read_dta(paste0(datapath, "out/variables-ecz-sleep-definite.dta"))
-# ecz_sleep_all <- haven::read_dta(paste0(datapath, "out/variables-ecz-sleep-all.dta"))
-# 
-# duplicated(ecz_sleep_def$patid) %>% sum() # all unique so that's good
-# 
-# add_text <- function(x, text){
-#   paste0(x,"_",text)
-# }
-# merge_ecz_sleep_def <- ecz_sleep_def %>% 
-#   dplyr::select(patid, ingredient, src, readterm) %>% 
-#   rename_with(add_text, text = "def")
-# merge_ecz_sleep_all <- ecz_sleep_all %>% 
-#   dplyr::select(patid, ingredient, src, readterm) %>% 
-#   rename_with(add_text, text = "all")
-# 
-# df_anx_split_withsrc <- df_anx_split %>% 
-#   ungroup() %>% 
-#   dplyr::select(setid, patid, tstart, exposed, severity, sleep, sleep_all) %>% 
-#   left_join(merge_ecz_sleep_def, by = c("patid" = "patid_def")) %>% 
-#   left_join(merge_ecz_sleep_all, by = c("patid" = "patid_all"))  
-#   
-# df_dep_split_withsrc <- df_dep_split %>% 
-#   ungroup() %>% 
-#   dplyr::select(setid, patid, tstart, exposed, severity, sleep, sleep_all) %>% 
-#   left_join(merge_ecz_sleep_def, by = c("patid" = "patid_def")) %>% 
-#   left_join(merge_ecz_sleep_all, by = c("patid" = "patid_all"))  
-# 
-
 # Get unique events in everything sleep -----------------------------------
 glimpse(ecz_sleep_everything)
 ecz_sleep_unique <- ecz_sleep_everything %>% 
@@ -81,27 +51,6 @@ ecz_sleep_unique <- ecz_sleep_unique %>%
   dplyr::select(patid, eventdate, sysdate, src, Possibledrugs, prodcode, ingredient, medcode, readterm) %>% 
   mutate_at("Possibledrugs", ~ifelse(is.na(.), 0, .)) %>% 
   rename(poss = Possibledrugs)
-
-# df_dep_split_withsrc <- df_dep_split %>% 
-#   ungroup() %>% 
-#   dplyr::select(setid, patid, tstart, exposed, severity, sleep, sleep_all) %>% 
-#   group_by(setid, patid) %>% 
-#   mutate(severity = as.numeric(severity)) %>% 
-#   mutate(sleep = max(sleep), sleep_all = max(sleep_all), severity = max(severity)) %>% 
-#   slice(1) %>% 
-#   left_join(ecz_sleep_unique, by = "patid")
-# df_dep_split_withsrc$severity = factor(df_dep_split_withsrc$severity, levels = 1:4, labels = levels(df_dep_split$severity))
-# 
-# 
-# df_anx_split_withsrc <- df_anx_split %>% 
-#   ungroup() %>% 
-#   dplyr::select(setid, patid, tstart, exposed, severity, sleep, sleep_all) %>% 
-#   group_by(setid, patid) %>% 
-#   mutate(severity = as.numeric(severity)) %>% 
-#   mutate(sleep = max(sleep), sleep_all = max(sleep_all), severity = max(severity)) %>% 
-#   slice(1) %>% 
-#   left_join(ecz_sleep_unique, by = "patid")
-# df_anx_split_withsrc$severity = factor(df_anx_split_withsrc$severity, levels = 1:4, labels = levels(df_anx_split$severity))
 
 cohort_severity <- cohort %>% 
   left_join(severity, by = "patid")
