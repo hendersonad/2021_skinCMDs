@@ -1,13 +1,12 @@
-pacman::p_load(here, haven, tidyverse, ggplot2, survival, survminer)
-pacman::p_load(gt, gtsummary)
-pacman::p_load(janitor, flextable)
-#pacman::p_load(summarytools)
-pacman::p_load(skimr)
-pacman::p_load(clipr)
-pacman::p_load(KMunicate)
-pacman::p_load(data.table)
-pacman::p_load(arrow)
-pacman::p_load(formattable)
+library(here, haven, tidyverse, ggplot2, survival, survminer)
+library(gt, gtsummary)
+library(janitor, flextable)
+library(skimr)
+library(clipr)
+library(KMunicate)
+library(data.table)
+library(arrow)
+library(formattable)
 
 if(Sys.info()["user"]=="lsh1510922"){
 	if(Sys.info()["sysname"]=="Darwin"){
