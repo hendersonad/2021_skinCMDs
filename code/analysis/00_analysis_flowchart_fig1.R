@@ -262,6 +262,6 @@ for(exposure in XX){
 	grViz(graph) %>% 
 		export_svg %>% 
 		charToRaw %>% 
-		rsvg_pdf(here("out", paste0("flowchart_", exposure, ".pdf")))
+		rsvg_pdf(here("out", "diagram", paste0("flowchart_", exposure, ".pdf")))
 
 }
