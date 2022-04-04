@@ -278,7 +278,7 @@ sleep_tab_exp$exposed <- factor(sleep_tab_exp$exposed,
                            labels = c("Unexposed", "With eczema"))
 
 sleep_tab_exp$pc <- round((sleep_tab_exp$n/sleep_tab_exp$Freq)*100, 1)
-sleep_tab_exp$prettyN <- paste0(prettyNum(sleep_tab_exp$n, big.mark = ","))
+sleep_tab_exp$prettyN <- paste0(prettyNum(sleep_tab_exp$n, big.mark = ","), " (", sleep_tab_exp$pc, "%)")
 sleep_tab_exp %>% 
   group_by(exposed, src) %>% 
   summarise(sum(n))
@@ -307,6 +307,10 @@ dev.copy(pdf, here::here("out/supplementary/sleep_codes_exposed.pdf"), width = 8
 
 pdf(here::here("out/supplementary/sleep_codes_all.pdf"), width = 7, height = 10)
   plot_grid(p3, p1, ncol = 1 , rel_heights = c(1,2), labels = "AUTO")
+dev.off()
+
+pdf(here::here("out/supplementary/sleep_codes_exp.pdf"), width = 7, height = 10)
+  plot_grid(p3, p2, ncol = 1 , rel_heights = c(1,2), labels = "AUTO")
 dev.off()
 
 
