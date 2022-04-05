@@ -40,7 +40,7 @@ for(exposure in XX){
     cox_fit3 <- readRDS(paste0(datapath, "out/models_data/", ABBRVexp, "_", outcome, "_mod3_modeldata.rds"))
     
     cox_model_unstrat <- coxph(Surv(t, out) ~ exposed, data = df_model)
-    cox_fit_unstrat <- survfit(cox_model, newdata = data.frame(exposed = c("Unexposed", str_to_title(exposure))))
+    cox_fit_unstrat <- survfit(cox_model_unstrat, newdata = data.frame(exposed = c("Unexposed", str_to_title(exposure))))
     
     km_fit <- survfit(Surv(t, out) ~ exposed, data = df_model)
     
@@ -69,7 +69,7 @@ for(exposure in XX){
     mtext("B", side=3, line=2, col=1, cex=1, font=2, adj = 0)
     
     # test interaction with t -------------------------------------------------
-    #cox_test <- coxph(Surv(t, out) ~ exposed + exposed*t, data = df_model)
+    cox_test <- coxph(Surv(t, out) ~ exposed + exposed*t, data = df_model)
     interaction_test_val <- broom::tidy(cox_test, exp = T, conf.int = T, conf.level = 0.99) %>% slice(3)
     gamma <- interaction_test_val$estimate %>% signif(digits = 3)
     gamma_lci <- interaction_test_val$conf.low %>% signif(digits = 3)
@@ -78,8 +78,8 @@ for(exposure in XX){
     text(x = exp(-1), y = log(-log(min(km_fit$surv)))-0.5, text_print, pos = 4)
     
     # schoenfeld  -------------------------------------------------------------
-    #sch_resid1 <- cox.zph(cox_fit, transform = 'identity')
-    #sch_resid3 <- cox.zph(cox_fit3, transform = 'identity')
+    sch_resid1 <- cox.zph(cox_fit, transform = 'identity')
+    sch_resid3 <- cox.zph(cox_fit3, transform = 'identity')
     minimal_est <- broom::tidy(cox_fit, conf.int = T, conf.level = 0.99, exp = T) %>% slice(1)
     mediator_est <- broom::tidy(cox_fit3, conf.int = T, conf.level = 0.99, exp = T) %>% slice(1)
     
