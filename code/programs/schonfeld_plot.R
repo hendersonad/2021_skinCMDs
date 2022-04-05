@@ -132,7 +132,16 @@ plot_schonfeld <- function(x, resid=TRUE, se=TRUE, df=4, nsmo=4000,
         else  plot(range(xx[keep]), exp(yr), type='n', xlab=xlab, 
                    ylab=ylab[i], log='y', ...)
       }
-      if (resid) points(xx[keep], exp(y))
+      if(thin_points) {
+        set.seed(3)
+        pc_sample <- round(length(y)*thin_prop)
+        samples <- sample(1:length(y), size = pc_sample)
+        y_thin <- y[samples]
+        if (resid) points(xx[samples], y_thin, col = thin_col)
+      }
+      else {
+        if (resid) points(xx[keep], y)
+      } 
       
       lines(pred.x, exp(yhat), lty=lty[1], col=col[1], lwd=lwd[1])
       if (se) {
