@@ -3,3 +3,5 @@ code/.DS_Store
 .Rproj.user
 *.pdf
 *.DS_Store
+data/
+*.zip
