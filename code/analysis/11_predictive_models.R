@@ -247,7 +247,7 @@ for(exposure in XX) {
     gt::gtsave(
       predict_gt,
       filename =  paste0("tab1_", ABBRVexp, "_", substr(outcome, 1, 3), "_predictmodel_logistic.html"),
-      path = here::here("out/predictions/")
+      path = here::here("out//predictions//")
     )  
     
     pred_vals_train <- predict(multi_1, type = "link", newdata = df_exp_train)
