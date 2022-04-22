@@ -29,9 +29,10 @@ XX <- c("psoriasis", "eczema")
 
 exposure <- XX[1]
 outcome <- YY[2]
-ABBRVexp <- substr(exposure, 1, 3)
 
-for(outcome in XX) {
+for(exposure in XX) {
+  ABBRVexp <- substr(exposure, 1, 3)
+  
   for(outcome in YY) {
     # load data ---------------------------------------------------------------
     df_model <-
@@ -106,6 +107,22 @@ for(outcome in XX) {
     assign(paste0("plot_", ABBRVexp, "_", substr(outcome, 1, 3)), plot)
   }
 }
+
+pdf(paste0(here("out//supplementary//"), "int_t_beta_ecz_anx.pdf"), 8, 8)
+  plot_ecz_anx
+dev.off()
+
+pdf(paste0(here("out//supplementary//"), "int_t_beta_ecz_dep.pdf"), 8, 8)
+  plot_ecz_dep
+dev.off()
+
+pdf(paste0(here("out//supplementary//"), "int_t_beta_pso_anx.pdf"), 8, 8)
+  plot_pso_anx
+dev.off()
+
+pdf(paste0(here("out//supplementary//"), "int_t_beta_pso_dep.pdf"), 8, 8)
+  plot_pso_dep
+dev.off()
 
 
 
