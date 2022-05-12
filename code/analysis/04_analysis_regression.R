@@ -22,6 +22,7 @@ if (Sys.info()["user"] == "lsh1510922") {
 }
 dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
 dir.create(file.path(datapath, "out/models_data"), showWarnings = FALSE)
+dir.create(file.path(datapath, "out/models_data_impute"), showWarnings = FALSE)
 
 XX <- c("psoriasis", "eczema")
 YY <- c("anxiety", "depression")
@@ -382,7 +383,19 @@ for (exposure in XX) {
 			levels(df_model$comorbid) <- c("No", "Yes")
 		}
 		
-		saveRDS(df_model, file = paste0(datapath, "out/models_data/df_model", ABBRVexp, "_", outcome, ".rds"))
+		## fake smoking data 
+		df_model$smokstatus %>% table(useNA = "always")
+		levels(df_model$smokstatus) <- c(levels(df_model$smokstatus), "Missing")
+		df_model$smokstatus[is.na(df_model$smokstatus)] <- "Missing"
+		df_model$smokstatus %>% table(useNA = "always")
+		
+		df_model$bmi_miss <- 0
+		df_model$bmi_miss[is.na(df_model$bmi2)] <- 1
+		df_model$bmi_miss %>% table(useNA = "always")
+		
+		df_model$bmi2[is.na(df_model$bmi2)] <- 0
+		
+		saveRDS(df_model, file = paste0(datapath, "out/models_data_impute/df_model", ABBRVexp, "_", outcome, ".rds"))
 		
 		# Run a simple Cox regression ----------------------------------------
 		.dib("Running model 1 (crude)")
@@ -496,7 +509,7 @@ for (exposure in XX) {
 				mod1,
 				file = paste0(
 					datapath,
-					"out/models_data/",
+					"out/models_data_impute/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -507,7 +520,7 @@ for (exposure in XX) {
 				mod2,
 				file = paste0(
 					datapath,
-					"out/models_data/",
+					"out/models_data_impute/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -518,7 +531,7 @@ for (exposure in XX) {
 				mod3,
 				file = paste0(
 					datapath,
-					"out/models_data/",
+					"out/models_data_impute/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -621,7 +634,7 @@ for (exposure in XX) {
 				mod4,
 				file = paste0(
 					datapath,
-					"out/models_data/",
+					"out/models_data_impute/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -632,7 +645,7 @@ for (exposure in XX) {
 				mod5,
 				file = paste0(
 					datapath,
-					"out/models_data/",
+					"out/models_data_impute/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -643,7 +656,7 @@ for (exposure in XX) {
 				mod6,
 				file = paste0(
 					datapath,
-					"out/models_data/",
+					"out/models_data_impute/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -654,7 +667,7 @@ for (exposure in XX) {
 				mod7,
 				file = paste0(
 					datapath,
-					"out/models_data/",
+					"out/models_data_impute/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -665,7 +678,7 @@ for (exposure in XX) {
 				mod8,
 				file = paste0(
 					datapath,
-					"out/models_data/",
+					"out/models_data_impute/",
 					ABBRVexp,
 					"_",
 					outcome,
