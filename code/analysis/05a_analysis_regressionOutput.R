@@ -1,4 +1,5 @@
 library(tidyverse)
+library(data.table)
 library(here)
 library(magrittr)
 library(survival)
@@ -90,14 +91,20 @@ make_regression_tab <- function(exposure){
     vars <- attr(terms(model), "term.labels")
     vars <- vars[1:length(vars) - 1]
     df <- data %>%
-      select(setid, patid, gender, age, pracid, out, all_of(vars), dob, indexdate, enddate, tstart, tstop, t) %>%
-      mutate(indexNum = as.numeric(indexdate-dob),
-             full_t = tstop-indexNum) %>% 
-      group_by(setid, patid) %>% 
-      slice(n()) %>% 
-      select(-tstart, -tstop, -t)
+      select(setid, patid, gender, age, pracid, out, all_of(vars), dob, indexdate, enddate, tstart, tstop, t) 
+    dim(df)
     
-    dfsum <- df %>%
+    # convert to data.table for speed of selecting the last row by group
+    dt <- setDT(df)
+    dt <- dt[ complete.cases(dt) ]
+    dt[, indexNum := as.numeric(indexdate-dob)]
+    dt[, full_t := tstop-indexNum]
+    dt <- dt[ dt[order(setid, patid, tstart), .I[c(.N)], by = list(setid, patid)]$V1 ]
+    
+    # convert back to tibble for summary code
+    dtib <- tibble(dt)
+    
+    dfsum <- dtib %>%
       group_by(exposed) %>%
       summarise(n = n(),
                 nevents = sum(out),
