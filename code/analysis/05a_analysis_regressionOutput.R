@@ -28,21 +28,21 @@ make_regression_tab <- function(exposure){
   mod1_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data/",
+      "out/models_data_impute/",
       ABBRVexp,
       "_anxiety_mod1_modeldata.rds"
     ))
   mod2_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data/",
+      "out/models_data_impute/",
       ABBRVexp,
       "_anxiety_mod2_modeldata.rds"
     ))
   mod3_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data/",
+      "out/models_data_impute/",
       ABBRVexp,
       "_anxiety_mod3_modeldata.rds"
     ))
@@ -51,21 +51,21 @@ make_regression_tab <- function(exposure){
   mod1_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data/",
+      "out/models_data_impute/",
       ABBRVexp,
       "_depression_mod1_modeldata.rds"
     ))
   mod2_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data/",
+      "out/models_data_impute/",
       ABBRVexp,
       "_depression_mod2_modeldata.rds"
     ))
   mod3_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data/",
+      "out/models_data_impute/",
       ABBRVexp,
       "_depression_mod3_modeldata.rds"
     ))
@@ -74,14 +74,14 @@ make_regression_tab <- function(exposure){
   df_model_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/models_data_impute/df_model",
       ABBRVexp,
       "_anxiety.rds"
     ))
   df_model_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/models_data_impute/df_model",
       ABBRVexp,
       "_depression.rds"
     ))
@@ -392,12 +392,12 @@ tab3_out <- tab3 %>%
 tab3_out
 tab3_out %>%
   gt::gtsave(
-    filename =  paste0("table2_regression.html"),
+    filename =  paste0("table2_regression_impute.html"),
     path = here::here("out/analysis")
   )
 tab3_out %>%
   gt::gtsave(
-    filename =  paste0("table2_regression.rtf"),
+    filename =  paste0("table2_regression_impute.rtf"),
     path = here::here("out/analysis")
   )
 
@@ -462,6 +462,6 @@ ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure,
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
 
-saveRDS(plot_df, here::here("out/data/df_forest_main.rds"))
-dev.copy(pdf, here::here("out/analysis/forest_plot1.pdf"), width = 6, height = 4); dev.off()
+saveRDS(plot_df, here::here("out/data/df_forest_main_impute.rds"))
+dev.copy(pdf, here::here("out/analysis/forest_plot1_impute.pdf"), width = 6, height = 4); dev.off()
 
