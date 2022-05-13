@@ -586,8 +586,9 @@ for(exposure in XX){
 		  mutate(smok_missing_always = ifelse(any(!is.na(smokstatus)), 0, 1),
 		         bmi_missing_always = ifelse(any(!is.na(bmi2)), 0, 1)
 		  )
-		df_model$smokstatus[is.na(df_model$smokstatus) & df_model$smok_missing_always == 0] <- "Non-Smoker"
-		df_model$smokstatus %>% table(useNA = "always")
+		df_model$smokstatus_nomiss <- df_model$smokstatus
+		df_model$smokstatus_nomiss[is.na(df_model$smokstatus_nomiss) & df_model$smok_missing_always == 0] <- "Non-Smoker"
+		df_model$smokstatus_nomiss %>% table(useNA = "always")
 		
 		df_model$bmi_miss <- 0
 		df_model$bmi_miss[is.na(df_model$bmi2)] <- 1
