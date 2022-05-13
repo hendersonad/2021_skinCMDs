@@ -14,7 +14,6 @@ library(lubridate)
 if (Sys.info()["user"] == "lsh1510922") {
 	if (Sys.info()["sysname"] == "Darwin") {
 		datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-		datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
 	}
 	if (Sys.info()["sysname"] == "Windows") {
 		datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
@@ -26,42 +25,31 @@ dir.create(file.path(datapath, "out/models_data_impute"), showWarnings = FALSE)
 
 XX <- c("psoriasis", "eczema")
 YY <- c("anxiety", "depression")
-samplingSmall <- F
-export_plots <- F # will be written to F if samplingSmall == T
+
+export_plots <- F 
 export_models <- T
-export_tables <- F
-small_sample_size <- 100
 
 st_time <- Sys.time()
 for (exposure in XX) {
 	#exposure <- XX[1]
 	ABBRVexp <- str_sub(exposure, 1 , 3)
 	if (exposure == "eczema") {
-		df_anx_split <-
-			readRDS(paste0(datapath, "out/ecz-anxiety_split.rds"))
-		df_dep_split <-
-			readRDS(paste0(datapath, "out/ecz-depression_split.rds"))
+		df_anx_model <-
+			readRDS(paste0(datapath, "out/df_modelecz_anxiety.rds"))
+		df_dep_model <-
+			readRDS(paste0(datapath, "out/df_modelecz_depression.rds"))
 	} else if (exposure == "psoriasis") {
-		df_anx_split <-
-			readRDS(paste0(datapath, "out/pso-anxiety_split.rds"))
-		df_dep_split <-
-			readRDS(paste0(datapath, "out/pso-depression_split.rds"))
+		df_anx_model <-
+			readRDS(paste0(datapath, "out/df_modelpso_anxiety.rds"))
+		df_dep_model <-
+			readRDS(paste0(datapath, "out/df_modelecz_depression.rds"))
 	}
 	
 	.dib(exposure)
 	
-	if (samplingSmall) {
-		patids_anx <-  sample(unique(df_anx_split$setid), size = small_sample_size)
-		patids_dep <-  sample(unique(df_dep_split$setid), size = small_sample_size)
-		
-		df_anx_split <- df_anx_split %>% filter(setid %in% patids_anx)
-		df_dep_split <- df_dep_split %>% filter(setid %in% patids_dep)
-		export_plots <- F
-	}
-	
 	# annual period prevalence plot -------------------------------------------
 	if (export_plots) {
-		temp <- df_anx_split %>%
+		temp <- df_anx_model %>%
 			select(setid, patid, exposed, dob, indexdate, tstart, tstop, out) %>%
 			mutate(eligible_from = dob + tstart,
 						 eligible_to = dob + tstop)
@@ -146,7 +134,7 @@ for (exposure in XX) {
 			theme(axis.text.x = element_text(angle = 30))
 		
 		
-		temp <- df_dep_split %>%
+		temp <- df_dep_model %>%
 			select(setid, patid, exposed, dob, indexdate, tstart, tstop, out) %>%
 			mutate(eligible_from = dob + tstart,
 						 eligible_to = dob + tstop)
@@ -274,7 +262,7 @@ for (exposure in XX) {
 		# Run a simple KM analysis ------------------------------------------------
 		pdf(file = here::here("out", paste0("km_", ABBRVexp, "_anxiety_v2.pdf")),6,6,onefile = F)
 		km <- ggsurvplot(
-			fit = survminer::surv_fit(Surv(t / 365.25, out) ~ exposed, data = df_anx_split),
+			fit = survminer::surv_fit(Surv(t / 365.25, out) ~ exposed, data = df_anx_model),
 			xlab = "Years",
 			ylab = "Overall survival probability",
 			conf.int = T,
@@ -289,7 +277,7 @@ for (exposure in XX) {
 		
 		pdf(file = here::here("out", paste0("km_", ABBRVexp, "_depression_v2.pdf")),6,6,onefile = F)
 		km <- ggsurvplot(
-			fit = survminer::surv_fit(Surv(t / 365.25, out) ~ exposed, data = df_dep_split),
+			fit = survminer::surv_fit(Surv(t / 365.25, out) ~ exposed, data = df_dep_model),
 			xlab = "Years",
 			ylab = "Overall survival probability",
 			conf.int = T,
@@ -308,9 +296,9 @@ for (exposure in XX) {
 		.dib(outcome)
 		
 		if (outcome == "anxiety") {
-			df_model <- df_anx_split
+			df_model <- df_anx_model
 		} else if (outcome == "depression") {
-			df_model <- df_dep_split
+			df_model <- df_dep_model
 		}
 
 		# Run a simple Cox regression ----------------------------------------
@@ -510,13 +498,12 @@ for (exposure in XX) {
 	if (sum(grepl(pattern = "df_model", x = ls())) == 1) {
 		rm(df_model)
 	}
-	if (sum(grepl(pattern = "df_dep_split", x = ls())) == 1) {
-		rm(df_dep_split)
+	if (sum(grepl(pattern = "df_dep_model", x = ls())) == 1) {
+		rm(df_dep_model)
 	}
-	if (sum(grepl(pattern = "df_anx_split", x = ls())) == 1) {
-		rm(df_anx_split)
+	if (sum(grepl(pattern = "df_anx_model", x = ls())) == 1) {
+		rm(df_anx_model)
 	}
 }
 end_tim <- Sys.time()
-
 end_tim - st_time
