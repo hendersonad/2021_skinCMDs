@@ -317,13 +317,13 @@ for (exposure in XX) {
 		if (ABBRVexp == "ecz") {
 			mod3 <-
 				coxph(
-					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi2 + bmi_miss + sleep + alc + smokstatus + gc90days + strata(setid),
+					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + obese_cat + sleep + alc + smokstatus + gc90days + strata(setid),
 					data = df_model
 				) 
 		} else if (ABBRVexp == "pso") {
 			mod3 <-
 				coxph(
-					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi2 + bmi_miss + alc + smokstatus + strata(setid),
+					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + obese_cat + alc + smokstatus + strata(setid),
 					data = df_model
 				) 
 		}
@@ -371,13 +371,13 @@ for (exposure in XX) {
 		if (ABBRVexp == "ecz") {
 			mod4 <-
 				coxph(
-					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi2 + bmi_miss + sleep + alc + smokstatus + gc90days + strata(setid),
+					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + obese_cat + sleep + alc + smokstatus + gc90days + strata(setid),
 					data = df_model
 				) 
 		} else if (ABBRVexp == "pso") {
 			mod4 <-
 				coxph(
-					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi2 + bmi_miss + alc + smokstatus + strata(setid),
+					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + obese_cat + alc + smokstatus + strata(setid),
 					data = df_model
 				) 
 		}
