@@ -383,17 +383,22 @@ for (exposure in XX) {
 			levels(df_model$comorbid) <- c("No", "Yes")
 		}
 		
-		## fake smoking data 
+		## impute smoking data 
 		df_model$smokstatus %>% table(useNA = "always")
+		df_model <- df_model %>% 
+		  group_by(setid, patid) %>% 
+		  mutate(smok_missing_always = ifelse(any(!is.na(smokstatus)), 0, 1),
+		         bmi_missing_always = ifelse(any(!is.na(bmi2)), 0, 1)
+		         )
 		levels(df_model$smokstatus) <- c(levels(df_model$smokstatus), "Missing")
-		df_model$smokstatus[is.na(df_model$smokstatus)] <- "Missing"
+		
+		df_model$smokstatus[is.na(df_model$smokstatus) & df_model$smok_missing_always == 0] <- "Non-Smoker"
 		df_model$smokstatus %>% table(useNA = "always")
 		
 		df_model$bmi_miss <- 0
 		df_model$bmi_miss[is.na(df_model$bmi2)] <- 1
 		df_model$bmi_miss %>% table(useNA = "always")
-		
-		df_model$bmi2[is.na(df_model$bmi2)] <- 0
+		df_model$bmi2[is.na(df_model$bmi2) & df_model$bmi_missing_always == 0] <- 0
 		
 		saveRDS(df_model, file = paste0(datapath, "out/models_data_impute/df_model", ABBRVexp, "_", outcome, ".rds"))
 		
@@ -426,13 +431,13 @@ for (exposure in XX) {
 		if (ABBRVexp == "ecz") {
 			mod3 <-
 				coxph(
-					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi2 + sleep + alc + smokstatus + gc90days + strata(setid),
+					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi2 + bmi_miss + sleep + alc + smokstatus + gc90days + strata(setid),
 					data = df_model
 				) 
 		} else if (ABBRVexp == "pso") {
 			mod3 <-
 				coxph(
-					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi2 + alc + smokstatus + strata(setid),
+					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi2 + bmi_miss + alc + smokstatus + strata(setid),
 					data = df_model
 				) 
 		}
