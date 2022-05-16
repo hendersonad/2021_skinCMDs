@@ -32,9 +32,17 @@ for(exposure in XX) {
 ABBRVexp <- str_sub(exposure,1 ,3)
 
 .dib(exposure)
-
-df_anx_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-anxiety_split.rds"))
-df_dep_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-depression_split.rds"))
+if (exposure == "eczema") {
+  df_anx_split <-
+    readRDS(paste0(datapath, "out/df_modelecz_anxiety.rds"))
+  df_dep_split <-
+    readRDS(paste0(datapath, "out/df_modelecz_depression.rds"))
+} else if (exposure == "psoriasis") {
+  df_anx_split <-
+    readRDS(paste0(datapath, "out/df_modelpso_anxiety.rds"))
+  df_dep_split <-
+    readRDS(paste0(datapath, "out/df_modelpso_depression.rds"))
+}
 
 # psoriasis
 # levels(df_anx$severity) <- c("severe", "mild")
@@ -48,8 +56,8 @@ table(df_dep_split$severity)
 # There also seems to be an absolute mess with the factor levels (from build1.R)
 
 # Build flat baseline char. -----------------------------------------------------------------
-build_baseline <- function(df_in = slice(df_anx_split,1:1000)){
-	df_in[df_in$exposed == 0, "severity"] <- "none" ## MANUAL SUPPRESSION: not ideal but 94 unexposed~severe in psoriasis (at baseline) so not too big an issue
+build_baseline <- function(df_in = slice(df_anx_split,1:10000)){
+  df_in$severity[df_in$exposed == "Unexposed"] <- "None" ## MANUAL SUPPRESSION: not ideal but 94 unexposed~severe in psoriasis (at baseline) so not too big an issue
 	if(exposure=="eczema"){
 		df_in <- df_in %>% 
 			mutate(comorbid = asthma)
@@ -64,28 +72,29 @@ build_baseline <- function(df_in = slice(df_anx_split,1:1000)){
 		group_by(setid, patid) %>% 
 		slice(1)
 	
-	df_out <- df_out %>% 
+	tab1 <- df_out %>% 
 		ungroup() %>%
 		mutate(fup = (enddate-indexdate)/365.25) %>%
-		select(setid, patid, exposed, gender, age, agegroup, country, ruc, fup, cal_period, eth_edited, carstairs, ruc, bmi, bmi_cat, alc, smokstatus, sleep, sleep_all, comorbid, cci, severity, out) ## need to add DEATH here once it is working properly but seems to have been corrupted by the stsplit (death=1 being copied over multiple lines which is non-sensical)
-	
-	tab1 <- df_out %>% 
-		mutate_at("exposed", ~ifelse(. == 0, "Matched controls", paste0("With ", exposure)))
-	## reorder value labels
-	tab1 <- tab1 %>% 
-		mutate(alc = factor(alc, levels = 0:1, labels = c("No", "Yes")),
-					 #smokstatus = factor(smokstatus, levels = 0:1, labels = c("No", "Yes")),
-					 sleep = factor(sleep, levels = 0:1, labels = c("No", "Yes")),
-					 sleep_all = factor(sleep_all, levels = 0:1, labels = c("No", "Yes")),
-					 comorbid = factor(comorbid, levels = 0:1, labels = c("No", "Yes")),
-					 cci = factor(cci, levels = 0:2, labels = c("0 Low (0)", "1 Moderate (1-2)", "2 Severe (3 or more)")),
-					 out = factor(out, levels = 0:1, labels = c("No", "Yes"))
-		)  
-	## investigating the unexposed people with severe psoriasis Rx codes
+		select(setid, patid, exposed, gender, age, agegroup, country, ruc, fup, cal_period, eth_edited, carstairs, ruc, bmi, bmi_cat, obese_cat, alc, smokstatus, smokstatus_nomiss, sleep, sleep_all, comorbid, cci, severity, out) ## need to add DEATH here once it is working properly but seems to have been corrupted by the stsplit (death=1 being copied over multiple lines which is non-sensical)
 	table(tab1$exposed, tab1$severity, useNA = "always")
+	
+	# tab1 <- df_out %>% 
+	#   mutate_at("exposed", ~ifelse(. == 0, "Matched controls", paste0("With ", exposure)))
+	## reorder value labels
+	# tab1 <- tab1 %>% 
+	# 	mutate(alc = factor(alc, levels = 0:1, labels = c("No", "Yes")),
+	# 				 #smokstatus = factor(smokstatus, levels = 0:1, labels = c("No", "Yes")),
+	# 				 sleep = factor(sleep, levels = 0:1, labels = c("No", "Yes")),
+	# 				 sleep_all = factor(sleep_all, levels = 0:1, labels = c("No", "Yes")),
+	# 				 comorbid = factor(comorbid, levels = 0:1, labels = c("No", "Yes")),
+	# 				 cci = factor(cci, levels = 0:2, labels = c("0 Low (0)", "1 Moderate (1-2)", "2 Severe (3 or more)")),
+	# 				 out = factor(out, levels = 0:1, labels = c("No", "Yes"))
+	# 	)  
+	## investigating the unexposed people with severe psoriasis Rx codes
 	
 	## make table with nice gtsummary 
 	table1 <- tab1 %>% 
+	  ungroup() %>% 
 		select(-patid, -setid, -out) %>%
 		tbl_summary(by = exposed,
 								statistic = list(all_continuous() ~ "{p50} ({p25}-{p75})",
@@ -105,6 +114,7 @@ build_baseline <- function(df_in = slice(df_anx_split,1:1000)){
 														 sleep_all = "Sleep problems (incl. benzos)", 
 														 cci = "Charlson's comorbidity index",
 														 smokstatus = "Smoking status", 
+														 smokstatus_nomiss = "Smoking status (imputed)",
 														 carstairs = "Carstairs deprivation quintile",
 														 ruc = "Rural/Urban", 
 														 country = "Country",
@@ -113,7 +123,7 @@ build_baseline <- function(df_in = slice(df_anx_split,1:1000)){
 		) %>%
 		add_overall() %>%
 		bold_labels() %>%
-		modify_table_styling(align = "right", columns=6:8) %>%
+		#modify_table_styling(align = "right", columns=6:8) %>%
 		modify_footnote(
 			all_stat_cols() ~ "Median (IQR) or Frequency (%)"
 		) 
@@ -129,12 +139,9 @@ table1 <- tbl_merge(
 )
 table1
 table1 %>%
-	as_flex_table() %>%
-	flextable::save_as_docx(path = here::here("out/tables", paste0("tab1_",ABBRVexp,".docx")))
-table1 %>%
 	as_gt() %>%
 	gt::gtsave(filename = paste0("tab1_",ABBRVexp,".html"), path = here::here("out/tables"))
-
+}
 
 # Build table 2 - any exposure during follow up ---------------------------
 build_followup <- function(df_in){
@@ -157,10 +164,10 @@ build_followup <- function(df_in){
 																			 					 NA))),
 					 everOut = ifelse(any(out==1), 1, 0),
 					 everAlc = ifelse(any(alc==1), 1, 0),
-					 everSmok = ifelse(any(smokstatus == "current smoker"), 3, 
-					 											ifelse(any(smokstatus == "current or ex-smoker"), 2, 
-					 														 ifelse(any(smokstatus == "ex-smoker"), 1 ,
-					 														 			 ifelse(any(smokstatus == "non-smoker"), 0 ,
+					 everSmok = ifelse(any(smokstatus_nomiss == "current smoker"), 3, 
+					 											ifelse(any(smokstatus_nomiss == "current or ex-smoker"), 2, 
+					 														 ifelse(any(smokstatus_nomiss == "ex-smoker"), 1 ,
+					 														 			 ifelse(any(smokstatus_nomiss == "non-smoker"), 0 ,
 					 														 			 			 NA)))),
 					 everSleep = ifelse(any(sleep==1), 1, 0),
 					 everSteroid = ifelse(any(gc90days=="active"), 1, 0),
@@ -305,7 +312,7 @@ build_pyears <- function(df_in){
 			name == "comorbid" ~ ifelse(exposure=="eczema","Asthma diagnosis","Arthritis diagnosis"),
 			name == "cci" ~ "Charlson's comorbidity index",
 			name == "sleep" ~ "Sleep problems", 
-			name == "smokstatus" ~ "Smoking status", 
+			name == "smokstatus_nomiss" ~ "Smoking status", 
 			name == "carstairs" ~ "Carstairs deprivation quintile",
 			name == "cal_period" ~ "Calendar period", 
 			name == "gc90day" ~ "Oral steroid prescription", 
