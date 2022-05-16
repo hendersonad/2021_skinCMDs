@@ -42,7 +42,7 @@ for (exposure in XX) {
 		df_anx_model <-
 			readRDS(paste0(datapath, "out/df_modelpso_anxiety.rds"))
 		df_dep_model <-
-			readRDS(paste0(datapath, "out/df_modelecz_depression.rds"))
+			readRDS(paste0(datapath, "out/df_modelpso_depression.rds"))
 	}
 	
 	.dib(exposure)
