@@ -5,6 +5,7 @@ library(magrittr)
 library(survival)
 library(gt)
 
+
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
     datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
@@ -393,12 +394,7 @@ tab3_out <- tab3 %>%
 tab3_out
 tab3_out %>%
   gt::gtsave(
-    filename =  paste0("table2_regression_impute.html"),
-    path = here::here("out/analysis")
-  )
-tab3_out %>%
-  gt::gtsave(
-    filename =  paste0("table2_regression_impute.rtf"),
+    filename =  paste0("table2_regression_impute_keepmissing.html"),
     path = here::here("out/analysis")
   )
 
@@ -463,6 +459,6 @@ ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure,
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
 
-saveRDS(plot_df, here::here("out/data/df_forest_main_impute.rds"))
-dev.copy(pdf, here::here("out/analysis/forest_plot1_impute.pdf"), width = 6, height = 4); dev.off()
+saveRDS(plot_df, here::here("out/data/df_forest_main_impute_keepmissing.rds"))
+dev.copy(pdf, here::here("out/analysis/forest_plot1_impute_keepmissing.pdf"), width = 6, height = 4); dev.off()
 
