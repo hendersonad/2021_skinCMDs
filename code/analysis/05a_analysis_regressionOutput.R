@@ -22,8 +22,9 @@ dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
 dir.create(file.path(here("out", "data")), showWarnings = FALSE)
 
 XX <- c("psoriasis", "eczema")
-exposure <- XX[2]
+exposure <- XX[1]
 make_regression_tab <- function(exposure){
+  
   ABBRVexp <- str_sub(exposure, 1 , 3)
   # load models -------------------------------------------------------------
   mod1_anx <-
@@ -75,14 +76,14 @@ make_regression_tab <- function(exposure){
   df_model_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data_impute/df_model",
+      "out/df_model",
       ABBRVexp,
       "_anxiety.rds"
     ))
   df_model_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data_impute/df_model",
+      "out/df_model",
       ABBRVexp,
       "_depression.rds"
     ))
@@ -124,7 +125,7 @@ make_regression_tab <- function(exposure){
   mod3_desc_dep <- get_data_info(mod3_dep, df_model_dep)
   
   # Get CIs and p-values ----------------------------------------------------
-  getP <- function(model,
+  getP <- function(model = mod1_dep,
                    sigF = 3,
                    ci_level = 0.99) {
     model_sum <- summary(model, conf.int = ci_level)
