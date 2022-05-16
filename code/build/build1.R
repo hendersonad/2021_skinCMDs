@@ -517,6 +517,7 @@ for(exposure in XX){
 			XX <- c("psoriasis", "eczema")
 			export_datasets <- TRUE
 }
+
 for(exposure in XX){
   #exposure <- XX[1]
   ABBRVexp <- str_sub(exposure,1 ,3)
@@ -586,9 +587,22 @@ for(exposure in XX){
 		  mutate(smok_missing_always = ifelse(any(!is.na(smokstatus)), 0, 1),
 		         bmi_missing_always = ifelse(any(!is.na(bmi2)), 0, 1)
 		  )
-		df_model$smokstatus_nomiss <- df_model$smokstatus
-		df_model$smokstatus_nomiss[is.na(df_model$smokstatus_nomiss) & df_model$smok_missing_always == 0] <- "Non-Smoker"
-		df_model$smokstatus_nomiss %>% table(useNA = "always")
+		df_model_focbsmok <- df_model %>% 
+		  select(setid, patid, smokstatus) %>% 
+		  drop_na() %>% 
+		  group_by(setid, patid) %>% 
+		  slice(1)
+		
+		df_smok_imput <- df_model %>% 
+		  ungroup() %>% 
+		  select(setid, patid, smokstatus_original = smokstatus) %>% 
+		  left_join(df_model_focbsmok, by = c("setid","patid")) %>% 
+		  mutate(smokstatus_nomiss = smokstatus_original) %>% 
+		  mutate_at("smokstatus_nomiss", ~ifelse(is.na(.), smokstatus, .))
+		
+		df_model$smokstatus_nomiss <- factor(df_smok_imput$smokstatus_nomiss, levels = 1:4, labels = levels(df_model$smokstatus))
+		table(df_model$smokstatus_nomiss, useNA = "ifany")
+		var_label(df_model$smokstatus_nomiss) <- "Smoking status (imputed)"
 		
 		df_model$bmi_miss <- 0
 		df_model$bmi_miss[is.na(df_model$bmi2)] <- 1
