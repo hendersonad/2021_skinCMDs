@@ -2,6 +2,7 @@ out/data/
 code/.DS_Store
 .Rproj.user
 *.pdf
+*.html
 *.DS_Store
 data/
 *.zip
