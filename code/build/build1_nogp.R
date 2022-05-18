@@ -25,7 +25,6 @@ for(exposure in XX){
 	ABBRVexp <- str_sub(exposure,1 ,3)
 	.dib(exposure) 
 
-	
 	# import data -------------------------------------------------------------
 	patient <- haven::read_dta(paste0(datapath, "in/nogp/Patient_extract_", ABBRVexp, "_extract3_nogp_1.dta"))
 	cohort <- haven::read_dta(paste0(datapath, "out/nogp/getmatchedcohort-", exposure, "-main-mhealth-nogp.dta"))
@@ -118,7 +117,6 @@ for(exposure in XX){
 			if(sum(grepl(pattern = "cohort_edited", x = ls()))==0){
 			  an_anxiety <- readRDS(paste0(datapath, "out/nogp/", ABBRVexp, "_an_anxiety.rds"))
 			}
-			
 			
 			# DEPRESSION --------------------------------------------------------------
 			## make into tmerge format
@@ -283,4 +281,71 @@ for(exposure in XX){
 			
 		  saveRDS(anxiety_split, file = paste0(datapath, "out/nogp/", ABBRVexp, "-anxiety_split.rds")) 
 		  saveRDS(depression_split, file = paste0(datapath, "out/nogp/", ABBRVexp, "-depression_split.rds")) 
+}
+
+
+for(exposure in XX){
+  #exposure <- XX[1]
+  ABBRVexp <- str_sub(exposure,1 ,3)
+  .dib(exposure) 
+  
+  anxiety_split <- readRDS(paste0(datapath, "out/nogp/", ABBRVexp, "-anxiety_split.rds"))
+  depression_split <- readRDS(paste0(datapath, "out/nogp/", ABBRVexp, "-depression_split.rds"))
+  for(outcome in c("depression", "anxiety")){
+    if (outcome == "anxiety") {
+      df_model <- anxiety_split
+    } else if (outcome == "depression") {
+      df_model <- depression_split
+    }
+    
+    # Bit of variable formatting for output in regression tables --------------
+    df_model$t <-
+      as.numeric(df_model$tstop - df_model$tstart)
+    
+    df_model$gc90days <-
+      factor(df_model$gc90days, levels = c("not active", "active"))
+    
+    df_model$bmi2 <-
+      df_model$bmi - mean(df_model$bmi, na.rm = T)
+    
+    df_model <- df_model %>% 
+      mutate(exposed = case_when(
+        exposed == 0 ~ "Unexposed",
+        exposed == 1 ~ stringr::str_to_title(paste0(exposure))
+      ))
+    df_model$exposed <- factor(df_model$exposed, levels = c("Unexposed", str_to_title(exposure)))
+    var_label(df_model$exposed) <- "Exposure"
+    var_label(df_model$carstairs) <- "Carstairs index of deprivation"
+    levels(df_model$carstairs)[1] <- "1 (least deprived)"
+    levels(df_model$carstairs)[5] <- "5 (most deprived)"
+    var_label(df_model$cal_period) <- "Calendar Period"
+    var_label(df_model$cci) <- "Charlson's comorbidity index"
+    levels(df_model$cci) <- c("Low", "Moderate", "Severe")
+    var_label(df_model$agegroup) <- "Age group"
+    df_model$agegroup <- relevel(df_model$agegroup, ref = "50-59")
+    
+    # Mediators
+    var_label(df_model$bmi2) <- "BMI (centred)"
+    var_label(df_model$alc) <- "Alcohol misuse"
+    levels(df_model$alc) <- c("No", "Yes")
+    var_label(df_model$smokstatus) <- "Smoking status"
+    levels(df_model$smokstatus) <- stringr::str_to_title(levels(df_model$smokstatus))
+    var_label(df_model$gc90days) <- "Recent high dose glucocorticoid steroid use (<30days)"
+    levels(df_model$gc90days) <- c("No", "Yes")
+    df_model$sleep <- factor(df_model$sleep, levels = 0:1, labels = c("No", "Yes"))
+    var_label(df_model$sleep) <- "Sleep problems"
+    var_label(df_model$severity) <- paste(str_to_title(exposure), "severity", sep = " ")
+    levels(df_model$severity) <- str_to_title(levels(df_model$severity))
+    if (ABBRVexp == "ecz") {
+      df_model$comorbid <- df_model$asthma
+      var_label(df_model$comorbid) <- "Asthma"
+      levels(df_model$comorbid) <- c("No", "Yes")
+    } else{
+      df_model$comorbid <- df_model$arthritis
+      var_label(df_model$comorbid) <- "Arthritis"
+      levels(df_model$comorbid) <- c("No", "Yes")
+    }
+    
+    saveRDS(df_model, file = paste0(datapath, "out/nogp/df_model", ABBRVexp, "_", outcome, ".rds"))
+  }
 }
