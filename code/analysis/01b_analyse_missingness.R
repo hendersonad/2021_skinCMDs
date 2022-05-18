@@ -33,83 +33,84 @@ outcome = YY[2]
 for(exposure in XX){
   ABBRVexp <- substr(exposure, 1, 3)
   .dib(exposure)
-  for(outcome in YY){
-    df_model <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, ".rds"))
-    df_model_1row <- df_model %>% 
+  #for(outcome in YY){
+  df_model_anx_imputed <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety_imputed.rds"))
+  df_model_dep_imputed <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression_imputed.rds"))
+  
+  ## combine these datasets
+  ## filter to one row
+  fn_onerow <- function(df, exp = ABBRVexp){
+    temp <- df %>% 
       group_by(setid, patid) %>% 
       slice(1) %>% 
-      ungroup()
-      
-    ## visualise missing data
-    if (ABBRVexp == "ecz") {
-      df_model_select <- df_model_1row %>% 
-        select(exposed, carstairs, cal_period, comorbid, cci, bmi, obese_cat, alc, smokstatus, smokstatus_nomiss, sleep, gc90days) %>% 
-        rename(smoking_imputed = smokstatus_nomiss, obesity_categorised = obese_cat)
-    } else if (ABBRVexp == "pso") {
-      df_model_select <- df_model_1row %>% 
-        select(exposed, carstairs, cal_period, comorbid, cci, bmi, obese_cat, alc, smokstatus, smokstatus_nomiss) %>% 
-        rename(smoking_imputed = smokstatus_nomiss, obesity_categorised = obese_cat)
+      ungroup() 
+    
+    if(exp == "ecz"){
+      temp %>% 
+        select(setid, patid, dob, indexdate, gender, exposed, eth_edited, carstairs, cal_period, comorbid, cci, bmi2, bmi, alc, smokstatus, smoking_original, sleep, gc90days) %>% 
+        rename(smoking_imputed = smokstatus, obesity_categorised = bmi2) %>% 
+        mutate(age = as.numeric(indexdate - dob)/365.25) %>% 
+        select(-dob, -indexdate)
+    } else if(exp == "pso"){
+      temp %>% 
+        select(setid, patid, dob, indexdate, gender, exposed, eth_edited, carstairs, cal_period, comorbid, cci, bmi2, bmi, alc, smokstatus, smoking_original) %>% 
+        rename(smoking_imputed = smokstatus, obesity_categorised = bmi2) %>% 
+        mutate(age = as.numeric(indexdate - dob)/365.25) %>% 
+        select(-dob, -indexdate)
     }
-    
-    df_missingsum <- df_model_select %>% 
-      ungroup() %>% 
-      group_by(exposed) %>% 
-      summarise_all(~sum(is.na(.)))
-    
-    df_missingN <- df_model_select %>% 
-      group_by(exposed) %>% 
-      summarise(n = n())
-    
-    df_missingplot <- df_missingsum %>% 
-      pivot_longer(!exposed) %>% 
-      arrange(value) %>% 
-      filter(name == "obesity_categorised" | value>0)  %>% 
-      left_join(df_missingN, by = "exposed") %>% 
-      mutate(pc = (value/n)*100)
-    
-    fct_levels <- df_missingplot %>% 
-      ungroup() %>% 
-      group_by(name) %>% 
-      summarise(val = sum(value)) %>% 
-      arrange(val) %>% 
-      pull(name)
-    fct_labels <- stringr::str_replace(fct_levels, "_", " ")
-    fct_labels <- stringr::str_to_title(fct_labels)
-    
-    df_missingplot$plotname <- factor(df_missingplot$name, levels = fct_levels, labels = fct_labels)
-    
-    pdf(paste0(here::here("out/supplementary/"), "missing_", ABBRVexp, "_", substr(outcome,1,3), ".pdf"), width = 8, height = 6)
-      p1 <- ggplot(df_missingplot, aes(x = plotname, y = pc, ymax = pc, ymin = 0, group = exposed, col = exposed)) +
-        geom_linerange() +
-        geom_point() +
-        coord_flip() +
-        facet_wrap(~exposed) +
-        labs(x = "Variable", y = "% missing") +
-        theme_ali() +
-        theme(strip.background = element_blank(),
-              legend.position = "none")
-      print(p1)
-    dev.off()
   }
+  df_model_anx_1row <- fn_onerow(df_model_anx_imputed)
+  df_model_dep_1row <- fn_onerow(df_model_dep_imputed)
+  
+  rm(df_model_anx_imputed, df_model_dep_imputed)
+  
+  df_model_merge <- df_model_anx_1row %>% 
+    full_join(df_model_dep_1row)
+  
+  df_missingsum <- df_model_merge %>% 
+    ungroup() %>% 
+    group_by(exposed) %>% 
+    summarise_all(~sum(is.na(.)))
+  
+  df_missingN <- df_model_merge %>% 
+    group_by(exposed) %>% 
+    summarise(n = n())
+  
+  df_missingplot <- df_missingsum %>% 
+    pivot_longer(!exposed) %>% 
+    arrange(value) %>% 
+    filter(name == "obesity_categorised" | value>0)  %>% 
+    left_join(df_missingN, by = "exposed") %>% 
+    mutate(pc = (value/n)*100)
+  
+  fct_levels <- df_missingplot %>% 
+    ungroup() %>% 
+    group_by(name) %>% 
+    summarise(val = sum(value)) %>% 
+    arrange(val) %>% 
+    pull(name)
+  fct_labels <- stringr::str_replace(fct_levels, "_", " ")
+  fct_labels <- stringr::str_to_title(fct_labels)
+  
+  df_missingplot$plotname <- factor(df_missingplot$name, levels = fct_levels, labels = fct_labels)
+  
+  pdf(paste0(here::here("out/supplementary/"), "missing_", ABBRVexp, ".pdf"), width = 8, height = 6)
+    p1 <- ggplot(df_missingplot, aes(x = plotname, y = pc, ymax = pc, ymin = 0, group = exposed, col = exposed)) +
+      geom_linerange() +
+      geom_point() +
+      coord_flip() +
+      facet_wrap(~exposed) +
+      labs(x = "Variable", y = "% missing") +
+      theme_ali() +
+      theme(strip.background = element_blank(),
+            legend.position = "none")
+    print(p1)
+  dev.off()
   
   ## describe characteristics by missing status 
-  if (ABBRVexp == "ecz") {
-    df_model_select <- df_model_1row %>% 
-      select(setid, patid, dob, indexdate, gender, exposed, carstairs, cal_period, comorbid, cci, bmi, obese_cat, alc, smokstatus, smokstatus_nomiss, sleep, gc90days) %>% 
-      rename(smoking_imputed = smokstatus_nomiss, obesity_categorised = obese_cat) %>% 
-      mutate(age = as.numeric(indexdate - dob)/365.25) %>% 
-      select(-dob, -indexdate)
-  } else if (ABBRVexp == "pso") {
-    df_model_select <- df_model_1row %>% 
-      select(setid, patid, dob, indexdate, gender, exposed, carstairs, cal_period, comorbid, cci, bmi, obese_cat, alc, smokstatus, smokstatus_nomiss) %>% 
-      rename(smoking_imputed = smokstatus_nomiss, obesity_categorised = obese_cat) %>% 
-      mutate(age = as.numeric(indexdate - dob)/365.25) %>% 
-      select(-dob, -indexdate)
-  }
-  
   missing_data <- NULL
-  for(var in c("carstairs", "smokstatus", "bmi")){
-    patids_missing <- df_model_select %>% 
+  for(var in c("carstairs", "smoking_original", "bmi","obesity_categorised", "smoking_imputed", "eth_edited")){
+    patids_missing <- df_model_merge %>% 
       select(setid, patid, all_of(var)) %>% 
       filter(is.na(get(var))) %>% 
       distinct(setid, patid)
@@ -122,50 +123,23 @@ for(exposure in XX){
       )
   }
   missing_data <- missing_data %>% 
-    distinct(setid, patid) %>% 
-    mutate(missing = 1)
+    distinct(setid, patid, .keep_all = TRUE) %>% 
+    mutate(missing = 1+as.numeric(var_missing == "eth_edited")) ## missing = 1 or 2 if only missing ethnicity
   
-  missing_data_impute <- NULL
-  for(var in c("obesity_categorised", "smoking_imputed")){
-    patids_missing <- df_model_select %>% 
-      select(setid, patid, all_of(var)) %>% 
-      filter(is.na(get(var))) %>% 
-      distinct(setid, patid)
-    missing_data_impute <- missing_data_impute %>% 
-      bind_rows(
-        bind_cols(
-          patids_missing,
-          var_missing = var
-          )
-      )
-  }
-  missing_data_impute <- missing_data_impute %>% 
-    distinct(setid, patid) %>% 
-    mutate(missing = 1)
-  
-  missing_either <- missing_data %>% 
-    left_join(missing_data_impute, by = c("setid", "patid")) %>% 
-    rename(missing_original = missing.x, missing_impute = missing.y) %>% 
-    mutate_at(c("missing_original", "missing_impute"), ~ifelse(is.na(.), 0, .)) %>% 
-    mutate(missing = missing_original + missing_impute) %>% 
-    select(-missing_original, -missing_impute)
-  
-  df_model_miss_1obs <- df_model_select %>% 
-    left_join(missing_either, by = c("setid", "patid")) %>% 
+  df_model_miss_1obs <- df_model_merge %>% 
+    left_join(missing_data, by = c("setid", "patid")) %>% 
     mutate_at("missing", ~ifelse(is.na(.), 0, .))
-  
-  # df_model_miss_1obs <- df_model_miss %>% 
-  #   group_by(setid,patid) %>% 
-  #   slice(1)
   
   var_label(df_model_miss_1obs$smoking_imputed) <- "Smoking status (imputed)"
   df_model_miss_1obs$gender <- factor(as.character(df_model_miss_1obs$gender), levels = c("Male", "Female"))
   var_label(df_model_miss_1obs$gender) <- "Sex"
   var_label(df_model_miss_1obs$age) <- "Age at index"
+  var_label(df_model_miss_1obs$eth_edited) <- "Ethnicity"
+  var_label(df_model_miss_1obs$carstairs) <- "Carstairs index of deprivation"
   
   tab_missing <- df_model_miss_1obs %>% 
     ungroup() %>% 
-    mutate(missing = factor(missing, levels = 0:2, labels = c("Complete", "Missing data", "Missing data after imputation"))) %>% 
+    mutate(missing = factor(missing, levels = 0:2, labels = c("Complete", "Missing other data", "Missing ethnicity data"))) %>% 
     select(-patid, -setid) %>%
     select(age, gender, everything()) %>% 
     tbl_strata(strata = exposed,
@@ -185,5 +159,5 @@ for(exposure in XX){
   tab_missing %>%
     as_gt() %>%
     gt::gtsave(filename = paste0("tab4_",ABBRVexp,"_missingness.html"), path = here::here("out/tables"))
-  
+
 }
