@@ -580,51 +580,125 @@ for(exposure in XX){
 		  levels(df_model$comorbid) <- c("No", "Yes")
 		}
 		
-		## impute smoking data 
-		df_model$smokstatus %>% table(useNA = "always")
-		df_model <- df_model %>% 
-		  group_by(setid, patid) %>% 
-		  mutate(smok_missing_always = ifelse(any(!is.na(smokstatus)), 0, 1),
-		         bmi_missing_always = ifelse(any(!is.na(bmi2)), 0, 1)
-		  )
-		df_model_focbsmok <- df_model %>% 
-		  select(setid, patid, smokstatus) %>% 
-		  drop_na() %>% 
-		  group_by(setid, patid) %>% 
-		  slice(1)
-		
-		df_smok_imput <- df_model %>% 
-		  ungroup() %>% 
-		  select(setid, patid, smokstatus_original = smokstatus) %>% 
-		  left_join(df_model_focbsmok, by = c("setid","patid")) %>% 
-		  mutate(smokstatus_nomiss = smokstatus_original) %>% 
-		  mutate_at("smokstatus_nomiss", ~ifelse(is.na(.), smokstatus, .))
-		
-		df_model$smokstatus_nomiss <- factor(df_smok_imput$smokstatus_nomiss, levels = 1:4, labels = levels(df_model$smokstatus))
-		table(df_model$smokstatus_nomiss, useNA = "ifany")
-		var_label(df_model$smokstatus_nomiss) <- "Smoking status (imputed)"
-		
-		df_model$bmi_miss <- 0
-		df_model$bmi_miss[is.na(df_model$bmi2)] <- 1
-		df_model$bmi_miss %>% table(useNA = "always")
-		df_model$bmi2[is.na(df_model$bmi2) & df_model$bmi_missing_always == 0] <- 0
-		
-		# re-categorise BMI
-		df_model <- df_model %>% 
-		  ungroup() %>% 
-		  mutate(obese_cat=case_when(bmi < 30 ~ "no evidence of obesity",
-		                           bmi < 35 ~ "obese class I (30-34.9)",
-		                           bmi < 40 ~ "obese class II (35-39.9)",
-		                           bmi >= 40 ~ "obese class III (40+)"))
-		df_model$obese_cat <- factor(df_model$obese_cat, levels = c("no evidence of obesity", 
-		                                            "obese class I (30-34.9)", 
-		                                            "obese class II (35-39.9)", 
-		                                            "obese class III (40+)"))
-		df_model$obese_cat %>% table(useNA = "always")
-		df_model$obese_cat[is.na(df_model$bmi)] <- "no evidence of obesity"
-		df_model$obese_cat %>% table(useNA = "always")
-		
-		saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, ".rds"))
+	  saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, ".rds"))
 	}
 }
 
+
+# Impute missing data -----------------------------------------------------
+for(exposure in XX){
+  #exposure <- XX[1]
+  ABBRVexp <- str_sub(exposure,1 ,3)
+  .dib(exposure) 
+  
+  anxiety_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-anxiety_split.rds"))
+  depression_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-depression_split.rds"))
+  for(outcome in c("depression", "anxiety")){
+    if (outcome == "anxiety") {
+      df_model <- anxiety_split
+    } else if (outcome == "depression") {
+      df_model <- depression_split
+    }
+    
+    # Bit of variable formatting for output in regression tables --------------
+    df_model$t <-
+      as.numeric(df_model$tstop - df_model$tstart)
+    
+    df_model$gc90days <-
+      factor(df_model$gc90days, levels = c("not active", "active"))
+    
+    df_model$bmi2 <-
+      df_model$bmi - mean(df_model$bmi, na.rm = T)
+    
+    df_model <- df_model %>% 
+      mutate(exposed = case_when(
+        exposed == 0 ~ "Unexposed",
+        exposed == 1 ~ stringr::str_to_title(paste0(exposure))
+      ))
+    df_model$exposed <- factor(df_model$exposed, levels = c("Unexposed", str_to_title(exposure)))
+    var_label(df_model$exposed) <- "Exposure"
+    var_label(df_model$carstairs) <- "Carstairs index of deprivation"
+    levels(df_model$carstairs)[1] <- "1 (least deprived)"
+    levels(df_model$carstairs)[5] <- "5 (most deprived)"
+    var_label(df_model$cal_period) <- "Calendar Period"
+    var_label(df_model$cci) <- "Charlson's comorbidity index"
+    levels(df_model$cci) <- c("Low", "Moderate", "Severe")
+    var_label(df_model$agegroup) <- "Age group"
+    df_model$agegroup <- relevel(df_model$agegroup, ref = "50-59")
+    
+    # Mediators
+    var_label(df_model$bmi2) <- "BMI (centred)"
+    var_label(df_model$alc) <- "Alcohol misuse"
+    levels(df_model$alc) <- c("No", "Yes")
+    var_label(df_model$smokstatus) <- "Smoking status"
+    levels(df_model$smokstatus) <- stringr::str_to_title(levels(df_model$smokstatus))
+    var_label(df_model$gc90days) <- "Recent high dose glucocorticoid steroid use (<30days)"
+    levels(df_model$gc90days) <- c("No", "Yes")
+    df_model$sleep <- factor(df_model$sleep, levels = 0:1, labels = c("No", "Yes"))
+    var_label(df_model$sleep) <- "Sleep problems"
+    var_label(df_model$severity) <- paste(str_to_title(exposure), "severity", sep = " ")
+    levels(df_model$severity) <- str_to_title(levels(df_model$severity))
+    if (ABBRVexp == "ecz") {
+      df_model$comorbid <- df_model$asthma
+      var_label(df_model$comorbid) <- "Asthma"
+      levels(df_model$comorbid) <- c("No", "Yes")
+    } else{
+      df_model$comorbid <- df_model$arthritis
+      var_label(df_model$comorbid) <- "Arthritis"
+      levels(df_model$comorbid) <- c("No", "Yes")
+    }
+    
+    ## impute smoking data 
+    df_model$smokstatus %>% table(useNA = "always")
+    df_model <- df_model %>% 
+      group_by(setid, patid) %>% 
+      mutate(smok_missing_always = ifelse(any(!is.na(smokstatus)), 0, 1),
+             bmi_missing_always = ifelse(any(!is.na(bmi2)), 0, 1)
+      )
+    df_model_focbsmok <- df_model %>% 
+      select(setid, patid, smokstatus) %>% 
+      drop_na() %>% 
+      group_by(setid, patid) %>% 
+      slice(1)
+    
+    df_smok_imput <- df_model %>% 
+      ungroup() %>% 
+      select(setid, patid, smokstatus_original = smokstatus) %>% 
+      left_join(df_model_focbsmok, by = c("setid","patid")) %>% 
+      mutate(smokstatus_nomiss = smokstatus_original) %>% 
+      mutate_at("smokstatus_nomiss", ~ifelse(is.na(.), smokstatus, .))
+    
+    df_model$smokstatus_nomiss <- factor(df_smok_imput$smokstatus_nomiss, levels = 1:4, labels = levels(df_model$smokstatus))
+    table(df_model$smokstatus_nomiss, useNA = "ifany")
+    var_label(df_model$smokstatus_nomiss) <- "Smoking status (imputed)"
+    
+    df_model$bmi_miss <- 0
+    df_model$bmi_miss[is.na(df_model$bmi2)] <- 1
+    df_model$bmi_miss %>% table(useNA = "always")
+    df_model$bmi2[is.na(df_model$bmi2) & df_model$bmi_missing_always == 0] <- 0
+    
+    # re-categorise BMI
+    df_model <- df_model %>% 
+      ungroup() %>% 
+      mutate(obese_cat=case_when(bmi < 30 ~ "no evidence of obesity",
+                                 bmi < 35 ~ "obese class I (30-34.9)",
+                                 bmi < 40 ~ "obese class II (35-39.9)",
+                                 bmi >= 40 ~ "obese class III (40+)"))
+    df_model$obese_cat <- factor(df_model$obese_cat, levels = c("no evidence of obesity", 
+                                                                "obese class I (30-34.9)", 
+                                                                "obese class II (35-39.9)", 
+                                                                "obese class III (40+)"))
+    df_model$obese_cat %>% table(useNA = "always")
+    df_model$obese_cat[is.na(df_model$bmi)] <- "no evidence of obesity"
+    df_model$obese_cat %>% table(useNA = "always")
+    
+    
+    ## keep names consistent for analysis code
+    df_model$bmi_centred <- df_model$bmi2
+    df_model$bmi2 <- df_model$obese_cat
+    df_model$smoking_original <- df_model$smokstatus
+    df_model$smokstatus <- df_model$smokstatus_nomiss
+    
+    saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_imputed.rds"))
+  }
+}
