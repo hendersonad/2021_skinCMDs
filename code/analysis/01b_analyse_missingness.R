@@ -10,8 +10,6 @@ library(survival)
 library(survminer)
 library(htmltools)
 library(lubridate)
-library(naniar)
-library(visdat)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
@@ -94,7 +92,7 @@ for(exposure in XX){
   
   df_missingplot$plotname <- factor(df_missingplot$name, levels = fct_levels, labels = fct_labels)
   
-  pdf(paste0(here::here("out/supplementary/"), "missing_", ABBRVexp, ".pdf"), width = 8, height = 6)
+  pdf(paste0(here::here("out/supplementary"), "/missing_", ABBRVexp, ".pdf"), width = 8, height = 6)
     p1 <- ggplot(df_missingplot, aes(x = plotname, y = pc, ymax = pc, ymin = 0, group = exposed, col = exposed)) +
       geom_linerange() +
       geom_point() +
@@ -136,11 +134,23 @@ for(exposure in XX){
   var_label(df_model_miss_1obs$age) <- "Age at index"
   var_label(df_model_miss_1obs$eth_edited) <- "Ethnicity"
   var_label(df_model_miss_1obs$carstairs) <- "Carstairs index of deprivation"
+  var_label(df_model_miss_1obs$smoking_original) <- "Original smoking data"
+  var_label(df_model_miss_1obs$bmi) <- "Body Mass Index (BMI)"
+  var_label(df_model_miss_1obs$obesity_categorised) <- "Obesity status"
+  var_label(df_model_miss_1obs$cal_period) <- "Calendar Period"
+  var_label(df_model_miss_1obs$cci) <- "Charlson's comorbidity index"
+  if (ABBRVexp == "ecz") {
+    var_label(df_model_miss_1obs$comorbid) <- "Asthma"
+  } else{
+    var_label(df_model_miss_1obs$comorbid) <- "Arthritis"
+  }
+  
+  
   
   tab_missing <- df_model_miss_1obs %>% 
     ungroup() %>% 
     mutate(missing = factor(missing, levels = 0:2, labels = c("Complete", "Missing other data", "Missing ethnicity data"))) %>% 
-    select(-patid, -setid) %>%
+    select(-patid, -setid, -var_missing) %>%
     select(age, gender, everything()) %>% 
     tbl_strata(strata = exposed,
                .tbl_fun = 
