@@ -4,6 +4,7 @@ code/.DS_Store
 *.pdf
 *.rtf
 *.html
+*.xlsx
 *.DS_Store
 data/
 *.zip
