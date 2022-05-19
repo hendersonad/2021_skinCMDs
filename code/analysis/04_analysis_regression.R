@@ -26,7 +26,7 @@ dir.create(file.path(datapath, "out/models_data_impute"), showWarnings = FALSE)
 XX <- c("psoriasis", "eczema")
 YY <- c("anxiety", "depression")
 
-export_plots <- TRUE
+export_plots <- F
 export_models <- TRUE
 
 st_time <- Sys.time()
@@ -74,39 +74,13 @@ for (exposure in XX) {
 		df_split_sum <- df_split_cal %>%
 			group_by(exposed, year2) %>%
 			summarise(at_risk = n(), outcome = sum(out)) %>%
-			mutate(prop = outcome / at_risk,
-						 exposed = factor(
-						 	exposed,
-						 	levels = 0:1,
-						 	labels = c("Matched controls", paste0("With ", exposure))
-						 )) %>%
+			mutate(prop = outcome / at_risk) %>% 
 			ungroup() %>%
 			rowwise() %>%
 			mutate(tst = list(broom::tidy(
 				prop.test(outcome, at_risk, conf.level = 0.95)
 			))) %>%
 			tidyr::unnest(tst)
-		
-		p1 <-
-			ggplot(
-				df_split_sum,
-				aes(
-					x = year2,
-					y = estimate * 100,
-					ymin = conf.low * 100,
-					ymax = conf.high * 100,
-					group = exposed,
-					colour = exposed,
-					fill = exposed
-				)
-			) +
-			geom_line(lty = 2) +
-			geom_ribbon(lty = 0, alpha = 0.2) +
-			labs(title = paste0(exposure, " ~ anxiety"),
-					 y = "Annual incidence",
-					 x = "Year") +
-			theme_ali() +
-			theme(axis.text.x = element_text(angle = 30))
 		
 		dodge <- position_dodge(width = 0.9)
 		p2 <-
@@ -160,41 +134,13 @@ for (exposure in XX) {
 		df_split_sum <- df_split_cal %>%
 			group_by(exposed, year2) %>%
 			summarise(at_risk = n(), outcome = sum(out)) %>%
-			mutate(prop = outcome / at_risk,
-						 exposed = factor(
-						 	exposed,
-						 	levels = 0:1,
-						 	labels = c("Matched controls", paste0("With ", exposure))
-						 )) %>%
+			mutate(prop = outcome / at_risk) %>% 
 			ungroup() %>%
 			rowwise() %>%
 			mutate(tst = list(broom::tidy(
 				prop.test(outcome, at_risk, conf.level = 0.95)
 			))) %>%
 			tidyr::unnest(tst)
-		
-		p3 <-
-			ggplot(
-				df_split_sum,
-				aes(
-					x = year2,
-					y = estimate * 100,
-					ymin = conf.low * 100,
-					ymax = conf.high * 100,
-					group = exposed,
-					colour = exposed,
-					fill = exposed
-				)
-			) +
-			geom_line(lty = 2) +
-			geom_ribbon(lty = 0, alpha = 0.2) +
-			labs(
-				title = paste0(exposure, " ~ depression"),
-				y = "Annual incidence",
-				x = "Year"
-			) +
-			theme_ali() +
-			theme(axis.text.x = element_text(angle = 30))
 		
 		#dodge <- position_dodge(width=0.9)
 		p4 <-
@@ -230,7 +176,7 @@ for (exposure in XX) {
 		print(pAll)
 		dev.off()
 		
-		rm(df_split_sum, df_split_cal, temp, p1, p2, p3, p4)
+		rm(df_split_sum, df_split_cal, temp, p2, p4)
 	}
 	
 	for (outcome in YY) {
@@ -259,13 +205,13 @@ for (exposure in XX) {
 		if (ABBRVexp == "ecz") {
 			mod3 <-
 				coxph(
-					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + obese_cat + sleep + alc + smokstatus_nomiss + gc90days + strata(setid),
+					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + sleep + gc90days + strata(setid),
 					data = df_model
 				) 
 		} else if (ABBRVexp == "pso") {
 			mod3 <-
 				coxph(
-					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + obese_cat + alc + smokstatus_nomiss + strata(setid),
+					Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
 					data = df_model
 				) 
 		}
@@ -313,13 +259,13 @@ for (exposure in XX) {
 		if (ABBRVexp == "ecz") {
 			mod4 <-
 				coxph(
-					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi2 + sleep + alc + smokstatus + gc90days + strata(setid),
+					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + sleep + gc90days + strata(setid),
 					data = df_model
 				) 
 		} else if (ABBRVexp == "pso") {
 			mod4 <-
 				coxph(
-					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi2 + alc + smokstatus + strata(setid),
+					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
 					data = df_model
 				) 
 		}
