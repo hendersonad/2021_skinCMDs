@@ -43,7 +43,7 @@ for(exposure in XX){
     
     km_fit <- survfit(Surv(t, out) ~ exposed, data = df_model)
     
-    pdf(paste0(here("out/PHchecks"), "ph_checks_", ABBRVexp, "_", substr(outcome,1,3), ".pdf"), width = 10, height = 8)
+    pdf(paste0(here("out/PHchecks"), "/ph_checks_", ABBRVexp, "_", substr(outcome,1,3), ".pdf"), width = 10, height = 8)
     par(mfrow=c(3,2))
     
     # compare KM and Cox fits -------------------------------------------------
