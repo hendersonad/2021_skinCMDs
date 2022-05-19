@@ -130,6 +130,7 @@ for (exposure in XX) {
     
     table1
   }
+  .dib("Building Table 1")
   table1_anx <- build_baseline(df_anx_split)
   table1_dep <- build_baseline(df_dep_split)
   
@@ -147,44 +148,20 @@ for (exposure in XX) {
   
   # Build table 2 - any exposure during follow up ---------------------------
   build_followup <- function(df_in) {
-    #df_in[df_in$exposed == 0, "severity"] <- NA ## MANUAL SUPPRESSION: not ideal but 94 unexposed~severe in psoriasis (at baseline) so not too big an issue
-    if (exposure == "eczema") {
-      df_in <- df_in %>%
-        mutate(comorbid = asthma)
-      #severity = factor(severity, levels = c(0, "mild", "severe"), labels=c("Mild", "Moderate", "Severe")))
-    } else if (exposure == "psoriasis") {
-      df_in <- df_in %>%
-        mutate(steroids = NA, # just need a placeholder so the code doesn't break below
-               comorbid = arthritis)
-      #severity = factor(severity, levels = c(0, "mild"), labels=c("Mild", "Severe")))
-    }
     df_out <- df_in %>%
+      ungroup() %>% 
+      mutate(smok_recategorised = factor(smokstatus, levels = c("Non-Smoker", "Ex-Smoker", "Current Or Ex-Smoker", "Current Smoker"))) %>% 
+      mutate(severity_recategorised = factor(severity, levels = c("None", "Mild",  "Moderate", "Severe"))) %>% 
+      mutate(smokNum = as.numeric(smok_recategorised)) %>% 
+      mutate(severityNum = as.numeric(severity_recategorised)) %>% 
       group_by(setid, patid) %>%
-      mutate(
-        everSev = ifelse(any(severity == "Severe"), 3,
-                         ifelse(
-                           any(severity == "Moderate"), 2,
-                           ifelse(any(severity == "Mild"), 1,
-                                  NA)
-                         )),
+      mutate(everSev = factor(max(severityNum, na.rm = T), levels = 1:4, labels = c("None", "Mild",  "Moderate", "Severe")),
         everOut = ifelse(any(out == 1), 1, 0),
-        everAlc = ifelse(any(alc == 1), 1, 0),
-        everSmok = ifelse(
-          any(smokstatus == "current smoker"),
-          3,
-          ifelse(
-            any(smokstatus == "current or ex-smoker"),
-            2,
-            ifelse(any(smokstatus == "ex-smoker"), 1 ,
-                   ifelse(any(
-                     smokstatus == "non-smoker"
-                   ), 0 ,
-                   NA))
-          )
-        ),
-        everSleep = ifelse(any(sleep == 1), 1, 0),
-        everSteroid = ifelse(any(gc90days == "active"), 1, 0),
-        everComorbid = ifelse(any(comorbid == 1), 1, 0)
+        everAlc = ifelse(any(alc == "Yes"), 1, 0),
+        everSmok = factor(max(smokNum, na.rm = T), levels = 1:4, labels = c("Non-Smoker", "Ex-Smoker", "Current Or Ex-Smoker", "Current Smoker")),
+        everSleep = ifelse(any(sleep == "Yes"), 1, 0),
+        everSteroid = ifelse(any(gc90days == "Yes"), 1, 0),
+        everComorbid = ifelse(any(comorbid == "Yes"), 1, 0)
       ) %>%
       slice(1) %>%
       ungroup() %>%
@@ -202,53 +179,7 @@ for (exposure in XX) {
         everOut
       )
     
-    tab2 <- df_out %>%
-      mutate_at("exposed", ~ ifelse(. == 0, "Matched controls", paste0("With ", exposure)))
-    
-    ## reorder value labels
-    tab2 <- tab2 %>%
-      mutate(
-        everSmok = factor(
-          everSmok,
-          levels = 0:3,
-          labels = c(
-            "Non-Smoker",
-            "Ex-Smoker",
-            "Current or ex-smoker",
-            "Current smoker"
-          )
-        ),
-        everAlc = factor(
-          everAlc,
-          levels = 0:1,
-          labels = c("No", "Yes")
-        ),
-        everSleep = factor(
-          everSleep,
-          levels = 0:1,
-          labels = c("No", "Yes")
-        ),
-        everComorbid = factor(
-          everComorbid,
-          levels = 0:1,
-          labels = c("No", "Yes")
-        ),
-        everSev = factor(
-          everSev,
-          levels = 1:3,
-          labels = c("Mild", "Moderate", "Severe")
-        ),
-        everSteroid = factor(
-          everSteroid,
-          levels = 0:1,
-          labels = c("None", "At least 1")
-        ),
-        everOut = factor(
-          everOut,
-          levels = 0:1,
-          labels = c("No", "Yes")
-        )
-      )
+    tab2 <- df_out 
     
     ## investigating the unexposed people with severe psoriasis Rx codes
     table(tab2$exposed, tab2$everSev)
@@ -296,6 +227,8 @@ for (exposure in XX) {
     
     table2
   }
+  .dib("Building Table 2")
+  
   table2_anx <- build_followup(df_anx_split)
   table2_dep <- build_followup(df_dep_split)
   
@@ -304,9 +237,6 @@ for (exposure in XX) {
     tab_spanner = c("**Anxiety cohort**", "**Depression cohort**")
   )
   table2
-  table2 %>%
-    as_flex_table() %>%
-    flextable::save_as_docx(path = here::here("out/tables", paste0("tab2_", ABBRVexp, "_fup.docx")))
   table2 %>%
     as_gt() %>%
     gt::gtsave(
@@ -320,7 +250,7 @@ for (exposure in XX) {
   summ_pyars <- function(V = "alc", df = tab1) {
     df %>%
       group_by(exposed, get(V)) %>%
-      summarise(pyar = sum(time)) %>%
+      summarise(pyar = sum(t)) %>%
       rename(var = `get(V)`) %>%
       mutate(name = V,
              group_pyar = sum(pyar)) %>%
@@ -329,41 +259,26 @@ for (exposure in XX) {
   
   ## and this is the main function
   build_pyears <- function(df_in) {
-    #df_in[df_in$exposed == 0, "severity"] <- NA ## MANUAL SUPPRESSION: not ideal but 94 unexposed~severe in psoriasis (at baseline) so not too big an issue
-    if (exposure == "eczema") {
-      df_in <- df_in %>%
-        mutate(comorbid = asthma)
-      #severity = factor(severity, levels = c(0, "mild", "severe"), labels=c("Mild", "Moderate", "Severe")))
-    } else if (exposure == "psoriasis") {
-      df_in <- df_in %>%
-        mutate(steroids = NA, # just need a placeholder so the code doesn't break below
-               comorbid = arthritis)
-      #severity = factor(severity, levels = c(0, "mild"), labels=c("Mild", "Severe")))
-    }
-    
+    df_in$severity[df_in$exposed=="Unexposed"] <- "None"
     tab1 <- df_in %>%
       as_tibble() %>%
       ungroup() %>%
-      mutate_at("exposed",
-                ~ ifelse(. == 0, "Matched controls", "With exposure")) %>%
-      arrange(setid, patid) %>%
-      mutate(time = as.numeric(tstop - tstart) / 365.25) %>%
-      mutate(
-        sleep = as.factor(sleep),
-        country = as.factor(country),
-        gc90day = as.factor(gc90days)
-      )
-    
-    #summ_pyars("comorbid")
+      arrange(setid, patid)
     
     x <- tab1 %>%
       select_if(is.factor) %>%
-      select(-arthritis,-asthma,-age_cat) %>%
-      names() %>% as.list()
+      select(-arthritis,-asthma,-age_cat, -exposed) %>%
+      names() %>% 
+      as.list()
     
     pyars_table <-
       map(x, summ_pyars, df = tab1) %>% ## to use the little function defined above
       do.call(rbind, .)
+    
+    if(exposure == "psoriasis"){
+      pyars_table <- pyars_table %>% 
+        filter(name != "gc90days")
+    }
     
     gt_pyars_table <- pyars_table %>%
       group_by(exposed) %>%
@@ -377,6 +292,7 @@ for (exposure in XX) {
       mutate_at("var", ~ stringr::str_to_title(.)) %>%
       mutate(
         new_lab = case_when(
+          name == "exposed" ~ "Exposed",
           name == "gender" ~ "Sex",
           name == "agegroup" ~ "Age (categorised)",
           name == "eth_edited" ~ "Ethnicity",
@@ -389,7 +305,7 @@ for (exposure in XX) {
           ),
           name == "cci" ~ "Charlson's comorbidity index",
           name == "sleep" ~ "Sleep problems",
-          name == "smokstatus_nomiss" ~ "Smoking status",
+          name == "smokstatus" ~ "Smoking status",
           name == "carstairs" ~ "Carstairs deprivation quintile",
           name == "cal_period" ~ "Calendar period",
           name == "gc90day" ~ "Oral steroid prescription",
@@ -402,6 +318,8 @@ for (exposure in XX) {
       arrange(new_lab)
     
     gt_pyars_table %>%
+      rename(pyar_exposure = paste0("pyar_", exposure),
+             pc_pyar_exposure = paste0("pc_pyar_", exposure)) %>% 
       gt(rowname_col = "var",
          groupname_col = "new_lab") %>%
       tab_stubhead(label = "Characteristic") %>%
@@ -410,20 +328,22 @@ for (exposure in XX) {
         decimals = 1,
         use_seps = T
       ) %>%
-      cols_merge(columns = contains("matched_controls"),
+      cols_merge(columns = contains("unexposed"),
                  pattern = "{1} ({2}%)") %>%
-      cols_merge(columns = contains("with_exposure"),
+      cols_merge(columns = contains("exposure"),
                  pattern = "{1} ({2}%)") %>%
       tab_style(style = cell_text(weight = "bold"),
                 locations = cells_row_groups(groups = everything())) %>%
       cols_label(
-        pyar_matched_controls = md("**Matched controls**"),
-        pyar_with_exposure = md(paste0("**With ", exposure, "**"))
+        pyar_unexposed = md("**Matched controls**"),
+        pyar_exposure = md(paste0("**With ", exposure, "**"))
       )
   }
+  .dib("Building Table 3")
+  
   table3_anx <- build_pyears(df_in = df_anx_split)
   table3_dep <- build_pyears(df_in = df_dep_split)
-  
+
   table3_anx %>%
     gt::gtsave(
       filename = paste0("tab3_", ABBRVexp, "_pyars_anxiety.html"),
