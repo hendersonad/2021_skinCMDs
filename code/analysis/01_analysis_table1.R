@@ -69,32 +69,7 @@ for (exposure in XX) {
     tab1 <- df_out %>%
       ungroup() %>%
       mutate(fup = (enddate - indexdate) / 365.25) %>%
-      select(
-        setid,
-        patid,
-        exposed,
-        gender,
-        age,
-        agegroup,
-        country,
-        ruc,
-        fup,
-        cal_period,
-        eth_edited,
-        carstairs,
-        ruc,
-        bmi,
-        bmi2,
-        bmi_cat,
-        alc,
-        smokstatus,
-        sleep,
-        sleep_all,
-        comorbid,
-        cci,
-        severity,
-        out
-      ) ## need to add DEATH here once it is working properly but seems to have been corrupted by the stsplit (death=1 being copied over multiple lines which is non-sensical)
+      select(setid,patid,exposed,gender,age,agegroup,country,ruc,fup,cal_period,eth_edited,carstairs,ruc,bmi,bmi2,bmi_cat,alc,smokstatus,sleep,sleep_all,comorbid,cci,severity,out) ## need to add DEATH here once it is working properly but seems to have been corrupted by the stsplit (death=1 being copied over multiple lines which is non-sensical)
     table(tab1$exposed, tab1$severity, useNA = "always")
     
     # tab1 <- df_out %>%

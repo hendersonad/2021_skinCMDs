@@ -6,7 +6,6 @@ library(tidyverse)
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-    datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
@@ -22,14 +21,14 @@ for(exposure in XX) {
   df_model_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_anxiety.rds"
     ))
   df_model_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_depression.rds"
     ))
@@ -45,7 +44,6 @@ for(exposure in XX) {
   }
 }
 
-#for(plotfit in c(km_fit_eczanx, km_fit_eczdep, km_fit_psoanx, km_fit_psodep)) {
 plot_function <- function(exposure, outcome, plotfit){
   col1 <- as.numeric(substr(str_to_upper(exposure), 1, 1)=="E") + 2
   plot(
@@ -63,33 +61,11 @@ plot_function <- function(exposure, outcome, plotfit){
   legend(0, 0.11, legend=c("Unexposed", str_to_title(exposure)),
          col=c(1,col1), lty=1:2, cex=0.8, bty = "n")
 }
+pdf(here::here("out/analysis/fig_cuminc.pdf"), width = 8, 6)
 par(mfrow = c(2,2))
   plot_function("Eczema", "Anxiety", km_fiteczanx)
   plot_function("Eczema", "Depression", km_fiteczdep)
   plot_function("Psoriasis", "Anxiety", km_fitpsoanx)
   plot_function("Psoriasis", "Depression", km_fitpsodep)
-dev.copy(pdf, here::here("out/analysis/fig_cuminc.pdf"), width = 8, 6)
-  dev.off()
-         
-# 
-# ci_fit <- 
-#   cuminc(
-#     ftime = df_test$t, 
-#     fstatus = df_test$out,
-#     group = df_test$exposed
-#   )
-# 
-# ciplotdat <- 
-#   ci_fit %>% 
-#   list_modify("Tests" = NULL) %>% 
-#   map_df(`[`, c("time", "est"), .id = "id") %>% 
-#   separate(id, c("Exposure", "Event"), " ") 
-# 
-# ggcompetingrisks(
-#   fit = ci_fit, 
-#   multiple_panels = FALSE,
-#   xlab = "Days",
-#   ylab = "Cumulative incidence of event",
-#   title = "Anxiety"#,
-#   #ylim = c(0, 1)
-# )
+dev.off()
+

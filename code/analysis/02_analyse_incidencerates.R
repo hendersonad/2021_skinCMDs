@@ -7,7 +7,6 @@ library(fmsb)
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-    datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
@@ -24,14 +23,14 @@ for (exposure in XX) {
   df_model_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_anxiety.rds"
     ))
   df_model_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_depression.rds"
     ))
@@ -83,12 +82,6 @@ for (exposure in XX) {
     select(out, exposed, everything()) %>%
     mutate_at(c("rd", "lci", "uci"), ~round(. * 1000,2)) %>% 
     mutate_at(c("pyears","crude_rate"), ~round(.,2))
-  
-  gt(rd_output) %>% 
-    gt::gtsave(
-      filename =  paste0("tabA_cruderates_", ABBRVexp, ".html"),
-      path = here::here("out/analysis")
-    )
   
   assign(paste0("rd_",ABBRVexp), rd_output)
 }
