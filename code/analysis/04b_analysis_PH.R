@@ -11,7 +11,6 @@ require(gplots)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
-    #datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
@@ -34,7 +33,7 @@ for(exposure in XX){
   for (outcome in YY){
     # load df_model -----------------------------------------------------------
     df_model <-
-      readRDS(paste0(datapath, "out/models_data/df_model", ABBRVexp, "_", outcome,".rds"))
+      readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_", outcome,".rds"))
     
     cox_fit <- readRDS(paste0(datapath, "out/models_data/", ABBRVexp, "_", outcome, "_mod1_modeldata.rds"))
     cox_fit3 <- readRDS(paste0(datapath, "out/models_data/", ABBRVexp, "_", outcome, "_mod3_modeldata.rds"))
@@ -44,7 +43,7 @@ for(exposure in XX){
     
     km_fit <- survfit(Surv(t, out) ~ exposed, data = df_model)
     
-    pdf(paste0(here("out/PHchecks/"), "ph_checks_", ABBRVexp, "_", substr(outcome,1,3), ".pdf"), width = 10, height = 8)
+    pdf(paste0(here("out/PHchecks"), "ph_checks_", ABBRVexp, "_", substr(outcome,1,3), ".pdf"), width = 10, height = 8)
     par(mfrow=c(3,2))
     
     # compare KM and Cox fits -------------------------------------------------
