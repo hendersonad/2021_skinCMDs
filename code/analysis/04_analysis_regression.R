@@ -26,8 +26,8 @@ dir.create(file.path(datapath, "out/models_data_impute"), showWarnings = FALSE)
 XX <- c("psoriasis", "eczema")
 YY <- c("anxiety", "depression")
 
-export_plots <- F 
-export_models <- T
+export_plots <- TRUE
+export_models <- TRUE
 
 st_time <- Sys.time()
 for (exposure in XX) {
@@ -46,8 +46,7 @@ for (exposure in XX) {
 	}
 	
 	.dib(exposure)
-	
-	# annual period prevalence plot -------------------------------------------
+	# annual Annual incidence plot -------------------------------------------
 	if (export_plots) {
 		temp <- df_anx_model %>%
 			select(setid, patid, exposed, dob, indexdate, tstart, tstop, out) %>%
@@ -104,7 +103,7 @@ for (exposure in XX) {
 			geom_line(lty = 2) +
 			geom_ribbon(lty = 0, alpha = 0.2) +
 			labs(title = paste0(exposure, " ~ anxiety"),
-					 y = "Period prevalence",
+					 y = "Annual incidence",
 					 x = "Year") +
 			theme_ali() +
 			theme(axis.text.x = element_text(angle = 30))
@@ -128,7 +127,7 @@ for (exposure in XX) {
 										alpha = 0.8,
 										position = dodge) +
 			labs(title = paste0(exposure, " ~ anxiety"),
-					 y = "Period prevalence",
+					 y = "Annual incidence",
 					 x = "Year") +
 			theme_ali() +
 			theme(axis.text.x = element_text(angle = 30))
@@ -191,12 +190,11 @@ for (exposure in XX) {
 			geom_ribbon(lty = 0, alpha = 0.2) +
 			labs(
 				title = paste0(exposure, " ~ depression"),
-				y = "Period prevalence",
+				y = "Annual incidence",
 				x = "Year"
 			) +
 			theme_ali() +
 			theme(axis.text.x = element_text(angle = 30))
-		
 		
 		#dodge <- position_dodge(width=0.9)
 		p4 <-
@@ -218,38 +216,13 @@ for (exposure in XX) {
 										position = dodge) +
 			labs(
 				title = paste0(exposure, " ~ depression"),
-				y = "Period prevalence",
+				y = "Annual incidence",
 				x = "Year"
 			) +
 			theme_ali() +
 			theme(axis.text.x = element_text(angle = 30))
 		
 		pAll <- cowplot::plot_grid(p2, p4, ncol = 1)
-		
-		pdf(here::here(
-			"out/analysis",
-			paste0("ann-prevalence-anxiety-", ABBRVexp, ".pdf")
-		), 10, 6)
-		print(p1)
-		dev.off()
-		pdf(here::here(
-			"out/analysis",
-			paste0("ann-prevalence-anxiety-", ABBRVexp, "_v2.pdf")
-		), 10, 6)
-		print(p2)
-		dev.off()
-		pdf(here::here(
-			"out/analysis",
-			paste0("ann-prevalence-depression-", ABBRVexp, ".pdf")
-		), 10, 6)
-		print(p3)
-		dev.off()
-		pdf(here::here(
-			"out/analysis",
-			paste0("ann-prevalence-depression-", ABBRVexp, "_v2.pdf")
-		), 10, 6)
-		print(p4)
-		dev.off()
 		pdf(here::here(
 			"out/analysis",
 			paste0("ann-prevalence-", ABBRVexp, ".pdf")
@@ -258,37 +231,6 @@ for (exposure in XX) {
 		dev.off()
 		
 		rm(df_split_sum, df_split_cal, temp, p1, p2, p3, p4)
-		
-		# Run a simple KM analysis ------------------------------------------------
-		pdf(file = here::here("out", paste0("km_", ABBRVexp, "_anxiety_v2.pdf")),6,6,onefile = F)
-		km <- ggsurvplot(
-			fit = survminer::surv_fit(Surv(t / 365.25, out) ~ exposed, data = df_anx_model),
-			xlab = "Years",
-			ylab = "Overall survival probability",
-			conf.int = T,
-			censor = F,
-			ylim = c(0.9, 1),
-			legend.title = paste0(exposure, "~anx"),
-			legend.labs = c("unexposed", "exposed")
-		)
-		print(km)
-		dev.off()
-		### improvements: add in a little tile with c(0,1) ylims to show true survival
-		
-		pdf(file = here::here("out", paste0("km_", ABBRVexp, "_depression_v2.pdf")),6,6,onefile = F)
-		km <- ggsurvplot(
-			fit = survminer::surv_fit(Surv(t / 365.25, out) ~ exposed, data = df_dep_model),
-			xlab = "Years",
-			ylab = "Overall survival probability",
-			conf.int = T,
-			censor = F,
-			ylim = c(0.9, 1),
-			legend.title = paste0(exposure, "~anx"),
-			legend.labs = c("unexposed", "exposed")
-		)
-		print(km)
-		dev.off()
-		rm(km)
 	}
 	
 	for (outcome in YY) {
@@ -333,7 +275,7 @@ for (exposure in XX) {
 				mod1,
 				file = paste0(
 					datapath,
-					"out/models_data_impute/",
+					"out/models_data/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -344,7 +286,7 @@ for (exposure in XX) {
 				mod2,
 				file = paste0(
 					datapath,
-					"out/models_data_impute/",
+					"out/models_data/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -355,7 +297,7 @@ for (exposure in XX) {
 				mod3,
 				file = paste0(
 					datapath,
-					"out/models_data_impute/",
+					"out/models_data/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -371,13 +313,13 @@ for (exposure in XX) {
 		if (ABBRVexp == "ecz") {
 			mod4 <-
 				coxph(
-					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + obese_cat + sleep + alc + smokstatus_nomiss + gc90days + strata(setid),
+					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi2 + sleep + alc + smokstatus + gc90days + strata(setid),
 					data = df_model
 				) 
 		} else if (ABBRVexp == "pso") {
 			mod4 <-
 				coxph(
-					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + obese_cat + alc + smokstatus_nomiss + strata(setid),
+					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi2 + alc + smokstatus + strata(setid),
 					data = df_model
 				) 
 		}
@@ -440,7 +382,7 @@ for (exposure in XX) {
 				mod4,
 				file = paste0(
 					datapath,
-					"out/models_data_impute/",
+					"out/models_data/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -451,7 +393,7 @@ for (exposure in XX) {
 				mod5,
 				file = paste0(
 					datapath,
-					"out/models_data_impute/",
+					"out/models_data/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -462,7 +404,7 @@ for (exposure in XX) {
 				mod6,
 				file = paste0(
 					datapath,
-					"out/models_data_impute/",
+					"out/models_data/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -473,7 +415,7 @@ for (exposure in XX) {
 				mod7,
 				file = paste0(
 					datapath,
-					"out/models_data_impute/",
+					"out/models_data/",
 					ABBRVexp,
 					"_",
 					outcome,
@@ -484,7 +426,7 @@ for (exposure in XX) {
 				mod8,
 				file = paste0(
 					datapath,
-					"out/models_data_impute/",
+					"out/models_data/",
 					ABBRVexp,
 					"_",
 					outcome,
