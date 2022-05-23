@@ -36,6 +36,7 @@ for(exposure in XX) {
   for(outcome in YY) {
     # load data ---------------------------------------------------------------
     df_model <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_", outcome,".rds"))
+    .dib(exposure)
     
     ## fit model with time interaction 
     fit1_int <-
