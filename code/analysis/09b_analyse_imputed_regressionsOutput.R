@@ -1,4 +1,5 @@
 library(tidyverse)
+library(data.table)
 library(here)
 library(magrittr)
 library(gt)
@@ -8,7 +9,6 @@ library(readstata13)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
-    #datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
@@ -33,21 +33,21 @@ make_regression_tab <- function(exposure){
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_anxiety_mod1_modeldata_noghosts-3yrs.rds"
+      "_anxiety_mod1_modeldata_imputed.rds"
     ))
   mod2_anx <-
     readRDS(paste0(
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_anxiety_mod2_modeldata_noghosts-3yrs.rds"
+      "_anxiety_mod2_modeldata_imputed.rds"
     ))
   mod3_anx <-
     readRDS(paste0(
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_anxiety_mod3_modeldata_noghosts-3yrs.rds"
+      "_anxiety_mod3_modeldata_imputed.rds"
     ))
   
   # load models -------------------------------------------------------------
@@ -56,43 +56,49 @@ make_regression_tab <- function(exposure){
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_depression_mod1_modeldata_noghosts-3yrs.rds"
+      "_depression_mod1_modeldata_imputed.rds"
     ))
   mod2_dep <-
     readRDS(paste0(
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_depression_mod2_modeldata_noghosts-3yrs.rds"
+      "_depression_mod2_modeldata_imputed.rds"
     ))
   mod3_dep <-
     readRDS(paste0(
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_depression_mod3_modeldata_noghosts-3yrs.rds"
+      "_depression_mod3_modeldata_imputed.rds"
     ))
   
   # load data ---------------------------------------------------------------
   df_model_anx <-
-    readRDS(paste0(datapath, "out/models_data/df_model", ABBRVexp, "_anxiety_noghosts-3yrs.rds"))
+    readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety_imputed.rds"))
   
   df_model_dep <-
-    readRDS(paste0(datapath, "out/models_data/df_model", ABBRVexp, "_depression_noghosts-3yrs.rds"))
+    readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression_imputed.rds"))
   
   # Get n, n events and person-years by group ------------------------------
   get_data_info <- function(model, data) {
     vars <- attr(terms(model), "term.labels")
     vars <- vars[1:length(vars) - 1]
     df <- data %>%
-      select(setid, patid, gender, age, pracid, out, all_of(vars), dob, indexdate = indexdate.x, enddate, tstart, tstop, t) %>%
-      mutate(indexNum = as.numeric(indexdate-dob),
-             full_t = tstop-indexNum) %>% 
-      group_by(setid, patid) %>% 
-      slice(n()) %>% 
-      select(-tstart, -tstop, -t)
+      select(setid, patid, gender, age, pracid, out, all_of(vars), dob, indexdate, enddate, tstart, tstop, t) 
+    dim(df)
     
-    dfsum <- df %>%
+    # convert to data.table for speed of selecting the last row by group
+    dt <- setDT(df)
+    dt <- dt[ complete.cases(dt) ]
+    dt[, firstObsNum := tstart[1L], by = list(setid, patid)]
+    dt[, full_t := tstop-firstObsNum]
+    dt <- dt[ dt[order(setid, patid, tstart), .I[c(.N)], by = list(setid, patid)]$V1 ]
+    
+    # convert back to tibble for summary code
+    dtib <- tibble(dt)
+    
+    dfsum <- dtib %>%
       group_by(exposed) %>%
       summarise(n = n(),
                 nevents = sum(out),
@@ -102,35 +108,18 @@ make_regression_tab <- function(exposure){
     dfsum
   }
   
-  mod1_desc_anx <- get_data_info(mod1_anx, df_model_anx)
-  mod2_desc_anx <- get_data_info(mod2_anx, df_model_anx)
-  mod3_desc_anx <- get_data_info(mod3_anx, df_model_anx)
+  mod1_desc_anx <- get_data_info(model = mod1_anx, data = df_model_anx)
+  mod2_desc_anx <- get_data_info(model = mod2_anx, data = df_model_anx)
+  mod3_desc_anx <- get_data_info(model = mod3_anx, data = df_model_anx)
   
   mod1_desc_dep <- get_data_info(mod1_dep, df_model_dep)
   mod2_desc_dep <- get_data_info(mod2_dep, df_model_dep)
   mod3_desc_dep <- get_data_info(mod3_dep, df_model_dep)
   
   # Get CIs and p-values ----------------------------------------------------
-  getP <- function(model,
-                   sigF = 3,
-                   ci_level = 0.99) {
-    model_sum <- summary(model, conf.int = ci_level)
-    pval <-
-      model_sum$coefficients[paste0("exposed", str_to_title(exposure)), 5] %>% signif(digits = 1)
-    if (pval < 0.0001) {
-      pvalout <- "***"
-    } else if (pval < 0.001) {
-      pvalout <- "**"
-    } else if (pval < 0.01) {
-      pvalout <- "*"
-    } else {
-      pvalout <- paste0(pval)
-    }
-    pvalout
-  }
   getCI <- function(model,
                     sigF = 3,
-                    ci_level = 0.99) {
+                    ci_level = 0.95) {
     model_sum <- summary(model, conf.int = ci_level)
     paste0(signif(model_sum$conf.int[1, 3], sigF),
            "-",
@@ -144,15 +133,54 @@ make_regression_tab <- function(exposure){
                       mod2_dep,
                       mod3_dep)
   
-  p_values <- sapply(models_list, getP)
   ci_values <- sapply(models_list, getCI)
-  names(ci_values) <- names(p_values) <- c("mod1_anx",
-                                           "mod2_anx",
-                                           "mod3_anx",
-                                           "mod1_dep",
-                                           "mod2_dep",
-                                           "mod3_dep")
+  names(ci_values) <- c("mod1_anx","mod2_anx","mod3_anx","mod1_dep","mod2_dep","mod3_dep")
   
+  ## function to put together N, n_event/p-yars, HR, CI
+  merge_results <- function(model = "mod1"){
+    model_desc_anx <- get(paste0(model, "_desc_anx"))
+    model_desc_dep <- get(paste0(model, "_desc_dep"))
+    mod_anx <- get(paste0(model, "_anx"))
+    mod_dep <- get(paste0(model, "_dep"))
+    n <- c(
+      " ",
+      prettyNum(model_desc_anx$n, big.mark = ","),
+      " ",
+      prettyNum(model_desc_dep$n, big.mark = ",")
+    )
+    #col4 Nevent/pyars 
+    events <- c(
+      " ",
+      paste0(prettyNum(model_desc_anx$nevents, big.mark = ","), "/", prettyNum(model_desc_anx$pyars_mil, digits = 3, big.mark = ",")),
+      " ",
+      paste0(prettyNum(model_desc_dep$nevents, big.mark = ","), "/", prettyNum(model_desc_dep$pyars_mil, digits = 3, big.mark = ","))
+    )
+    #col5 HR 
+    hr <-
+      c(
+        " ",
+        "-",
+        prettyNum(
+          exp(mod_anx$coefficients[paste0("exposed", str_to_title(exposure))]),
+          digits = 3,
+          big.mark = ","
+        ),
+        " ",
+        "-",
+        prettyNum(
+          exp(mod_dep$coefficients[paste0("exposed", str_to_title(exposure))]),
+          digits = 3,
+          big.mark = ","
+        )
+      )
+    #col8 CI 
+    ci <- c(" ", "-", getCI(mod_anx), " ", "-", getCI(mod_dep))
+    
+    modelNum <- substr(model, 4, 4)
+    outtibble <- tibble(n, events, hr, ci)
+    names(outtibble) <- paste0(names(outtibble), modelNum)
+    return(outtibble)
+  }
   
   # regression table ---------------------------------------------------------
   #col1 exposure
@@ -167,147 +195,21 @@ make_regression_tab <- function(exposure){
   #col2 outcome
   out <- c("Anxiety", rep(" ", 2), "Depression", rep(" ", 2))
   
-  #col3 N
-  colN <- c(
-    " ",
-    prettyNum(mod1_desc_anx$n, big.mark = ","),
-    " ",
-    prettyNum(mod1_desc_dep$n, big.mark = ",")
-  )
-  #col4 Nevent
-  colevents <- c(
-    " ",
-    prettyNum(mod1_desc_anx$nevents, big.mark = ","),
-    " ",
-    prettyNum(mod1_desc_dep$nevents, big.mark = ",")
-  )
-  #col5 p-years
-  colpyars <- c(
-    " ",
-    prettyNum(mod1_desc_anx$pyars_mil, digits = 1, big.mark = ",", ),
-    " ",
-    prettyNum(mod1_desc_dep$pyars_mil, digits = 1, big.mark = ",")
-  )
-  
-  #col6 N (model 1)
-  mod1N <-
-    c(prettyNum(sum(mod1_desc_anx$n), big.mark = ","),
-      rep(" ", 2),
-      prettyNum(sum(mod1_desc_dep$n), big.mark = ","),
-      rep(" ", 2))
-  #col7 HR (model 1)
-  mod1HR <-
-    c(
-      " ",
-      "Ref",
-      prettyNum(
-        exp(mod1_anx$coefficients[paste0("exposed", str_to_title(exposure))]),
-        digits = 3,
-        big.mark = ","
-      ),
-      " ",
-      "Ref",
-      prettyNum(
-        exp(mod1_dep$coefficients[paste0("exposed", str_to_title(exposure))]),
-        digits = 3,
-        big.mark = ","
-      )
-    )
-  #col8 CI (model 1)
-  mod1Ci <- c(" ", "-", ci_values[1], " ", "-", ci_values[4])
-  #col9 p (model 1)
-  mod1P <- c(" ", "-", p_values[1], " ", "-", p_values[4])
-  
-  #col10 N (model 2)
-  mod2N <-
-    c(prettyNum(sum(mod2_desc_anx$n), big.mark = ","),
-      rep(" ", 2),
-      prettyNum(sum(mod2_desc_dep$n), big.mark = ","),
-      rep(" ", 2))
-  #col11 HR (model 2)
-  mod2HR <-
-    c(
-      " ",
-      "Ref",
-      prettyNum(
-        exp(mod2_anx$coefficients[paste0("exposed", str_to_title(exposure))]),
-        digits = 3,
-        big.mark = ","
-      ),
-      " ",
-      "Ref",
-      prettyNum(
-        exp(mod2_dep$coefficients[paste0("exposed", str_to_title(exposure))]),
-        digits = 3,
-        big.mark = ","
-      )
-    )
-  #col12 CI (model 2)
-  mod2Ci <- c(" ", "-", ci_values[2], " ", "-", ci_values[5])
-  #col13 p (model 2)
-  mod2P <- c(" ", "-", p_values[2], " ", "-", p_values[5])
-  
-  #col14 N (model 3)
-  mod3N <-
-    c(prettyNum(sum(mod3_desc_anx$n), big.mark = ","),
-      rep(" ", 2),
-      prettyNum(sum(mod3_desc_dep$n), big.mark = ","),
-      rep(" ", 2))
-  #col15 HR (model 3)
-  mod3HR <-
-    c(
-      " ",
-      "Ref",
-      prettyNum(
-        exp(mod3_anx$coefficients[paste0("exposed", str_to_title(exposure))]),
-        digits = 3,
-        big.mark = ","
-      ),
-      " ",
-      "Ref",
-      prettyNum(
-        exp(mod3_dep$coefficients[paste0("exposed", str_to_title(exposure))]),
-        digits = 3,
-        big.mark = ","
-      )
-    )
-  #col16 CI (model 3)
-  mod3Ci <- c(" ", "-", ci_values[3], " ", "-", ci_values[6])
-  #col17 p (model 3)
-  mod3P <- c(" ", "-", p_values[3], " ", "-", p_values[6])
-  
   out_table <-
-    tibble(
+    bind_cols(
       characteristic = char,
       outcome = out,
-      n = colN,
-      nevents = colevents,
-      pyars = colpyars,
-      n1 = mod1N,
-      hr1 = mod1HR,
-      ci1 = mod1Ci,
-      p1 = mod1P,
-      n2 = mod2N,
-      hr2 = mod2HR,
-      ci2 = mod2Ci,
-      p2 = mod2P,
-      n3 = mod3N,
-      hr3 = mod3HR,
-      ci3 = mod3Ci,
-      p3 = mod3P
+      merge_results("mod1"),
+      merge_results("mod2"),
+      merge_results("mod3")
     )
-  gt::gt(out_table) %>%
-    gt::cols_align(columns = 3:dim(out_table)[2], align = "right")
+  out_table
 }
 
 pso_table <- make_regression_tab(XX[1])
 ecz_table <- make_regression_tab(XX[2])
 
-## combine table data
-tab1 <- ecz_table$`_data`
-tab2 <- pso_table$`_data`
-
-tab3 <- bind_rows(tab1, tab2)
+tab3 <- bind_rows(ecz_table, pso_table)
 
 tab3_out <- tab3 %>%
   gt() %>% 
@@ -324,33 +226,30 @@ tab3_out <- tab3 %>%
   cols_label(
     characteristic = md("**Exposure**"),
     outcome = md("**Event**"),
-    n = md("**N (total)**"),
-    nevents = md("**No. events**"),
-    pyars = md("**Person-years (mil)**"),
-    n1 = md("**N**"),
+    n1 = md("**N (total)**"),
+    events1 = md("**No. events/person-years (mil)**"),
     hr1 = md("**HR**"),
-    ci1 = md("**99% CI**"),
-    p1 = md("***p***"),
+    ci1 = md("**95% CI**"),
     n2 = md("**N**"),
+    events2 = md("**No. events/person-years (mil)**"),
     hr2 = md("**HR**"),
-    ci2 = md("**99% CI**"),
-    p2 = md("***p***"),
+    ci2 = md("**95% CI**"),
     n3 = md("**N**"),
+    events3 = md("**No. events/person-years (mil)**"),
     hr3 = md("**HR**"),
-    ci3 = md("**99% CI**"),
-    p3 = md("***p***")
+    ci3 = md("**95% CI**")
   ) %>% 
   tab_spanner(
     label = md("**Crude model**"),
-    columns = 6:9
+    columns = 3:6
   ) %>% 
   tab_spanner(
     label = md("**Confounder model**"),
-    columns = 10:13
+    columns = 7:10
   ) %>% 
   tab_spanner(
     label = md("**Mediator model**"),
-    columns = 14:17
+    columns = 11:14
   ) %>%
   tab_style(
     style = cell_text(weight = "bold"),
@@ -369,39 +268,31 @@ tab3_out <- tab3 %>%
     locations = cells_column_spanners(
       spanners = "**Confounder model**")) %>% 
   tab_footnote(
-    footnote = "Additionally adjusted for BMI, alcohol misuse, smoking status",
+    footnote = "Additionally adjusted for BMI, alcohol misuse, smoking status and (eczema only) sleep problems and steroid use",
     locations = cells_column_spanners(
-      spanners = "**Mediator model**")) %>% 
-  tab_footnote(
-    footnote = "***: p<0.0001",
-    locations = cells_column_labels(
-      columns = c(p1,p2,p3))) 
+      spanners = "**Mediator model**")
+  )
 
 tab3_out
 tab3_out %>%
   gt::gtsave(
-    filename =  paste0("table4_regression_noghosts-3yrs.html"),
-    path = here::here("out/analysis")
+    filename =  paste0("tab15_regression_imputed.html"),
+    path = here::here("out/tables")
   )
-tab3_out %>%
-  gt::gtsave(
-    filename =  paste0("table4_regression_noghosts-3yrs.rtf"),
-    path = here::here("out/analysis")
-  )
-
 
 
 # make the plot -----------------------------------------------------------
 get_plot_data <- function(pretty_table) {
   numeric_tab <- pretty_table %>%
-    select(-starts_with("p")) %>%
     select(-starts_with("n")) %>%
+    select(-starts_with("events")) %>%
     select(-characteristic,-outcome) %>%
     separate(ci1, c("ciL1", "ciU1"), sep = "-") %>%
     separate(ci2, c("ciL2", "ciU2"), sep = "-") %>%
     separate(ci3, c("ciL3", "ciU3"), sep = "-") %>%
-    mutate_if(is.character, as.numeric) %>%
-    drop_na()
+    drop_na() %>% 
+    filter(hr1 != "-") %>% 
+    mutate_if(is.character, as.numeric) 
   
   plot_tab1 <- pretty_table %>%
     select(2) %>%
@@ -409,9 +300,9 @@ get_plot_data <- function(pretty_table) {
     bind_cols(numeric_tab)
 }
 
-ecz_plot <- get_plot_data(ecz_table$`_data`) %>%
+ecz_plot <- get_plot_data(ecz_table) %>%
   mutate(exposure = "Atopic eczema")
-pso_plot <- get_plot_data(pso_table$`_data`) %>%
+pso_plot <- get_plot_data(pso_table) %>%
   mutate(exposure = "Psoriasis")
 
 plot_df <- bind_rows(ecz_plot, pso_plot)
@@ -431,7 +322,7 @@ plot_df$a[plot_df$model == "Mediator adjusted"] <- 1
 
 plot_df$ciU %>% max()
 
-saveRDS(plot_df, here::here("out/data/df_forest_noghosts-3yrs.rds"))
+saveRDS(plot_df, here::here("out/data/df_forest_imputed.rds"))
 
 pd <- position_dodge(width = 0.3)
 plot_new <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure, colour = exposure, alpha = a)) +
@@ -453,7 +344,7 @@ plot_new <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group
         legend.position = "bottom")
 
 print(plot_new)
-dev.copy(pdf, here::here("out/analysis/forest_plot6_noghosts-3yrs.pdf"), width = 6, height = 4); dev.off()
+dev.copy(pdf, here::here("out/analysis/forest_plot11_imputed.pdf"), width = 6, height = 4); dev.off()
 
 
 # import the original main analysis forest plot data to merge ------------------
@@ -461,21 +352,21 @@ does_exist <- list.files(here::here("out/data"), "df_forest_main.rds") %>% lengt
 
 if(does_exist) {
   plot_df_main <- readRDS(here::here("out/data/df_forest_main.rds"))
-  plot_df_noghosts <- plot_df
+  plot_df_imputed <- plot_df
   
   plot_df <- plot_df_main %>% 
     mutate(analysis = "Main") %>% 
-    bind_rows(mutate(plot_df_noghosts, analysis = "Consult < 3yrs before entry"))
+    bind_rows(mutate(plot_df_imputed, analysis = "Impute missing data"))
   
   pd <- position_dodge(width = 0.3)
-  plot_both <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = outcome, colour = outcome, alpha = a)) +
+  plot_both <- ggplot(plot_df, aes(x = analysis, y = hr, ymin = ciL, ymax = ciU, group = outcome, colour = outcome, alpha = a)) +
     geom_point(position = pd, size = 3, shape = 1) +
     geom_errorbar(position = pd, width = 0.25) +
     geom_hline(yintercept = 1, lty=2) +  
     #ylim(c(0,NA)) +
     scale_y_log10(breaks=seq(0.5,2,0.1),position="left",limits=c(0.9,1.35)) +
     scale_x_discrete(limits=rev) +
-    facet_grid(rows = vars(analysis), cols = vars(exposure)) +
+    facet_grid(rows = vars(model), cols = vars(exposure)) +
     coord_flip() +
     guides(colour = guide_legend("Exposure"), 
            alpha = "none") +
@@ -487,114 +378,5 @@ if(does_exist) {
           legend.position = "bottom")
   
   print(plot_both)
-  dev.copy(pdf, here::here("out/analysis/forest_plot7_sens_mainVnoghosts-3yrs.pdf"), width = 6, height = 6); dev.off()
-}
-
-
-# make table summarising the consult  drop_out  ---------------------------
-ecz_cohort <- readstata13::read.dta13(paste0(datapath, "out/getmatchedcohort-eczema-main-mhealth.dta"))
-ecz_nonghosts <- haven::read_dta(paste0(datapath, "out/variables-ecz-consultations-yrbeforeindex-3yrs.dta"))
-
-pso_cohort <- haven::read_dta(paste0(datapath, "out/getmatchedcohort-psoriasis-main-mhealth.dta"))
-pso_nonghosts <- haven::read_dta(paste0(datapath, "out/variables-pso-consultations-yrbeforeindex-3yrs.dta"))
-
-get_table <- function(ABBRVexp) {
-  data <- get(paste0(ABBRVexp, "_cohort"))
-  ghosts_var <- get(paste0(ABBRVexp, "_nonghosts"))
-  df_noghosts <- data %>% 
-    left_join(ghosts_var, by = "patid") %>% 
-    mutate(pre_cons = replace_na(consyrbeforeindex, 0))
-  table_noghosts <- df_noghosts %>% 
-    count(exposed, pre_cons) %>% 
-    group_by(exposed) %>% 
-    mutate(prop = prop.table(n)*100 %>% signif(digits = 2)) %>% 
-    pivot_wider(exposed, names_from = pre_cons, values_from = c(n, prop))
-  table_noghosts
-}
-ecz_tab <- get_table("ecz") %>% 
-  mutate(exposed = case_when(
-    exposed == 0 ~ "Unexposed",
-    exposed == 1 ~ "Eczema"
-    )
-  )
-pso_tab <- get_table("pso") %>% 
-  mutate(exposed = case_when(
-    exposed == 0 ~ "Unexposed",
-    exposed == 1 ~ "Psoriasis"
-    )
-  )
-
-ecz_tab$exposed <- factor(ecz_tab$exposed, levels = c("Unexposed", "Eczema"))
-pso_tab$exposed <- factor(pso_tab$exposed, levels = c("Unexposed", "Psoriasis"))
-
-
-tab_ghosts <- ecz_tab %>% 
-  bind_rows(pso_tab)
-
-gt_ghosts <- tab_ghosts %>%
-  ungroup() %>% 
-  dplyr::select(exposed, n_0, prop_0, n_1, prop_1) %>%
-  gt::gt() %>%
-  tab_row_group(label = "Eczema cohort",
-                rows = 1:2) %>%
-  tab_row_group(label = "Psoriasis cohort",
-                rows = 3:4) %>%
-  gt::tab_header(title = md("Proportion of people with/without a consultation < 3 yr before indexdate")) %>%
-  gt::fmt_number(columns = c(3, 5), decimals = 1) %>%
-  gt::fmt_number(columns = c(2, 4), decimals = 0) %>%
-  gt::data_color(
-    columns = c(prop_1),
-    colors = scales::col_numeric(
-      palette = paletteer::paletteer_c(palette = "viridis::inferno",
-                                       n = 100) %>% as.character(),
-      domain = c(0,100)
-    )
-  ) %>%
-  cols_label(n_0 = md("*n* without a recent consultation"),
-             n_1 = md("*n* with a recent consultation"),
-             prop_0 = "%",
-             prop_1 = "%") 
-gt_ghosts
-
-gt_ghosts %>% 
-  gt::gtsave(
-    filename =  paste0("ghosts_analysis_3yrs.html"),
-    path = here::here("out/supplementary")
-  )
-
-# Compare main/1-yr/3-yr --------------------------------------------------
-# import the original main analysis forest plot data to merge ------------------
-does_exist <- list.files(here::here("out/data"), "df_forest_noghosts.rds") %>% length() %>% as.logical()
-
-if(does_exist) {
-  plot_df_main <- readRDS(here::here("out/data/df_forest_main.rds"))
-  plot_df_noghosts_1yr <- readRDS(here::here("out/data/df_forest_noghosts.rds"))
-  plot_df_noghosts_3yr <- readRDS(here::here("out/data/df_forest_noghosts-3yrs.rds"))
-  
-  plot_df <- plot_df_main %>% 
-    mutate(analysis = "Main") %>% 
-    bind_rows(mutate(plot_df_noghosts_1yr, analysis = "Consult < 1yr before entry")) %>% 
-    bind_rows(mutate(plot_df_noghosts_3yr, analysis = "Consult < 3yrs before entry")) 
-  
-  pd <- position_dodge(width = 0.3)
-  plot_both <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = outcome, colour = outcome, alpha = a)) +
-    geom_point(position = pd, size = 3, shape = 1) +
-    geom_errorbar(position = pd, width = 0.25) +
-    geom_hline(yintercept = 1, lty=2) +  
-    #ylim(c(0,NA)) +
-    scale_y_log10(breaks=seq(0.5,2,0.1),position="left",limits=c(0.9,1.35)) +
-    scale_x_discrete(limits=rev) +
-    facet_grid(rows = vars(analysis), cols = vars(exposure)) +
-    coord_flip() +
-    guides(colour = guide_legend("Exposure"), 
-           alpha = "none") +
-    labs(y = "Hazard ratio", x = "Model") +
-    scale_alpha_identity() +
-    theme_bw() +
-    theme(strip.background = element_blank(),
-          strip.text = element_text(face = "bold"),
-          legend.position = "bottom")
-  
-  print(plot_both)
-  dev.copy(pdf, here::here("out/analysis/forest_plot7_sens_mainVnoghosts-all.pdf"), width = 6, height = 6); dev.off()
+  dev.copy(pdf, here::here("out/analysis/forest_plot12_sens_mainVimputed.pdf"), width = 6, height = 6); dev.off()
 }

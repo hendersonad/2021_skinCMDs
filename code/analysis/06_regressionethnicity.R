@@ -17,7 +17,6 @@ library(lmtest)
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-    datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
@@ -36,128 +35,50 @@ for (exposure in XX) {
   ABBRVexp <- str_sub(exposure, 1 , 3)
   if (exposure == "eczema") {
     df_anx_split <-
-      readRDS(paste0(datapath, "out/ecz-anxiety_split.rds"))
+      readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety_2006on.rds"))
     df_dep_split <-
-      readRDS(paste0(datapath, "out/ecz-depression_split.rds"))
+      readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression_2006on.rds"))
   } else if (exposure == "psoriasis") {
     df_anx_split <-
-      readRDS(paste0(datapath, "out/pso-anxiety_split.rds"))
+      readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety_2006on.rds"))
     df_dep_split <-
-      readRDS(paste0(datapath, "out/pso-depression_split.rds"))
+      readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression_2006on.rds"))
   }
   
   .dib(exposure)
   
-  df_anx_split$t <-
-    as.numeric(df_anx_split$tstop - df_anx_split$tstart)
-  df_dep_split$t <-
-    as.numeric(df_dep_split$tstop - df_dep_split$tstart)
-  
-  df_anx_split$gc90days <-
-    factor(df_anx_split$gc90days, levels = c("not active", "active"))
-  df_dep_split$gc90days <-
-    factor(df_dep_split$gc90days, levels = c("not active", "active"))
-  
-  df_anx_split$bmi2 <-
-    df_anx_split$bmi - mean(df_anx_split$bmi, na.rm = T)
-  df_dep_split$bmi2 <-
-    df_dep_split$bmi - mean(df_dep_split$bmi, na.rm = T)
-  
-  
   for (outcome in YY) {
-    #outcome = YY[2]
     .dib(outcome)
     
     if (outcome == "anxiety") {
-      df_model <- df_anx_split
+      df_model_eth_nonmiss <- df_anx_split
     } else if (outcome == "depression") {
-      df_model <- df_dep_split
+      df_model_eth_nonmiss <- df_dep_split
     }
     
-    # Bit of variable formatting for output in regression tables --------------
-    df_model <- df_model %>% 
-      mutate(exposed = case_when(
-        exposed == 0 ~ "Unexposed",
-        exposed == 1 ~ stringr::str_to_title(paste0(exposure))
-      ))
-    #rename(!!paste0(exposure) := exposed) %>% 
-    df_model$exposed <- factor(df_model$exposed, levels = c("Unexposed", str_to_title(exposure)))
-    var_label(df_model$exposed) <- "Exposure"
-    var_label(df_model$carstairs) <- "Carstairs index of deprivation"
-    levels(df_model$carstairs)[1] <- "1 (least deprived)"
-    levels(df_model$carstairs)[5] <- "5 (most deprived)"
-    var_label(df_model$cal_period) <- "Calendar Period"
-    var_label(df_model$cci) <- "Charlson's comorbidity index"
-    levels(df_model$cci) <- c("Low", "Moderate", "Severe")
-    var_label(df_model$agegroup) <- "Age group"
-    df_model$agegroup <- relevel(df_model$agegroup, ref = "50-59")
-    
-    # Mediators
-    var_label(df_model$bmi2) <- "BMI (centred)"
-    var_label(df_model$alc) <- "Alcohol misuse"
-    levels(df_model$alc) <- c("No", "Yes")
-    var_label(df_model$smokstatus) <- "Smoking status"
-    levels(df_model$smokstatus) <- stringr::str_to_title(levels(df_model$smokstatus))
-    var_label(df_model$gc90days) <- "Recent high dose glucocorticoid steroid use (<30days)"
-    levels(df_model$gc90days) <- c("No", "Yes")
-    df_model$sleep <- factor(df_model$sleep, levels = 0:1, labels = c("No", "Yes"))
-    var_label(df_model$sleep) <- "Sleep problems"
-    var_label(df_model$severity) <- paste(str_to_title(exposure), "severity", sep = " ")
-    levels(df_model$severity) <- str_to_title(levels(df_model$severity))
-    if (ABBRVexp == "ecz") {
-      df_model$comorbid <- df_model$asthma
-      var_label(df_model$comorbid) <- "Asthma"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    } else{
-      df_model$comorbid <- df_model$arthritis
-      var_label(df_model$comorbid) <- "Arthritis"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    }
-    
-    # moderations for ethnicity -----------------------------------------------
-    missingEth <- table(df_model$eth_edited, useNA = "always")
-    missingEth_all <- missingEth[8]/sum(missingEth)
-    df_model_eth <- df_model %>% 
-      filter(indexdate >= as.Date("2006-01-01")) 
-    missingEth <- table(df_model_eth$eth_edited, useNA = "always")
-    missingEth_06 <- missingEth[8]/sum(missingEth)
-    
-    var_label(df_model_eth$eth_edited) <- "Ethnicity"
-    levels(df_model_eth$eth_edited)[levels(df_model_eth$eth_edited)=="equally common"] <- NA
-    
-    ##got to get rid of missing ethnicity sets
-    missing_sets <- df_model_eth$patid[is.na(df_model_eth$eth_edited) & df_model_eth$exposed==str_to_title(exposure)] %>% unique
-    length(missing_sets)
-    df_model_eth_nonmiss <- df_model_eth %>% 
-      filter(!setid %in% missing_sets)
-    missingEth <- table(df_model_eth_nonmiss$eth_edited, useNA = "always")
-    missingEth_nonmis <- missingEth[7]/sum(missingEth)
-    
-    levels(df_model_eth_nonmiss$cal_period)[levels(df_model_eth_nonmiss$cal_period)=="1997-2002"] <- NA
-    
-    saveRDS(df_model_eth_nonmiss, file = paste0(datapath, "out/models_data/df_model", ABBRVexp, "_", outcome, "_2006on.rds"))
-  
     # Run a simple Cox regression ----------------------------------------
-    .dib("Running model 1 (crude)")
+    .dib("Running model 2 (confounder)")
     modEth <-
       coxph(
         Surv(t, out) ~ exposed + eth_edited + carstairs + cal_period + comorbid + cci + strata(setid),
         data = df_model_eth_nonmiss)
+    .dib("Running model 3 (mediation)")
     if (ABBRVexp == "ecz") {
       modEth2 <-
         coxph(
-          Surv(t, out) ~ exposed + eth_edited + carstairs + cal_period + comorbid + cci + bmi2 + sleep + alc + smokstatus + gc90days + strata(setid),
+          Surv(t, out) ~ exposed + eth_edited + carstairs + cal_period + comorbid + cci + bmi_cat + sleep + alc + smokstatus + gc90days + strata(setid),
           data = df_model_eth_nonmiss
         ) 
     } else if (ABBRVexp == "pso") {
       modEth2 <-
         coxph(
-          Surv(t, out) ~ exposed + eth_edited + carstairs + cal_period + comorbid + cci + bmi2 + alc + smokstatus + strata(setid),
+          Surv(t, out) ~ exposed + eth_edited + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
           data = df_model_eth_nonmiss
         ) 
     }
     
     # interaction model ------------------------------------
+    .dib("Running model 4 (interaction)")
     modEth3 <-
       coxph(
         Surv(t, out) ~ exposed + agegroup + exposed * eth_edited + eth_edited + carstairs + cal_period + comorbid + cci + strata(setid),
@@ -209,13 +130,13 @@ for (exposure in XX) {
     if (ABBRVexp == "ecz") {
       mod2_small <-
         coxph(
-          Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi2 + sleep + alc + smokstatus + gc90days + strata(setid),
+          Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi_cat + sleep + alc + smokstatus + gc90days + strata(setid),
           data = df_model_small
         ) 
     } else if (ABBRVexp == "pso") {
       mod2_small <-
         coxph(
-          Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi2 + alc + smokstatus + strata(setid),
+          Surv(t, out) ~ exposed + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
           data = df_model_small
         ) 
     }
@@ -224,6 +145,7 @@ for (exposure in XX) {
     lr3 <- lrtest(modEth, modEth3)
     
     .dib(paste0(outcome, "~", exposure))
+    
     # load models -------------------------------------------------------------
     mod_confound_old <-
       readRDS(
@@ -250,11 +172,11 @@ for (exposure in XX) {
     mod_confound_new <- modEth
     mod_mediator_new <- modEth2
     
-    mod1_old <- broom::tidy(mod_confound_old, conf.int = T, exponentiate = T, conf.level = 0.99)
-    mod2_old <- broom::tidy(mod_mediator_old, conf.int = T, exponentiate = T, conf.level = 0.99)
-    mod1_new <- broom::tidy(mod_confound_new, conf.int = T, exponentiate = T, conf.level = 0.99)
-    mod2_new <- broom::tidy(mod_mediator_new, conf.int = T, exponentiate = T, conf.level = 0.99)
-    mod3_new <- broom::tidy(modEth3, conf.int = T, exponentiate = T, conf.level = 0.99)
+    mod1_old <- broom::tidy(mod_confound_old, conf.int = T, exponentiate = T, conf.level = 0.95)
+    mod2_old <- broom::tidy(mod_mediator_old, conf.int = T, exponentiate = T, conf.level = 0.95)
+    mod1_new <- broom::tidy(mod_confound_new, conf.int = T, exponentiate = T, conf.level = 0.95)
+    mod2_new <- broom::tidy(mod_mediator_new, conf.int = T, exponentiate = T, conf.level = 0.95)
+    mod3_new <- broom::tidy(modEth3, conf.int = T, exponentiate = T, conf.level = 0.95)
     
     fmt_tab <- function(modelframe) {
       modelframe %>% 
@@ -286,7 +208,7 @@ for (exposure in XX) {
     lincom_out <- lincom(modEth3,
                          interactions,
                          eform = TRUE,
-                         level = 0.99)
+                         level = 0.95)
     rownames(lincom_out)[1] <-
       paste0(rownames(lincom_out)[1], "+", int_var, int_levels[1])
     
@@ -295,8 +217,8 @@ for (exposure in XX) {
       janitor::clean_names() %>%
       dplyr::select(lincom,
                     estimate,
-                    conf.low = x0_5_percent,
-                    conf.high = x99_5_percent,
+                    conf.low = x2_5_percent,
+                    conf.high = x97_5_percent,
                     p.value = pr_chisq) %>%
       mutate_at(c("estimate", "conf.low", "conf.high", "p.value"), ~ unlist(.))  %>% 
       dplyr::select(term = lincom, estimate, conf.low, conf.high, p.value) %>% 
@@ -314,10 +236,6 @@ for (exposure in XX) {
 }
 end <- Sys.time()
 end-st
-
-## I fucked up and had mod2_new repeated for the interaction model
-#full_ethnicity$model[c(15:25, 46:56, 77:87, 108:118)] <- "mod3_new"
-
 
 saveRDS(full_ethnicity, file = paste0(datapath,  "out/models_data/ethnicity_models.rds"))
 
@@ -399,5 +317,5 @@ ethnicity_table_long %>%
   ) %>% 
   tab_footnote(footnote = md("*p* value from a likelihood ratio test comparing models with and without ethnicity as a covariate"),
                cells_column_labels(columns = lrP)) %>% 
-  gt::gtsave(filename = paste0("table_ethnicity.html"), 
-             path = here::here("out/supplementary/")) 
+  gt::gtsave(filename = paste0("tab12_ethnicity_mainestimates.html"), 
+             path = here::here("out/tables/")) 

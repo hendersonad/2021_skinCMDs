@@ -7,7 +7,6 @@ library(gtsummary)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
-    datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
@@ -15,16 +14,12 @@ if (Sys.info()["user"] == "lsh1510922") {
   }
 }
 
-
-
 XX <- c("psoriasis", "eczema")
 YY <- c("anxiety", "depression")
-#exposure <- XX[2]
-#outcome <- YY[1]
 dir.create(file.path(here("out")), showWarnings = FALSE)
-dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
+dir.create(file.path(here("out", "tables")), showWarnings = FALSE)
 
-for(exposure in XX[2]) {
+for(exposure in XX) {
   ABBRVexp <- substr(exposure, 1 , 3)
   mod1_anx <-
     readRDS(paste0(
@@ -80,14 +75,14 @@ for(exposure in XX[2]) {
   df_model_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_anxiety.rds"
     ))
   df_model_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_depression.rds"
     ))
@@ -106,11 +101,11 @@ for(exposure in XX[2]) {
       modify_footnote(update = estimate ~ "Adjusted for matched set (age, sex, GP)")
     
     mod2_full <- mod2 %>% 
-      tbl_regression(exp = T, conf.level = 0.99) %>%
+      tbl_regression(exp = T, conf.level = 0.95) %>%
       modify_footnote(update = estimate ~ "Additionally adjusted for calendar period and comorbidities")
     
     mod3_full <- mod3 %>% 
-      tbl_regression(exp = T, conf.level = 0.99) %>%
+      tbl_regression(exp = T, conf.level = 0.95) %>%
       modify_footnote(update = estimate ~ "Additionally adjusted for calendar period and comorbidities")
     
     if (exposure == "eczema") {
@@ -130,14 +125,8 @@ for(exposure in XX[2]) {
     tbls_full %>%
       gtsummary::as_gt() %>%
       gt::gtsave(
-        filename =  paste0("tabls1B_", ABBRVexp, "_", outcome, "_full.html"),
-        path = here::here("out/analysis")
-      )
-    tbls_full %>%
-      gtsummary::as_gt() %>% 
-      gt::gtsave(
-        filename =  paste0("tabls1B_", ABBRVexp, "_", outcome, "_full.rtf"),
-        path = here::here("out/analysis")
+        filename =  paste0("tab11_", ABBRVexp, "_", outcome, "_full.html"),
+        path = here::here("out/tables")
       )
   }
 }

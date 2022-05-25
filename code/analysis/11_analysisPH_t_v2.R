@@ -10,7 +10,6 @@ library(splines)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
-    #datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
@@ -28,9 +27,10 @@ XX <- c("psoriasis", "eczema")
 exposure <- XX[2]
 outcome <- YY[2]
 
-pdf(paste0(here::here("out/PHchecks/"), "/spline_time_estimates.pdf"), 8, 8)
+pdf(paste0(here::here("out/analysis"), "/fig2_spline_time_estimates.pdf"), 8, 8)
 par(mfrow = c(2,2))
 ii=1
+
 for(exposure in XX) {
   ABBRVexp <- substr(exposure, 1, 3)
   for(outcome in YY) {
@@ -100,7 +100,7 @@ for(exposure in XX) {
     assign(paste0("interaction_plot", ABBRVexp, substr(outcome,1,3)), plot_int)
 
     ## Spline
-    cox_fit <- readRDS(paste0(datapath, "out/models_data_impute/", ABBRVexp, "_", outcome, "_mod3_modeldata.rds"))
+    cox_fit <- readRDS(paste0(datapath, "out/models_data/", ABBRVexp, "_", outcome, "_mod3_modeldata.rds"))
     
     df_model$exp <- as.numeric(df_model$exposed)-1 ## need a numeric exposure variable for tt() to work
     
@@ -125,14 +125,14 @@ for(exposure in XX) {
     if (ABBRVexp == "ecz") {
       pspline <-
         coxph(
-          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + obese_cat + sleep + alc + smokstatus_nomiss + gc90days + strata(setid),
+          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + sleep + alc + smokstatus + gc90days + strata(setid),
           data = df_model,
           tt = function(x, t, ...) x * pspline(t/365.25)
         )
     } else if (ABBRVexp == "pso") {
       pspline <-
         coxph(
-          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + obese_cat + alc + smokstatus_nomiss + strata(setid),
+          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
           data = df_model,
           tt = function(x, t, ...) x * pspline(t/365.25)
         ) 
@@ -155,14 +155,14 @@ for(exposure in XX) {
     if (ABBRVexp == "ecz") {
       spline <-
         coxph(
-          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + obese_cat + sleep + alc + smokstatus_nomiss + gc90days + strata(setid),
+          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + sleep + alc + smokstatus + gc90days + strata(setid),
           data = df_model,
           tt = function(x, t, ...) x * splines::bs(t/365.25, degree = 3, knots = kk)
       )
     } else if (ABBRVexp == "pso") {
       spline <-
         coxph(
-          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + obese_cat + alc + smokstatus_nomiss + strata(setid),
+          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
           data = df_model,
           tt = function(x, t, ...) x * splines::bs(t/365.25, degree = 3, knots = kk)
       ) 
@@ -197,7 +197,7 @@ for(exposure in XX) {
 }
 dev.off()
 
-pdf(paste0(here::here("out/PHchecks/"), "/linear_time_estimates.pdf"), 8, 8)
+pdf(paste0(here::here("out/analysis"), "/fig3_linear_time_estimates.pdf"), 8, 8)
 cowplot::plot_grid(
   interaction_ploteczanx,
   interaction_ploteczdep,

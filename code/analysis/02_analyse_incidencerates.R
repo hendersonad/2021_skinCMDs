@@ -130,6 +130,6 @@ rd_tab %>%
       columns = c(crude_rate, 
                   rd2))) %>% 
   gt::gtsave(
-    filename =  paste0("tabA_cruderates.html"),
-    path = here::here("out/analysis")
+    filename =  paste0("tab5_cruderates.html"),
+    path = here::here("out/tables")
   )

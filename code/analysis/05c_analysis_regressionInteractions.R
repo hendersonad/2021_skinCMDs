@@ -9,14 +9,14 @@ library(biostat3)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
-    #datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
 }
-dir.create(paste0(datapath, "out/supplementary/"), showWarnings = FALSE)
+dir.create(paste0(datapath, "out/tables/"), showWarnings = FALSE)
+dir.create(paste0(datapath, "out/analysis/"), showWarnings = FALSE)
            
 YY <- c("depression", "anxiety")
 XX <- c("psoriasis", "eczema")
@@ -29,7 +29,7 @@ pval_interactions <- function(exposure, outcome) {
   df_model <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_",
       outcome, 
@@ -166,13 +166,8 @@ gt_int_table <- int_table %>%
 gt_int_table
 gt::gtsave(
   gt_int_table,
-  filename =  paste0("interaction_pvals.rtf"),
-  path = here::here("out/supplementary/")
-)
-gt::gtsave(
-  gt_int_table,
-  filename =  paste0("interaction_pvals.html"),
-  path = here::here("out/supplementary/")
+  filename =  paste0("tab8_interaction_pvals.html"),
+  path = here::here("out/tables/")
 )
 
 # calculating the effect modification of the hazard ratios ----------------

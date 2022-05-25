@@ -27,57 +27,43 @@ exposure <- XX[1]
 make_regression_tab <- function(exposure){
   ABBRVexp <- str_sub(exposure, 1 , 3)
   # load models -------------------------------------------------------------
-  mod1_anx <-
-    readRDS(paste0(
-      datapath,
-      "out/models_data/",
-      ABBRVexp,
-      "_anxiety_mod1_modeldata_noghosts.rds"
-    ))
   mod2_anx <-
     readRDS(paste0(
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_anxiety_mod2_modeldata_noghosts.rds"
+      "_anxiety_mod_ethnicity_confound.rds"
     ))
   mod3_anx <-
     readRDS(paste0(
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_anxiety_mod3_modeldata_noghosts.rds"
+      "_anxiety_mod_ethnicity_mod.rds"
     ))
   
   # load models -------------------------------------------------------------
-  mod1_dep <-
-    readRDS(paste0(
-      datapath,
-      "out/models_data/",
-      ABBRVexp,
-      "_depression_mod1_modeldata_noghosts.rds"
-    ))
   mod2_dep <-
     readRDS(paste0(
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_depression_mod2_modeldata_noghosts.rds"
+      "_depression_mod_ethnicity_confound.rds"
     ))
   mod3_dep <-
     readRDS(paste0(
       datapath,
       "out/models_data/",
       ABBRVexp,
-      "_depression_mod3_modeldata_noghosts.rds"
+      "_depression_mod_ethnicity_mod.rds"
     ))
   
   # load data ---------------------------------------------------------------
   df_model_anx <-
-    readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety_noghosts.rds"))
+    readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety_2006on.rds"))
   
   df_model_dep <-
-    readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression_noghosts.rds"))
+    readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression_2006on.rds"))
   
   # Get n, n events and person-years by group ------------------------------
   get_data_info <- function(model, data) {
@@ -107,11 +93,9 @@ make_regression_tab <- function(exposure){
     dfsum
   }
   
-  mod1_desc_anx <- get_data_info(model = mod1_anx, data = df_model_anx)
   mod2_desc_anx <- get_data_info(model = mod2_anx, data = df_model_anx)
   mod3_desc_anx <- get_data_info(model = mod3_anx, data = df_model_anx)
   
-  mod1_desc_dep <- get_data_info(mod1_dep, df_model_dep)
   mod2_desc_dep <- get_data_info(mod2_dep, df_model_dep)
   mod3_desc_dep <- get_data_info(mod3_dep, df_model_dep)
   
@@ -125,15 +109,13 @@ make_regression_tab <- function(exposure){
            signif(model_sum$conf.int[1, 4], sigF))
   }
   
-  models_list <- list(mod1_anx,
-                      mod2_anx,
+  models_list <- list(mod2_anx,
                       mod3_anx,
-                      mod1_dep,
                       mod2_dep,
                       mod3_dep)
   
   ci_values <- sapply(models_list, getCI)
-  names(ci_values) <- c("mod1_anx","mod2_anx","mod3_anx","mod1_dep","mod2_dep","mod3_dep")
+  names(ci_values) <- c("mod2_anx","mod3_anx","mod2_dep","mod3_dep")
   
   ## function to put together N, n_event/p-yars, HR, CI
   merge_results <- function(model = "mod1"){
@@ -198,7 +180,6 @@ make_regression_tab <- function(exposure){
     bind_cols(
       characteristic = char,
       outcome = out,
-      merge_results("mod1"),
       merge_results("mod2"),
       merge_results("mod3")
     )
@@ -225,10 +206,6 @@ tab3_out <- tab3 %>%
   cols_label(
     characteristic = md("**Exposure**"),
     outcome = md("**Event**"),
-    n1 = md("**N (total)**"),
-    events1 = md("**No. events/person-years (mil)**"),
-    hr1 = md("**HR**"),
-    ci1 = md("**95% CI**"),
     n2 = md("**N**"),
     events2 = md("**No. events/person-years (mil)**"),
     hr2 = md("**HR**"),
@@ -239,16 +216,12 @@ tab3_out <- tab3 %>%
     ci3 = md("**95% CI**")
   ) %>% 
   tab_spanner(
-    label = md("**Crude model**"),
+    label = md("**Confounder model**"),
     columns = 3:6
   ) %>% 
   tab_spanner(
-    label = md("**Confounder model**"),
-    columns = 7:10
-  ) %>% 
-  tab_spanner(
     label = md("**Mediator model**"),
-    columns = 11:14
+    columns = 7:10
   ) %>%
   tab_style(
     style = cell_text(weight = "bold"),
@@ -257,13 +230,9 @@ tab3_out <- tab3 %>%
   tab_footnote(
     footnote = "HR: Hazard ratio, CI: Confidence Interval",
     locations = cells_column_labels(
-      columns = c(hr1, hr2, hr3, ci1, ci2, ci3))) %>% 
+      columns = c(hr2, hr3, ci2, ci3))) %>% 
   tab_footnote(
-    footnote = "Adjusted for matched set (age, sex, GP)",
-    locations = cells_column_spanners(
-      spanners = "**Crude model**")) %>% 
-  tab_footnote(
-    footnote = "Additionally adjusted for calendar period and comorbidities",
+    footnote = "Additionally adjusted for calendar period, comorbidities and ethnicity",
     locations = cells_column_spanners(
       spanners = "**Confounder model**")) %>% 
   tab_footnote(
@@ -275,7 +244,7 @@ tab3_out <- tab3 %>%
 tab3_out
 tab3_out %>%
   gt::gtsave(
-    filename =  paste0("tab13_regression_noghosts.html"),
+    filename =  paste0("tab12_regression_ethnicity.html"),
     path = here::here("out/tables")
   )
 
@@ -285,11 +254,10 @@ get_plot_data <- function(pretty_table) {
     select(-starts_with("n")) %>%
     select(-starts_with("events")) %>%
     select(-characteristic,-outcome) %>%
-    separate(ci1, c("ciL1", "ciU1"), sep = "-") %>%
     separate(ci2, c("ciL2", "ciU2"), sep = "-") %>%
     separate(ci3, c("ciL3", "ciU3"), sep = "-") %>%
     drop_na() %>% 
-    filter(hr1 != "-") %>% 
+    filter(hr2 != "-") %>% 
     mutate_if(is.character, as.numeric) 
   
   plot_tab1 <- pretty_table %>%
@@ -312,7 +280,7 @@ plot_df <- plot_df %>%
 
 ##  models as factors 
 plot_df <- plot_df %>%
-  mutate(model = factor(model, labels = c("Crude", "Confounder Adjusted", "Mediator adjusted")))
+  mutate(model = factor(model, labels = c("Confounder Adjusted", "Mediator adjusted")))
 
 ## add alpha parameter to grey out other models
 plot_df$a <- 0.5
@@ -320,7 +288,7 @@ plot_df$a[plot_df$model == "Mediator adjusted"] <- 1
 
 plot_df$ciU %>% max()
 
-saveRDS(plot_df, here::here("out/data/df_forest_noghosts.rds"))
+saveRDS(plot_df, here::here("out/data/df_forest_ethnicity.rds"))
 
 pd <- position_dodge(width = 0.3)
 plot_new <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure, colour = exposure, alpha = a)) +
@@ -328,7 +296,7 @@ plot_new <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group
   geom_errorbar(position = pd, width = 0.25) +
   geom_hline(yintercept = 1, lty=2) +  
   #ylim(c(0,NA)) +
-  scale_y_log10(breaks=seq(0.5,2,0.1),position="left",limits=c(0.9,1.35)) +
+  scale_y_log10(breaks=seq(0.5,2,0.1),position="left",limits=c(0.9,1.4)) +
   scale_x_discrete(limits=rev) +
   facet_wrap(~outcome, ncol = 1) +
   coord_flip() +
@@ -342,7 +310,7 @@ plot_new <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group
         legend.position = "bottom")
 
 print(plot_new)
-dev.copy(pdf, here::here("out/analysis/forest_plot6_noghosts.pdf"), width = 6, height = 4); dev.off()
+dev.copy(pdf, here::here("out/analysis/forest_plot13_ethnicity.pdf"), width = 6, height = 4); dev.off()
 
 
 # import the original main analysis forest plot data to merge ------------------
@@ -350,11 +318,11 @@ does_exist <- list.files(here::here("out/data"), "df_forest_main.rds") %>% lengt
 
 if(does_exist) {
   plot_df_main <- readRDS(here::here("out/data/df_forest_main.rds"))
-  plot_df_noghosts <- plot_df
+  plot_df_ethnicity <- plot_df
   
   plot_df <- plot_df_main %>% 
     mutate(analysis = "Main") %>% 
-    bind_rows(mutate(plot_df_noghosts, analysis = "Consult < 1yr before entry"))
+    bind_rows(mutate(plot_df_ethnicity, analysis = "Includes ethnicity"))
   
   pd <- position_dodge(width = 0.3)
   plot_both <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = outcome, colour = outcome, alpha = a)) +
@@ -362,7 +330,7 @@ if(does_exist) {
     geom_errorbar(position = pd, width = 0.25) +
     geom_hline(yintercept = 1, lty=2) +  
     #ylim(c(0,NA)) +
-    scale_y_log10(breaks=seq(0.5,2,0.1),position="left",limits=c(0.9,1.35)) +
+    scale_y_log10(breaks=seq(0.5,2,0.1),position="left",limits=c(0.9,1.4)) +
     scale_x_discrete(limits=rev) +
     facet_grid(rows = vars(analysis), cols = vars(exposure)) +
     coord_flip() +
@@ -376,77 +344,7 @@ if(does_exist) {
           legend.position = "bottom")
   
   print(plot_both)
-  dev.copy(pdf, here::here("out/analysis/forest_plot7_sens_mainVnoghosts.pdf"), width = 6, height = 6); dev.off()
+  dev.copy(pdf, here::here("out/analysis/forest_plot14_sens_mainVethnicity.pdf"), width = 6, height = 6); dev.off()
 }
 
 
-# make table summarising the consult  drop_out  ---------------------------
-ecz_cohort <- readstata13::read.dta13(paste0(datapath, "out/getmatchedcohort-eczema-main-mhealth.dta"))
-ecz_nonghosts <- haven::read_dta(paste0(datapath, "out/variables-ecz-consultations-yrbeforeindex.dta"))
-
-pso_cohort <- haven::read_dta(paste0(datapath, "out/getmatchedcohort-psoriasis-main-mhealth.dta"))
-pso_nonghosts <- haven::read_dta(paste0(datapath, "out/variables-pso-consultations-yrbeforeindex.dta"))
-
-get_table <- function(ABBRVexp) {
-  data <- get(paste0(ABBRVexp, "_cohort"))
-  ghosts_var <- get(paste0(ABBRVexp, "_nonghosts"))
-  df_noghosts <- data %>% 
-    left_join(ghosts_var, by = "patid") %>% 
-    mutate(pre_cons = replace_na(consyrbeforeindex, 0))
-  table_noghosts <- df_noghosts %>% 
-    count(exposed, pre_cons) %>% 
-    group_by(exposed) %>% 
-    mutate(prop = prop.table(n)*100 %>% signif(digits = 2)) %>% 
-    pivot_wider(exposed, names_from = pre_cons, values_from = c(n, prop))
-  table_noghosts
-}
-ecz_tab <- get_table("ecz") %>% 
-  mutate(exposed = case_when(
-    exposed == 0 ~ "Unexposed",
-    exposed == 1 ~ "Eczema"
-    )
-  )
-pso_tab <- get_table("pso") %>% 
-  mutate(exposed = case_when(
-    exposed == 0 ~ "Unexposed",
-    exposed == 1 ~ "Psoriasis"
-    )
-  )
-
-ecz_tab$exposed <- factor(ecz_tab$exposed, levels = c("Unexposed", "Eczema"))
-pso_tab$exposed <- factor(pso_tab$exposed, levels = c("Unexposed", "Psoriasis"))
-
-
-tab_ghosts <- ecz_tab %>% 
-  bind_rows(pso_tab)
-
-gt_ghosts <- tab_ghosts %>%
-  ungroup() %>% 
-  dplyr::select(exposed, n_0, prop_0, n_1, prop_1) %>%
-  gt::gt() %>%
-  tab_row_group(label = "Eczema cohort",
-                rows = 1:2) %>%
-  tab_row_group(label = "Psoriasis cohort",
-                rows = 3:4) %>%
-  gt::tab_header(title = md("Proportion of people with/without a consultation < 1 yr before indexdate")) %>%
-  gt::fmt_number(columns = c(3, 5), decimals = 1) %>%
-  gt::fmt_number(columns = c(2, 4), decimals = 0) %>%
-  gt::data_color(
-    columns = c(prop_1),
-    colors = scales::col_numeric(
-      palette = paletteer::paletteer_c(palette = "viridis::inferno",
-                                       n = 100) %>% as.character(),
-      domain = c(0,100)
-    )
-  ) %>%
-  cols_label(n_0 = md("*n* without a recent consultation"),
-             n_1 = md("*n* with a recent consultation"),
-             prop_0 = "%",
-             prop_1 = "%") 
-gt_ghosts
-
-gt_ghosts %>% 
-  gt::gtsave(
-    filename =  paste0("ghosts_analysis.html"),
-    path = here::here("out/supplementary")
-  )

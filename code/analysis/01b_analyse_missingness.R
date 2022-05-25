@@ -46,13 +46,13 @@ for(exposure in XX){
     if(exp == "ecz"){
       temp %>% 
         select(setid, patid, dob, indexdate, gender, exposed, eth_edited, carstairs, cal_period, comorbid, cci, bmi2, bmi, alc, smokstatus, smoking_original, sleep, gc90days) %>% 
-        rename(smoking_imputed = smokstatus, obesity_categorised = bmi2) %>% 
+        rename(smoking_imputed = smokstatus, obesity_categorised = bmi2, ethnicity = eth_edited) %>% 
         mutate(age = as.numeric(indexdate - dob)/365.25) %>% 
         select(-dob, -indexdate)
     } else if(exp == "pso"){
       temp %>% 
         select(setid, patid, dob, indexdate, gender, exposed, eth_edited, carstairs, cal_period, comorbid, cci, bmi2, bmi, alc, smokstatus, smoking_original) %>% 
-        rename(smoking_imputed = smokstatus, obesity_categorised = bmi2) %>% 
+        rename(smoking_imputed = smokstatus, obesity_categorised = bmi2, ethnicity = eth_edited) %>% 
         mutate(age = as.numeric(indexdate - dob)/365.25) %>% 
         select(-dob, -indexdate)
     }
@@ -92,6 +92,9 @@ for(exposure in XX){
   
   df_missingplot$plotname <- factor(df_missingplot$name, levels = fct_levels, labels = fct_labels)
   
+  
+  df_missingplot
+  
   pdf(paste0(here::here("out/supplementary"), "/missing_", ABBRVexp, ".pdf"), width = 8, height = 6)
     p1 <- ggplot(df_missingplot, aes(x = plotname, y = pc, ymax = pc, ymin = 0, group = exposed, col = exposed)) +
       geom_linerange() +
@@ -107,7 +110,7 @@ for(exposure in XX){
   
   ## describe characteristics by missing status 
   missing_data <- NULL
-  for(var in c("carstairs", "smoking_original", "bmi","obesity_categorised", "smoking_imputed", "eth_edited")){
+  for(var in c("carstairs", "smoking_original", "bmi","obesity_categorised", "smoking_imputed", "ethnicity")){
     patids_missing <- df_model_merge %>% 
       select(setid, patid, all_of(var)) %>% 
       filter(is.na(get(var))) %>% 
@@ -122,7 +125,7 @@ for(exposure in XX){
   }
   missing_data <- missing_data %>% 
     distinct(setid, patid, .keep_all = TRUE) %>% 
-    mutate(missing = 1+as.numeric(var_missing == "eth_edited")) ## missing = 1 or 2 if only missing ethnicity
+    mutate(missing = 1+as.numeric(var_missing == "ethnicity")) ## missing = 1 or 2 if only missing ethnicity
   
   df_model_miss_1obs <- df_model_merge %>% 
     left_join(missing_data, by = c("setid", "patid")) %>% 
@@ -132,7 +135,7 @@ for(exposure in XX){
   df_model_miss_1obs$gender <- factor(as.character(df_model_miss_1obs$gender), levels = c("Male", "Female"))
   var_label(df_model_miss_1obs$gender) <- "Sex"
   var_label(df_model_miss_1obs$age) <- "Age at index"
-  var_label(df_model_miss_1obs$eth_edited) <- "Ethnicity"
+  var_label(df_model_miss_1obs$ethnicity) <- "Ethnicity"
   var_label(df_model_miss_1obs$carstairs) <- "Carstairs index of deprivation"
   var_label(df_model_miss_1obs$smoking_original) <- "Original smoking data"
   var_label(df_model_miss_1obs$bmi) <- "Body Mass Index (BMI)"

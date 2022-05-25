@@ -11,10 +11,10 @@ library(pROC)
 library(gt)
 library(tidyverse)
 library(tidycat)
+library(Hmisc)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
-    #datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
@@ -38,7 +38,7 @@ load_data_fn <- function(X, Y, fupmax = Inf){
   ABBRVexp <- substr(X, 1, 3)
   
   # load data ---------------------------------------------------------------
-  df_model <- readRDS(paste0(datapath, "out/models_data/df_model", ABBRVexp, "_", Y,".rds"))
+  df_model <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_", Y,".rds"))
   
   # restrict to skin disease pop --------------------------------------------
   df_exp <- df_model %>%
@@ -168,7 +168,7 @@ for(exposure in XX) {
       abline(coef = c(0,1))
     }
     
-    pdf(paste0(here("out/predictions/"), "01_univ_auc", ABBRVexp, "_", substr(outcome, 1, 3), ".pdf"), 8, 8)
+    pdf(paste0(here("out/predictions"), "/01_univ_auc", ABBRVexp, "_", substr(outcome, 1, 3), ".pdf"), 8, 8)
     par(mfrow = c(3,4))
       sapply(covars, FUN = univ_roc)
     dev.off()
@@ -176,7 +176,7 @@ for(exposure in XX) {
 }
 
 # 1b - build multivariable logistic regression models --------------------------
-pdf(paste0(here("out/predictions/"), "02_multimodel_logisticpredict.pdf"), 10, 10)
+pdf(paste0(here("out/predictions"), "/02_multimodel_logisticpredict.pdf"), 10, 10)
 par(mfrow = c(4,4), mgp=c(3,1,0))
 ii <- 0
 for(exposure in XX) {
@@ -663,7 +663,7 @@ dev.off()
 
 
 # 2b - up to 3 years -------------------------------------------------------
-pdf(paste0(here("out/predictions/"), "03_multimodel_logisticpredict_3year.pdf"), 10, 10)
+pdf(paste0(here("out/predictions"), "/03_multimodel_logisticpredict_3year.pdf"), 10, 10)
 par(mfrow = c(4,4), mgp=c(3,1,0))
 ii <- 0
 for(exposure in XX) {
@@ -733,11 +733,6 @@ for(exposure in XX) {
       ) %>% 
       tab_footnote("*  p < 0.0001", locations = cells_column_labels("p"))
     predict_gt
-    gt::gtsave(
-      predict_gt,
-      filename =  paste0("tab1_", ABBRVexp, "_", substr(outcome, 1, 3), "_predictmodel_logistic_1yr.rtf"),
-      path = here::here("out//predictions//")
-    )
     gt::gtsave(
       predict_gt,
       filename =  paste0("tab1_", ABBRVexp, "_", substr(outcome, 1, 3), "_predictmodel_logistic_1yr.html"),

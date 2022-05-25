@@ -8,7 +8,6 @@ library(survival)
 if (Sys.info()["user"] == "lsh1510922") {
 	if (Sys.info()["sysname"] == "Darwin") {
 		datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-		datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
 	}
 	if (Sys.info()["sysname"] == "Windows") {
 		datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
@@ -16,8 +15,7 @@ if (Sys.info()["user"] == "lsh1510922") {
 }
 
 dir.create(file.path(here("out")), showWarnings = FALSE)
-dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
-
+dir.create(file.path(here("out", "tables")), showWarnings = FALSE)
 
 YY <- c("depression", "anxiety")
 XX <- c("psoriasis", "eczema")
@@ -30,14 +28,14 @@ for(exposure in XX){
 	df_model_anx <-
 	  readRDS(paste0(
 	    datapath,
-	    "out/models_data/df_model",
+	    "out/df_model",
 	    ABBRVexp,
 	    "_anxiety.rds"
 	  ))
 	df_model_dep <-
 	  readRDS(paste0(
 	    datapath,
-	    "out/models_data/df_model",
+	    "out/df_model",
 	    ABBRVexp,
 	    "_depression.rds"
 	  ))
@@ -96,27 +94,27 @@ for(exposure in XX){
 	  mod4_tab <- mod4 %>%
 	    tbl_regression(exp = T,
 	                   #include = "severity",
-	                   conf.level = 0.99)
+	                   conf.level = 0.95)
 	  
 	  mod5_tab <- mod5 %>%
 	    tbl_regression(
 	      exp = T,
 	      include = c('exposed', 'exposed:agegroup', 'agegroup'),
-	      conf.level = 0.99
+	      conf.level = 0.95
 	    ) 
 	  
 	  mod6_tab <- mod6 %>%
 	    tbl_regression(
 	      exp = T,
 	      include = c('exposed', 'exposed:comorbid', 'comorbid'),
-	      conf.level = 0.99
+	      conf.level = 0.95
 	    )
 	  
 	  mod7_tab <- mod7 %>%
 	    tbl_regression(
 	      exp = T,
 	      include = c('exposed', 'exposed:cal_period', 'cal_period'),
-	      conf.level = 0.99
+	      conf.level = 0.95
 	    )
 	  
 	  # summarise results -------------------------------------------------------
@@ -130,14 +128,14 @@ for(exposure in XX){
 	    mod4_tab %>%
 	      gtsummary::as_gt() %>%
 	      gt::gtsave(
-	        filename =  paste0("tabls2_", ABBRVexp, "_", outcome, "_severity.html"),
-	        path = here::here("out/analysis")
+	        filename =  paste0("tab9_", ABBRVexp, "_", outcome, "_severity.html"),
+	        path = here::here("out/tables")
 	      )
 	    tbls_secondary %>%
 	      gtsummary::as_gt() %>%
 	      gt::gtsave(
-	        filename =  paste0("tabls3_", ABBRVexp, "_", outcome, "_interaction.html"),
-	        path = here::here("out/analysis")
+	        filename =  paste0("tab10_", ABBRVexp, "_", outcome, "_interaction.html"),
+	        path = here::here("out/tables")
 	      )
 	}
 	rm(mod4, mod5, mod6, mod7,

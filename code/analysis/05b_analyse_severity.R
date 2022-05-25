@@ -7,7 +7,6 @@ library(survival)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
-    #datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
@@ -36,7 +35,7 @@ for(exposure in XX){
     df_model <-
       readRDS(paste0(
         datapath,
-        "out/models_data/df_model",
+        "out/df_model",
         ABBRVexp,
         "_",
         outcome, 
@@ -57,7 +56,7 @@ for(exposure in XX){
         )
       )
     
-    mod4tab <- broom::tidy(mod4, conf.int = T, exponentiate = T, conf.level = 0.99)
+    mod4tab <- broom::tidy(mod4, conf.int = T, exponentiate = T, conf.level = 0.95)
     mod4results <- mod4tab %>% 
       filter(str_detect(string = term, pattern = "^severity.")) %>% 
       mutate(Y = paste0(outcome), X = paste0(exposure)) %>% 
@@ -109,14 +108,14 @@ make_gt_results <- function(exposure){
   df_model_anx <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_anxiety.rds"
     ))
   df_model_dep <-
     readRDS(paste0(
       datapath,
-      "out/models_data/df_model",
+      "out/df_model",
       ABBRVexp,
       "_depression.rds"
     ))
@@ -168,7 +167,7 @@ make_gt_results <- function(exposure){
   # Get CIs and p-values ----------------------------------------------------
   getP <- function(model,
                    sigF = 3,
-                   ci_level = 0.99) {
+                   ci_level = 0.95) {
     model_sum <- summary(model, conf.int = ci_level)
     modelrownames <- rownames(model_sum$coefficients)
     sev_names <- modelrownames[str_detect(modelrownames, "severity")]
@@ -189,7 +188,7 @@ make_gt_results <- function(exposure){
   }
   getCI <- function(model,
                     sigF = 3,
-                    ci_level = 0.99) {
+                    ci_level = 0.95) {
     model_sum <- summary(model, conf.int = ci_level)
     modelrownames <- rownames(model_sum$coefficients)
     sev_names <- modelrownames[str_detect(modelrownames, "severity")]
@@ -231,22 +230,12 @@ make_gt_results <- function(exposure){
     " ",
     prettyNum(mod4_desc_dep$n, big.mark = ",")
   )
-  #col4 Nevent
   colevents <- c(
     " ",
-    prettyNum(mod4_desc_anx$nevents, big.mark = ","),
+    paste0(prettyNum(mod4_desc_anx$nevents, big.mark = ","), "/", prettyNum(mod4_desc_anx$pyars_mil, digits = 3, big.mark = ",")),
     " ",
-    prettyNum(mod4_desc_dep$nevents, big.mark = ",")
+    paste0(prettyNum(mod4_desc_dep$nevents, big.mark = ","), "/", prettyNum(mod4_desc_dep$pyars_mil, digits = 3, big.mark = ","))
   )
-  
-  #col5 p-years
-  colpyars <- c(
-    " ",
-    prettyNum(mod4_desc_anx$pyars_mil, digits = 1, big.mark = ",", ),
-    " ",
-    prettyNum(mod4_desc_dep$pyars_mil, digits = 1, big.mark = ",")
-  )
-  
   #col7 HR (model 1)
   mod4HR <-
     c(
@@ -276,7 +265,6 @@ make_gt_results <- function(exposure){
       outcome = out,
       n = colN,
       nevents = colevents,
-      pyars = colpyars,
       hr4 = mod4HR,
       ci4 = mod4Ci,
       p4 = mod4P
@@ -309,15 +297,14 @@ tab3_out <- tab3 %>%
     characteristic = md("**Exposure severity**"),
     outcome = md("**Event**"),
     n = md("**N (total)**"),
-    nevents = md("**No. events**"),
-    pyars = md("**Person-years (mil)**"),
+    nevents = md("**No. events/person-years (mil)**"),
     hr4 = md("**HR**"),
-    ci4 = md("**99% CI**"),
+    ci4 = md("**95% CI**"),
     p4 = md("***p***")
   ) %>% 
   tab_spanner(
     label = md("**Severity model**"),
-    columns = 6:8
+    columns = 5:7
   ) %>% 
   tab_style(
     style = cell_text(weight = "bold"),
@@ -339,11 +326,6 @@ tab3_out <- tab3 %>%
 tab3_out
 tab3_out %>%
   gt::gtsave(
-    filename =  paste0("table3_regressionseverity.html"),
-    path = here::here("out/analysis")
-  )
-tab3_out %>%
-  gt::gtsave(
-    filename =  paste0("table3_regressionseverity.rtf"),
-    path = here::here("out/analysis")
+    filename =  paste0("tab7_regressionseverity.html"),
+    path = here::here("out/tables")
   )

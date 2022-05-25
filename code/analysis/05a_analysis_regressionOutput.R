@@ -19,6 +19,7 @@ if (Sys.info()["user"] == "lsh1510922") {
 dir.create(file.path(here("out")), showWarnings = FALSE)
 dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
 dir.create(file.path(here("out", "data")), showWarnings = FALSE)
+dir.create(file.path(here("out", "tables")), showWarnings = FALSE)
 
 XX <- c("psoriasis", "eczema")
 exposure <- XX[1]
@@ -283,8 +284,8 @@ tab3_out <- tab3 %>%
 tab3_out
 tab3_out %>%
   gt::gtsave(
-    filename =  paste0("table2_regression.html"),
-    path = here::here("out/analysis")
+    filename =  paste0("tab6_regression.html"),
+    path = here::here("out/tables")
   )
 
 # make the plot -----------------------------------------------------------

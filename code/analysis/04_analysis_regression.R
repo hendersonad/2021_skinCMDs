@@ -26,7 +26,7 @@ dir.create(file.path(datapath, "out/models_data_impute"), showWarnings = FALSE)
 XX <- c("psoriasis", "eczema")
 YY <- c("anxiety", "depression")
 
-export_plots <- F
+export_plots <- TRUE
 export_models <- TRUE
 
 st_time <- Sys.time()
@@ -178,7 +178,7 @@ for (exposure in XX) {
 		
 		rm(df_split_sum, df_split_cal, temp, p2, p4)
 	}
-	
+
 	for (outcome in YY) {
 		#outcome = YY[2]
 		.dib(outcome)
