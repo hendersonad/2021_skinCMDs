@@ -515,15 +515,15 @@ for(exposure in XX){
 
 
 
+
 # Build the different analyses datasets -----------------------------------
 ##//////////////////////////////////////////////////////////////////////////////////////////
 # The datsets anxiety_split, and depression_split are standard for all regressions
 # The following sections build different datasets for different sensitivity analyses:
-# 1 - Main analysis -> df_model[ABBRVexp]_[outcome]
+# 1 - Main formatting - label variables and impute missing values of smoking
 # 2 - Ethncity analysis (2006 onwards) -> df_model[ABBRVexp]_[outcome]_2006on
 # 3 - No ghosts analysis (consult <= 1year pre index) -> df_model[ABBRVexp]_[outcome]_noghosts
 # 4 - No ghosts analysis (consult <= 3years pre index) -> df_model[ABBRVexp]_[outcome]_noghosts_3yrs
-# 5 - Impute missing data (use first observation carried back fro smoking and BMI) -> df_model[ABBRVexp]_[outcome]_imputed
 
 for(exposure in XX){
   #exposure <- XX[1]
@@ -586,351 +586,6 @@ for(exposure in XX){
       var_label(df_model$comorbid) <- "Arthritis"
       levels(df_model$comorbid) <- c("No", "Yes")
     }
-    
-    saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, ".rds"))
-  }
-}
-
-# Filter on 2006 to increase ethnicity data -----------------------------------------------------
-for(exposure in XX){
-  #exposure <- XX[1]
-  ABBRVexp <- str_sub(exposure,1 ,3)
-  .dib(exposure) 
-  
-  anxiety_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-anxiety_split.rds"))
-  depression_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-depression_split.rds"))
-  
-  for(outcome in c("depression", "anxiety")){
-    if (outcome == "anxiety") {
-      df_model <- anxiety_split
-    } else if (outcome == "depression") {
-      df_model <- depression_split
-    }
-    
-    # Bit of variable formatting for output in regression tables 
-    df_model$t <-
-      as.numeric(df_model$tstop - df_model$tstart)
-    
-    df_model$gc90days <-
-      factor(df_model$gc90days, levels = c("not active", "active"))
-    
-    df_model$bmi2 <-
-      df_model$bmi - mean(df_model$bmi, na.rm = T)
-    
-    df_model <- df_model %>% 
-      mutate(exposed = case_when(
-        exposed == 0 ~ "Unexposed",
-        exposed == 1 ~ stringr::str_to_title(paste0(exposure))
-      ))
-    df_model$exposed <- factor(df_model$exposed, levels = c("Unexposed", str_to_title(exposure)))
-    var_label(df_model$exposed) <- "Exposure"
-    var_label(df_model$carstairs) <- "Carstairs index of deprivation"
-    levels(df_model$carstairs)[1] <- "1 (least deprived)"
-    levels(df_model$carstairs)[5] <- "5 (most deprived)"
-    var_label(df_model$cal_period) <- "Calendar Period"
-    var_label(df_model$cci) <- "Charlson's comorbidity index"
-    levels(df_model$cci) <- c("Low", "Moderate", "Severe")
-    var_label(df_model$agegroup) <- "Age group"
-    df_model$agegroup <- relevel(df_model$agegroup, ref = "50-59")
-    
-    # Mediators
-    var_label(df_model$bmi2) <- "BMI (centred)"
-    var_label(df_model$alc) <- "Alcohol misuse"
-    levels(df_model$alc) <- c("No", "Yes")
-    var_label(df_model$smokstatus) <- "Smoking status"
-    levels(df_model$smokstatus) <- stringr::str_to_title(levels(df_model$smokstatus))
-    var_label(df_model$gc90days) <- "Recent high dose glucocorticoid steroid use (<30days)"
-    levels(df_model$gc90days) <- c("No", "Yes")
-    df_model$sleep <- factor(df_model$sleep, levels = 0:1, labels = c("No", "Yes"))
-    var_label(df_model$sleep) <- "Sleep problems"
-    var_label(df_model$severity) <- paste(str_to_title(exposure), "severity", sep = " ")
-    levels(df_model$severity) <- str_to_title(levels(df_model$severity))
-    if (ABBRVexp == "ecz") {
-      df_model$comorbid <- df_model$asthma
-      var_label(df_model$comorbid) <- "Asthma"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    } else{
-      df_model$comorbid <- df_model$arthritis
-      var_label(df_model$comorbid) <- "Arthritis"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    }
-    
-    # moderations for ethnicity -----------------------------------------------
-    missingEth <- table(df_model$eth_edited, useNA = "always")
-    missingEth_all <- missingEth[8]/sum(missingEth)
-    df_model_eth <- df_model %>% 
-      filter(indexdate >= as.Date("2006-01-01")) 
-    missingEth <- table(df_model_eth$eth_edited, useNA = "always")
-    missingEth_06 <- missingEth[8]/sum(missingEth)
-    
-    var_label(df_model_eth$eth_edited) <- "Ethnicity"
-    levels(df_model_eth$eth_edited)[levels(df_model_eth$eth_edited)=="equally common"] <- NA
-    
-    ##got to get rid of missing ethnicity sets
-    missing_sets <- df_model_eth$patid[is.na(df_model_eth$eth_edited) & df_model_eth$exposed==str_to_title(exposure)] %>% unique
-    length(missing_sets)
-    df_model_eth_nonmiss <- df_model_eth %>% 
-      filter(!setid %in% missing_sets)
-    missingEth <- table(df_model_eth_nonmiss$eth_edited, useNA = "always")
-    missingEth_nonmis <- missingEth[7]/sum(missingEth)
-    
-    levels(df_model_eth_nonmiss$cal_period)[levels(df_model_eth_nonmiss$cal_period)=="1997-2002"] <- NA
-    
-    saveRDS(df_model_eth_nonmiss, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_2006on.rds"))
-  }
-}
-
-# Noghosts -----------------------------------------------------
-for(exposure in XX){
-  #exposure <- XX[1]
-  ABBRVexp <- str_sub(exposure,1 ,3)
-  .dib(exposure) 
-  
-  anxiety_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-anxiety_split.rds"))
-  depression_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-depression_split.rds"))
-  var_consbeforeindex <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp,"-consultations-yrbeforeindex.dta"))
-  
-  for(outcome in c("depression", "anxiety")){
-    if (outcome == "anxiety") {
-      df_model <- anxiety_split
-    } else if (outcome == "depression") {
-      df_model <- depression_split
-    }
-    
-    # Bit of variable formatting for output in regression tables 
-    df_model$t <-
-      as.numeric(df_model$tstop - df_model$tstart)
-    
-    df_model$gc90days <-
-      factor(df_model$gc90days, levels = c("not active", "active"))
-    
-    df_model$bmi2 <-
-      df_model$bmi - mean(df_model$bmi, na.rm = T)
-    
-    df_model <- df_model %>% 
-      mutate(exposed = case_when(
-        exposed == 0 ~ "Unexposed",
-        exposed == 1 ~ stringr::str_to_title(paste0(exposure))
-      ))
-    df_model$exposed <- factor(df_model$exposed, levels = c("Unexposed", str_to_title(exposure)))
-    var_label(df_model$exposed) <- "Exposure"
-    var_label(df_model$carstairs) <- "Carstairs index of deprivation"
-    levels(df_model$carstairs)[1] <- "1 (least deprived)"
-    levels(df_model$carstairs)[5] <- "5 (most deprived)"
-    var_label(df_model$cal_period) <- "Calendar Period"
-    var_label(df_model$cci) <- "Charlson's comorbidity index"
-    levels(df_model$cci) <- c("Low", "Moderate", "Severe")
-    var_label(df_model$agegroup) <- "Age group"
-    df_model$agegroup <- relevel(df_model$agegroup, ref = "50-59")
-    
-    # Mediators
-    var_label(df_model$bmi2) <- "BMI (centred)"
-    var_label(df_model$alc) <- "Alcohol misuse"
-    levels(df_model$alc) <- c("No", "Yes")
-    var_label(df_model$smokstatus) <- "Smoking status"
-    levels(df_model$smokstatus) <- stringr::str_to_title(levels(df_model$smokstatus))
-    var_label(df_model$gc90days) <- "Recent high dose glucocorticoid steroid use (<30days)"
-    levels(df_model$gc90days) <- c("No", "Yes")
-    df_model$sleep <- factor(df_model$sleep, levels = 0:1, labels = c("No", "Yes"))
-    var_label(df_model$sleep) <- "Sleep problems"
-    var_label(df_model$severity) <- paste(str_to_title(exposure), "severity", sep = " ")
-    levels(df_model$severity) <- str_to_title(levels(df_model$severity))
-    if (ABBRVexp == "ecz") {
-      df_model$comorbid <- df_model$asthma
-      var_label(df_model$comorbid) <- "Asthma"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    } else{
-      df_model$comorbid <- df_model$arthritis
-      var_label(df_model$comorbid) <- "Arthritis"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    }
-    
-    # add in filtering for consultation <= 1year before index
-    df_model_noghosts <- df_model %>% 
-      left_join(dplyr::select(var_consbeforeindex, patid, consyrbeforeindex), by = "patid") %>% 
-      mutate(pre_cons = replace_na(consyrbeforeindex, 0))
-    table_noghosts <- df_model_noghosts %>% 
-      count(exposed, pre_cons) %>% 
-      group_by(exposed) %>% 
-      mutate(prop = prop.table(n)*100 %>% signif(digits = 2)) %>% 
-      pivot_wider(exposed, names_from = pre_cons, values_from = c(n, prop))
-    
-    #saveRDS(table_noghosts, file = paste0(here::here("out/supplementary"), "/table", ABBRVexp, "_", outcome, "_noghosts.rds"))
-    df_model_noghosts <- df_model_noghosts %>% 
-      filter(pre_cons == 1)
-    
-    # only keep valid sets
-    validsets_noghosts <- df_model_noghosts %>% 
-      group_by(setid) %>% 
-      summarise(mean = mean(exposed == str_to_title(exposure))) %>% 
-      filter(mean > 0 & mean < 1)
-    validsets <- validsets_noghosts$setid
-    
-    df_validsets_noghosts <- df_model_noghosts %>% 
-      filter(setid %in% validsets)
-    
-    saveRDS(df_validsets_noghosts, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_noghosts.rds"))
-  }
-}
-
-# Noghosts - 3years before indexdate -----------------------------------------------------
-for(exposure in XX){
-  #exposure <- XX[1]
-  ABBRVexp <- str_sub(exposure,1 ,3)
-  .dib(exposure) 
-  
-  anxiety_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-anxiety_split.rds"))
-  depression_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-depression_split.rds"))
-  var_consbeforeindex <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp,"-consultations-yrbeforeindex-3yrs.dta"))
-  
-  for(outcome in c("depression", "anxiety")){
-    if (outcome == "anxiety") {
-      df_model <- anxiety_split
-    } else if (outcome == "depression") {
-      df_model <- depression_split
-    }
-    
-    # Bit of variable formatting for output in regression tables 
-    df_model$t <-
-      as.numeric(df_model$tstop - df_model$tstart)
-    
-    df_model$gc90days <-
-      factor(df_model$gc90days, levels = c("not active", "active"))
-    
-    df_model$bmi2 <-
-      df_model$bmi - mean(df_model$bmi, na.rm = T)
-    
-    df_model <- df_model %>% 
-      mutate(exposed = case_when(
-        exposed == 0 ~ "Unexposed",
-        exposed == 1 ~ stringr::str_to_title(paste0(exposure))
-      ))
-    df_model$exposed <- factor(df_model$exposed, levels = c("Unexposed", str_to_title(exposure)))
-    var_label(df_model$exposed) <- "Exposure"
-    var_label(df_model$carstairs) <- "Carstairs index of deprivation"
-    levels(df_model$carstairs)[1] <- "1 (least deprived)"
-    levels(df_model$carstairs)[5] <- "5 (most deprived)"
-    var_label(df_model$cal_period) <- "Calendar Period"
-    var_label(df_model$cci) <- "Charlson's comorbidity index"
-    levels(df_model$cci) <- c("Low", "Moderate", "Severe")
-    var_label(df_model$agegroup) <- "Age group"
-    df_model$agegroup <- relevel(df_model$agegroup, ref = "50-59")
-    
-    # Mediators
-    var_label(df_model$bmi2) <- "BMI (centred)"
-    var_label(df_model$alc) <- "Alcohol misuse"
-    levels(df_model$alc) <- c("No", "Yes")
-    var_label(df_model$smokstatus) <- "Smoking status"
-    levels(df_model$smokstatus) <- stringr::str_to_title(levels(df_model$smokstatus))
-    var_label(df_model$gc90days) <- "Recent high dose glucocorticoid steroid use (<30days)"
-    levels(df_model$gc90days) <- c("No", "Yes")
-    df_model$sleep <- factor(df_model$sleep, levels = 0:1, labels = c("No", "Yes"))
-    var_label(df_model$sleep) <- "Sleep problems"
-    var_label(df_model$severity) <- paste(str_to_title(exposure), "severity", sep = " ")
-    levels(df_model$severity) <- str_to_title(levels(df_model$severity))
-    if (ABBRVexp == "ecz") {
-      df_model$comorbid <- df_model$asthma
-      var_label(df_model$comorbid) <- "Asthma"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    } else{
-      df_model$comorbid <- df_model$arthritis
-      var_label(df_model$comorbid) <- "Arthritis"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    }
-    
-    
-    # add in filtering for consultation <= 3years before index
-    df_model_noghosts <- df_model %>% 
-      left_join(dplyr::select(var_consbeforeindex, patid, consyrbeforeindex), by = "patid") %>% 
-      mutate(pre_cons = replace_na(consyrbeforeindex, 0))
-    table_noghosts <- df_model_noghosts %>% 
-      count(exposed, pre_cons) %>% 
-      group_by(exposed) %>% 
-      mutate(prop = prop.table(n)*100 %>% signif(digits = 2)) %>% 
-      pivot_wider(exposed, names_from = pre_cons, values_from = c(n, prop))
-    
-    #saveRDS(table_noghosts, file = paste0(here::here("out/supplementary"), "/table", ABBRVexp, "_", outcome, "_noghosts.rds"))
-    df_model_noghosts <- df_model_noghosts %>% 
-      filter(pre_cons == 1)
-    
-    # only keep valid sets
-    validsets_noghosts <- df_model_noghosts %>% 
-      group_by(setid) %>% 
-      summarise(mean = mean(exposed == str_to_title(exposure))) %>% 
-      filter(mean > 0 & mean < 1)
-    validsets <- validsets_noghosts$setid
-    
-    df_validsets_noghosts <- df_model_noghosts %>% 
-      filter(setid %in% validsets)
-    
-    saveRDS(df_validsets_noghosts, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_noghosts_3yrs.rds"))
-  }
-}
-
-
-# Impute missing data -----------------------------------------------------
-for(exposure in XX){
-  #exposure <- XX[1]
-  ABBRVexp <- str_sub(exposure,1 ,3)
-  .dib(exposure) 
-  
-  anxiety_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-anxiety_split.rds"))
-  depression_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-depression_split.rds"))
-  for(outcome in c("depression", "anxiety")){
-    if (outcome == "anxiety") {
-      df_model <- anxiety_split
-    } else if (outcome == "depression") {
-      df_model <- depression_split
-    }
-    
-    # Bit of variable formatting for output in regression tables 
-    df_model$t <-
-      as.numeric(df_model$tstop - df_model$tstart)
-    
-    df_model$gc90days <-
-      factor(df_model$gc90days, levels = c("not active", "active"))
-    
-    df_model$bmi2 <-
-      df_model$bmi - mean(df_model$bmi, na.rm = T)
-    
-    df_model <- df_model %>% 
-      mutate(exposed = case_when(
-        exposed == 0 ~ "Unexposed",
-        exposed == 1 ~ stringr::str_to_title(paste0(exposure))
-      ))
-    df_model$exposed <- factor(df_model$exposed, levels = c("Unexposed", str_to_title(exposure)))
-    var_label(df_model$exposed) <- "Exposure"
-    var_label(df_model$carstairs) <- "Carstairs index of deprivation"
-    levels(df_model$carstairs)[1] <- "1 (least deprived)"
-    levels(df_model$carstairs)[5] <- "5 (most deprived)"
-    var_label(df_model$cal_period) <- "Calendar Period"
-    var_label(df_model$cci) <- "Charlson's comorbidity index"
-    levels(df_model$cci) <- c("Low", "Moderate", "Severe")
-    var_label(df_model$agegroup) <- "Age group"
-    df_model$agegroup <- relevel(df_model$agegroup, ref = "50-59")
-    
-    # Mediators
-    var_label(df_model$bmi2) <- "BMI (centred)"
-    var_label(df_model$alc) <- "Alcohol misuse"
-    levels(df_model$alc) <- c("No", "Yes")
-    var_label(df_model$smokstatus) <- "Smoking status"
-    levels(df_model$smokstatus) <- stringr::str_to_title(levels(df_model$smokstatus))
-    var_label(df_model$gc90days) <- "Recent high dose glucocorticoid steroid use (<30days)"
-    levels(df_model$gc90days) <- c("No", "Yes")
-    df_model$sleep <- factor(df_model$sleep, levels = 0:1, labels = c("No", "Yes"))
-    var_label(df_model$sleep) <- "Sleep problems"
-    var_label(df_model$severity) <- paste(str_to_title(exposure), "severity", sep = " ")
-    levels(df_model$severity) <- str_to_title(levels(df_model$severity))
-    if (ABBRVexp == "ecz") {
-      df_model$comorbid <- df_model$asthma
-      var_label(df_model$comorbid) <- "Asthma"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    } else{
-      df_model$comorbid <- df_model$arthritis
-      var_label(df_model$comorbid) <- "Arthritis"
-      levels(df_model$comorbid) <- c("No", "Yes")
-    }
-    
     ## impute smoking data 
     df_model$smokstatus %>% table(useNA = "always")
     df_model <- df_model %>% 
@@ -975,13 +630,140 @@ for(exposure in XX){
     df_model$obese_cat[is.na(df_model$bmi)] <- "no evidence of obesity"
     df_model$obese_cat %>% table(useNA = "always")
     
-    
-    ## keep names consistent for analysis code
-    df_model$bmi_centred <- df_model$bmi2
-    df_model$bmi2 <- df_model$obese_cat
-    df_model$smoking_original <- df_model$smokstatus
+    ## overwrite named variables in regression models
+    df_model$bmi_cat <- df_model$obese_cat
+    df_model$smokstatus_original <- df_model$smokstatus
     df_model$smokstatus <- df_model$smokstatus_nomiss
     
-    saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_imputed.rds"))
+    saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, ".rds"))
+  }
+}
+
+# Filter on 2006 to increase ethnicity data -----------------------------------------------------
+for(exposure in XX){
+  #exposure <- XX[1]
+  ABBRVexp <- str_sub(exposure,1 ,3)
+  .dib(exposure) 
+  
+  anxiety_split <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety.rds"))
+  depression_split <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression.rds"))
+  
+  for(outcome in c("depression", "anxiety")){
+    if (outcome == "anxiety") {
+      df_model <- anxiety_split
+    } else if (outcome == "depression") {
+      df_model <- depression_split
+    }
+    
+    # moderations for ethnicity -----------------------------------------------
+    missingEth <- table(df_model$eth_edited, useNA = "always")
+    missingEth_all <- missingEth[8]/sum(missingEth)
+    df_model_eth <- df_model %>% 
+      filter(indexdate >= as.Date("2006-01-01")) 
+    missingEth <- table(df_model_eth$eth_edited, useNA = "always")
+    missingEth_06 <- missingEth[8]/sum(missingEth)
+    
+    var_label(df_model_eth$eth_edited) <- "Ethnicity"
+    levels(df_model_eth$eth_edited)[levels(df_model_eth$eth_edited)=="equally common"] <- NA
+    
+    ##got to get rid of missing ethnicity sets
+    missing_sets <- df_model_eth$patid[is.na(df_model_eth$eth_edited) & df_model_eth$exposed==str_to_title(exposure)] %>% unique
+    length(missing_sets)
+    df_model_eth_nonmiss <- df_model_eth %>% 
+      filter(!setid %in% missing_sets)
+    missingEth <- table(df_model_eth_nonmiss$eth_edited, useNA = "always")
+    missingEth_nonmis <- missingEth[7]/sum(missingEth)
+    
+    levels(df_model_eth_nonmiss$cal_period)[levels(df_model_eth_nonmiss$cal_period)=="1997-2002"] <- NA
+    
+    saveRDS(df_model_eth_nonmiss, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_2006on.rds"))
+  }
+}
+
+# Noghosts -----------------------------------------------------
+for(exposure in XX){
+  #exposure <- XX[1]
+  ABBRVexp <- str_sub(exposure,1 ,3)
+  .dib(exposure) 
+  
+  anxiety_split <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety.rds"))
+  depression_split <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression.rds"))
+  var_consbeforeindex <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp,"-consultations-yrbeforeindex.dta"))
+  
+  for(outcome in c("depression", "anxiety")){
+    if (outcome == "anxiety") {
+      df_model <- anxiety_split
+    } else if (outcome == "depression") {
+      df_model <- depression_split
+    }
+    # add in filtering for consultation <= 1year before index
+    df_model_noghosts <- df_model %>% 
+      left_join(dplyr::select(var_consbeforeindex, patid, consyrbeforeindex), by = "patid") %>% 
+      mutate(pre_cons = replace_na(consyrbeforeindex, 0))
+    table_noghosts <- df_model_noghosts %>% 
+      count(exposed, pre_cons) %>% 
+      group_by(exposed) %>% 
+      mutate(prop = prop.table(n)*100 %>% signif(digits = 2)) %>% 
+      pivot_wider(exposed, names_from = pre_cons, values_from = c(n, prop))
+    
+    #saveRDS(table_noghosts, file = paste0(here::here("out/supplementary"), "/table", ABBRVexp, "_", outcome, "_noghosts.rds"))
+    df_model_noghosts <- df_model_noghosts %>% 
+      filter(pre_cons == 1)
+    
+    # only keep valid sets
+    validsets_noghosts <- df_model_noghosts %>% 
+      group_by(setid) %>% 
+      summarise(mean = mean(exposed == str_to_title(exposure))) %>% 
+      filter(mean > 0 & mean < 1)
+    validsets <- validsets_noghosts$setid
+    
+    df_validsets_noghosts <- df_model_noghosts %>% 
+      filter(setid %in% validsets)
+    
+    saveRDS(df_validsets_noghosts, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_noghosts.rds"))
+  }
+}
+
+# Noghosts - 3years before indexdate -----------------------------------------------------
+for(exposure in XX){
+  #exposure <- XX[1]
+  ABBRVexp <- str_sub(exposure,1 ,3)
+  .dib(exposure) 
+  
+  anxiety_split <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety.rds"))
+  depression_split <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression.rds"))
+  var_consbeforeindex <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp,"-consultations-yrbeforeindex-3yrs.dta"))
+  
+  for(outcome in c("depression", "anxiety")){
+    if (outcome == "anxiety") {
+      df_model <- anxiety_split
+    } else if (outcome == "depression") {
+      df_model <- depression_split
+    }
+    # add in filtering for consultation <= 3years before index
+    df_model_noghosts <- df_model %>% 
+      left_join(dplyr::select(var_consbeforeindex, patid, consyrbeforeindex), by = "patid") %>% 
+      mutate(pre_cons = replace_na(consyrbeforeindex, 0))
+    table_noghosts <- df_model_noghosts %>% 
+      count(exposed, pre_cons) %>% 
+      group_by(exposed) %>% 
+      mutate(prop = prop.table(n)*100 %>% signif(digits = 2)) %>% 
+      pivot_wider(exposed, names_from = pre_cons, values_from = c(n, prop))
+    
+    #saveRDS(table_noghosts, file = paste0(here::here("out/supplementary"), "/table", ABBRVexp, "_", outcome, "_noghosts.rds"))
+    df_model_noghosts <- df_model_noghosts %>% 
+      filter(pre_cons == 1)
+    
+    # only keep valid sets
+    validsets_noghosts <- df_model_noghosts %>% 
+      group_by(setid) %>% 
+      summarise(mean = mean(exposed == str_to_title(exposure))) %>% 
+      filter(mean > 0 & mean < 1)
+    validsets <- validsets_noghosts$setid
+    
+    df_validsets_noghosts <- df_model_noghosts %>% 
+      filter(setid %in% validsets)
+    
+    saveRDS(df_validsets_noghosts, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_noghosts_3yrs.rds"))
   }
 }
