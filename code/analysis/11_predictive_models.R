@@ -47,7 +47,7 @@ load_data_fn <- function(X, Y, fupmax = Inf){
   ## can't have time-updated covariates so collapse
   df_exp_select <- df_exp %>%
     dplyr::select(setid, patid, exposed, indexdate, enddate, dob, gender, comorbid, alc, smokstatus,
-                  severity, sleep, sleep_all, gc90days, death, eth_edited, bmi, bmi2, country, ruc,
+                  severity, sleep, sleep_all, gc90days, death, eth_edited, bmi, bmi_cat, country, ruc,
                   carstairs, cci, age, cal_period, out,
                   tstart, tstop, t)
 
@@ -74,7 +74,7 @@ load_data_fn <- function(X, Y, fupmax = Inf){
   ## variables we just want the value at indexdate
   df_exp_index <- df_exp_select %>%
     group_by(patid) %>%
-    select(indexdate, enddate, exposed, gender, dob, age, bmi, bmi2, eth_edited, country, ruc, carstairs, cal_period) %>%
+    select(indexdate, enddate, exposed, gender, dob, age, bmi, bmi_cat, eth_edited, country, ruc, carstairs, cal_period) %>%
     slice(1)
   
   ## need to add duration of disease (in 1-year increments)
@@ -136,7 +136,7 @@ for(exposure in XX) {
 
     # univariable logistic regression with covariates -------------------------
     covars <- c("age", "gender", "carstairs", 
-                "cci", "bmi2", "smoker")
+                "cci", "bmi_cat", "smoker")
     univ_roc <- function(covariate){
       uni_1 <- glm(out ~ get(covariate), data = df_exp_train, family = "binomial")
       
@@ -201,16 +201,16 @@ for(exposure in XX) {
       filter(!patid %in% patid_sample)
     
     if(ABBRVexp == "pso"){
-      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi2 + smoker + alc, data = df_exp_train, family = "binomial")
-      model_covars <- c("Intercept","age", "gender", "carstairs", "cci", "bmi2", "smoker", "alc")
+      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi_cat + smoker + alc, data = df_exp_train, family = "binomial")
+      model_covars <- c("Intercept","age", "gender", "carstairs", "cci", "bmi_cat", "smoker", "alc")
       pretty_model_covars <- cbind.data.frame(
         model_covars, 
         pretty = c("Intercept", "Age (centred)", "Gender", "Carstairs index of deprivation", "CCI", "BMI (centred)", "Smoker", "Harmful alcohol use")
       )
     }
     if(ABBRVexp == "ecz"){
-      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi2 + smoker + alc + sleep + gc90days, data = df_exp_train, family = "binomial")
-      model_covars <- c("Intercept", "age", "gender", "carstairs", "cci", "bmi2", "smoker", "alc","sleep", "gc90days")
+      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi_cat + smoker + alc + sleep + gc90days, data = df_exp_train, family = "binomial")
+      model_covars <- c("Intercept", "age", "gender", "carstairs", "cci", "bmi_cat", "smoker", "alc","sleep", "gc90days")
       pretty_model_covars <- cbind.data.frame(
         model_covars, 
         pretty = c("Intercept", "Age (centred)", "Gender", "Carstairs index of deprivation", "CCI", "BMI (centred)", "Smoker", "Harmful alcohol use", "Sleep problems", "Oral GC use (90 day risk window)")
@@ -446,16 +446,16 @@ for(exposure in XX) {
     df_exp_train$out %>% table()
     if(ABBRVexp == "pso"){
       glm(out ~ age + gender + carstairs + cci, data = df_exp_train, family = "binomial")
-      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi2 + smoker + alc, data = df_exp_train, family = "binomial")
-      model_covars <- c("Intercept","age", "gender", "carstairs", "cci", "bmi2", "smoker", "alc")
+      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi_cat + smoker + alc, data = df_exp_train, family = "binomial")
+      model_covars <- c("Intercept","age", "gender", "carstairs", "cci", "bmi_cat", "smoker", "alc")
       pretty_model_covars <- cbind.data.frame(
         model_covars, 
         pretty = c("Intercept", "Age (centred)", "Gender", "Carstairs index of deprivation", "CCI", "BMI (centred)", "Smoker", "Harmful alcohol use")
       )
     }
     if(ABBRVexp == "ecz"){
-      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi2 + smoker + alc + sleep + gc90days, data = df_exp_train, family = "binomial")
-      model_covars <- c("Intercept", "age", "gender", "carstairs", "cci", "bmi2", "smoker", "alc","sleep", "gc90days")
+      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi_cat + smoker + alc + sleep + gc90days, data = df_exp_train, family = "binomial")
+      model_covars <- c("Intercept", "age", "gender", "carstairs", "cci", "bmi_cat", "smoker", "alc","sleep", "gc90days")
       pretty_model_covars <- cbind.data.frame(
         model_covars, 
         pretty = c("Intercept", "Age (centred)", "Gender", "Carstairs index of deprivation", "CCI", "BMI (centred)", "Smoker", "Harmful alcohol use", "Sleep problems", "Oral GC use (90 day risk window)")
@@ -689,16 +689,16 @@ for(exposure in XX) {
       filter(!patid %in% patid_sample)
     
     if(ABBRVexp == "pso"){
-      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi2 + smoker + alc, data = df_exp_train, family = "binomial")
-      model_covars <- c("Intercept","age", "gender", "carstairs", "cci", "bmi2", "smoker", "alc")
+      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi_cat + smoker + alc, data = df_exp_train, family = "binomial")
+      model_covars <- c("Intercept","age", "gender", "carstairs", "cci", "bmi_cat", "smoker", "alc")
       pretty_model_covars <- cbind.data.frame(
         model_covars, 
         pretty = c("Intercept", "Age (centred)", "Gender", "Carstairs index of deprivation", "CCI", "BMI (centred)", "Smoker", "Harmful alcohol use")
       )
     }
     if(ABBRVexp == "ecz"){
-      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi2 + smoker + alc + sleep + gc90days, data = df_exp_train, family = "binomial")
-      model_covars <- c("Intercept", "age", "gender", "carstairs", "cci", "bmi2", "smoker", "alc","sleep", "gc90days")
+      multi_1 <- glm(out ~ age + gender + carstairs + cci + bmi_cat + smoker + alc + sleep + gc90days, data = df_exp_train, family = "binomial")
+      model_covars <- c("Intercept", "age", "gender", "carstairs", "cci", "bmi_cat", "smoker", "alc","sleep", "gc90days")
       pretty_model_covars <- cbind.data.frame(
         model_covars, 
         pretty = c("Intercept", "Age (centred)", "Gender", "Carstairs index of deprivation", "CCI", "BMI (centred)", "Smoker", "Harmful alcohol use", "Sleep problems", "Oral GC use (90 day risk window)")
