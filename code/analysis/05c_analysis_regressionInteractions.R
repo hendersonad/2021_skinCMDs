@@ -213,20 +213,9 @@ for(exposure in XX) {
           )
         )
 
-      # interaction_model %>%
-      #   broom::tidy(conf.int = T, conf.level = 0.99) %>%
-      #   print(n = Inf)
-      # 
-      # interaction_results <- interaction_model %>%
-      #   broom::tidy(conf.int = T, conf.level = 0.99) %>%
-      #   filter(str_detect(term, paste0("exposed|",ZZ)))
-      # 
-      # exp(0.268) # HR in nonemorbid  = 1.307
-      # exp(0.268+0.107+-0.0589) # HR in comorbid 1.371767
-      
       coeffs <- interaction_model$coefficients %>% names()
       int_var <- ZZ
-      int_levels <- df_model[, int_var] %>% levels()
+      int_levels <- df_model[, int_var] %>% pull() %>% levels()
       n_int_levels <- length(int_levels) - 1 # -1 because of reference category
       coeffs_interaction <- coeffs[str_detect(coeffs, int_var)]
       
@@ -272,27 +261,6 @@ pd <- position_dodge(width = 0.3)
 
 ybase <- -0.1 + tibble_plot$conf.low %>% min() %>% round(digits = 2) 
 yheight <- 0.1 + tibble_plot$conf.high %>% max() %>% round(digits = 2) 
-
-pdf(here::here("out/analysis/forest_plot3_interactions.pdf"), width = 8, height = 6)
-p1 <- ggplot(tibble_plot, aes(x = lincom, y = estimate, ymin = conf.low, ymax = conf.high, group = y, colour = y)) + 
-  geom_point(position = pd, size = 3, shape = 1) +
-  geom_errorbar(position = pd, width = 0.25) +
-  geom_hline(yintercept = 1, lty=2) +  
-  #ylim(c(0,NA)) +
-  scale_y_log10(breaks=seq(0,4,0.1)) +
-  scale_x_discrete(limits=rev) +
-  coord_flip() +
-  facet_wrap(~x, ncol = 2) +
-  guides(colour = guide_legend("Outcome")) +
-  labs(y = "Hazard ratio", x = "Level") +
-  scale_alpha_identity() +
-  theme_bw() +
-  theme(strip.background = element_blank(),
-        strip.text = element_text(face = "bold"),
-        legend.position = "bottom")
-print(p1)
-dev.off()
-
 
 tibble_plot2 <- tibble_out %>% 
   mutate(lincom2 = lincom) %>% 
