@@ -1,9 +1,3 @@
-# install.packages("rtools")
-# install.packages("gt")
-# install.packages("gtsummary")
-# install.packages("janitor")
-# install.packages("here")
-
 library(here)
 library(flextable)
 library(gt)
@@ -22,7 +16,6 @@ library(patchwork)
 
 if(Sys.info()["user"]=="lsh1510922"){
 	if(Sys.info()["sysname"]=="Darwin"){
-		#datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
 		datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
 	}
 	if(Sys.info()["sysname"]=="Windows"){
@@ -35,10 +28,14 @@ ABBRVexp <- str_sub(exposure,1 ,3)
 
 .dib(exposure)
 
-df_anx_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-anxiety_split.rds"))
-df_dep_split <- readRDS(paste0(datapath, "out/", ABBRVexp, "-depression_split.rds"))
+df_anx_split <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety.rds"))
+df_dep_split <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression.rds"))
 cohort <- haven::read_dta(paste0(datapath, "out/getmatchedcohort-", exposure, "-main-mhealth.dta"))
 severity <- haven::read_dta(paste0(datapath, "out/variables-ecz-severity.dta"))
+
+ecz_sleep_everything <- haven::read_dta(paste0(datapath, "out/variables-ecz-sleep-all-additionalinfo.dta"))
+ecz_sleep_def <- haven::read_dta(paste0(datapath, "out/variables-ecz-sleep-definite.dta"))
+ecz_sleep_all <- haven::read_dta(paste0(datapath, "out/variables-ecz-sleep-all.dta"))
 
 # Get unique events in everything sleep -----------------------------------
 glimpse(ecz_sleep_everything)
@@ -91,72 +88,72 @@ twoXtwo <- function(df, exp, out){
 	)
 }
 
-  df_out <- cohort_sleep
-  
-	df_out$src[is.na(df_out$src)] <- 0
-	df_out$poss[is.na(df_out$poss)] <- 0
-	
-  # all sleep codes - drugs only --------------------------------------------
-	df_tab <- df_out %>% 
-	  ungroup() %>% 
-	  mutate(readcode = ifelse(src == 1, 1, 0)) %>% 
-	  mutate(drug_poss = ifelse(src == 2, 1, 0)) %>% 
-	  mutate(drug_def = ifelse(src == 2 & poss == 0, 1, 0)) %>% 
-	  group_by(setid, patid) %>% 
-	  mutate(readcode = max(readcode),
-	         drug_poss = max(drug_poss),
-	         drug_def = max(drug_def)) %>% 
-	  slice(1)
-	table(df_tab$severity)
-	table(cohort_severity$severity)
-	
-	tab_sleep_readcode <- twoXtwo(df = df_tab, exp = "severity", out = "readcode") %>% drop_na() %>% mutate(sleep_class = "read")
-	tab_sleep_drugs_all <- twoXtwo(df = df_tab, exp = "severity", out = "drug_poss") %>% drop_na() %>% mutate(sleep_class = "drugs_poss")
-	tab_sleep_drugs_def <- twoXtwo(df = df_tab, exp = "severity", out = "drug_def") %>% drop_na() %>% mutate(sleep_class = "drugs_def")
-	
-	tab_sleep_out <- bind_rows(tab_sleep_readcode,
-	                           tab_sleep_drugs_def, 
-	                           tab_sleep_drugs_all)
-	
-	gt_sleep <- tab_sleep_out %>%
-		dplyr::select(-exposure,-Miss, -sleep_class) %>%
-	  mutate(val = str_to_title(val)) %>% 
-		gt::gt() %>%
-		tab_row_group(label = "All sleep Read codes",
-									rows = 1:4) %>%
-		tab_row_group(label = "Definite sleep drugs",
-									rows = 5:8) %>%
-		tab_row_group(label = "All sleep drugs",
-									rows = 9:12) %>%
-		gt::tab_header(title = "Sleep problems by eczema severity") %>%
-		gt::fmt_number(columns = c(3, 5), decimals = 1) %>%
-		gt::fmt_number(columns = c(2, 4), decimals = 0) %>%
-		gt::data_color(
-			columns = c(Yes_pc),
-			colors = scales::col_numeric(
-				palette = paletteer::paletteer_c(palette = "viridis::inferno",
-																				 n = 100) %>% as.character(),
-				domain = c(
-					min(tab_sleep_out$Yes_pc, na.rm = T),
-					max(tab_sleep_out$Yes_pc, na.rm = T)
-				)
+df_out <- cohort_sleep
+
+df_out$src[is.na(df_out$src)] <- 0
+df_out$poss[is.na(df_out$poss)] <- 0
+
+# all sleep codes - drugs only --------------------------------------------
+df_tab <- df_out %>% 
+  ungroup() %>% 
+  mutate(readcode = ifelse(src == 1, 1, 0)) %>% 
+  mutate(drug_poss = ifelse(src == 2, 1, 0)) %>% 
+  mutate(drug_def = ifelse(src == 2 & poss == 0, 1, 0)) %>% 
+  group_by(setid, patid) %>% 
+  mutate(readcode = max(readcode),
+         drug_poss = max(drug_poss),
+         drug_def = max(drug_def)) %>% 
+  slice(1)
+table(df_tab$severity)
+table(cohort_severity$severity)
+
+tab_sleep_readcode <- twoXtwo(df = df_tab, exp = "severity", out = "readcode") %>% drop_na() %>% mutate(sleep_class = "read")
+tab_sleep_drugs_all <- twoXtwo(df = df_tab, exp = "severity", out = "drug_poss") %>% drop_na() %>% mutate(sleep_class = "drugs_poss")
+tab_sleep_drugs_def <- twoXtwo(df = df_tab, exp = "severity", out = "drug_def") %>% drop_na() %>% mutate(sleep_class = "drugs_def")
+
+tab_sleep_out <- bind_rows(tab_sleep_readcode,
+                           tab_sleep_drugs_def, 
+                           tab_sleep_drugs_all)
+
+gt_sleep <- tab_sleep_out %>%
+	dplyr::select(-exposure,-Miss, -sleep_class) %>%
+  mutate(val = str_to_title(val)) %>% 
+	gt::gt() %>%
+	tab_row_group(label = "All sleep Read codes",
+								rows = 1:4) %>%
+	tab_row_group(label = "Definite sleep drugs",
+								rows = 5:8) %>%
+	tab_row_group(label = "All sleep drugs",
+								rows = 9:12) %>%
+	gt::tab_header(title = "Sleep problems by eczema severity") %>%
+	gt::fmt_number(columns = c(3, 5), decimals = 1) %>%
+	gt::fmt_number(columns = c(2, 4), decimals = 0) %>%
+	gt::data_color(
+		columns = c(Yes_pc),
+		colors = scales::col_numeric(
+			palette = paletteer::paletteer_c(palette = "viridis::inferno",
+																			 n = 100) %>% as.character(),
+			domain = c(
+				min(tab_sleep_out$Yes_pc, na.rm = T),
+				max(tab_sleep_out$Yes_pc, na.rm = T)
 			)
-		) %>%
-	  tab_footnote(footnote = md(paste0("*n* = ", prettyNum(dim(df_tab)[1], big.mark = ","))),
-	              locations = cells_title("title")) %>% 
-		cols_label(val = "Severity",
-							 No_pc = "%",
-							 Yes_pc = "%") 
-	
-	gt_sleep %>% 
-		gt::gtsave(
-			filename =  paste0("eczema_sleep_cohort_v3.html"),
-			path = here::here("out/supplementary")
 		)
-	
+	) %>%
+  tab_footnote(footnote = md(paste0("*n* = ", prettyNum(dim(df_tab)[1], big.mark = ","))),
+              locations = cells_title("title")) %>% 
+	cols_label(val = "Severity",
+						 No_pc = "%",
+						 Yes_pc = "%") 
+
+gt_sleep %>% 
+	gt::gtsave(
+		filename =  paste0("eczema_sleep_cohort_v3.html"),
+		path = here::here("out/supplementary")
+	)
+
 # bubble plot for proportion with code ------------------------------------
 p3 <- tab_sleep_out %>% 
-	  mutate(lab = prettyNum(Yes, big.mark = ",")) %>% 
+	  mutate(lab = paste0(prettyNum(Yes_pc, big.mark = ",", digits = 3), "%")) %>% 
 	  mutate(val = str_to_title(val)) %>% 
 	  mutate(val = factor(val, levels = c("None", "Mild", "Moderate", "Severe"))) %>% 
 	  mutate(sleep_class = 
@@ -221,7 +218,6 @@ sleep_tab$src <- factor(sleep_tab$src,
 # sleep_tab$exposed <- factor(sleep_tab$exposed,
 #                             labels = c("Unexposed", "With eczema"))
 # sleep_tab$bigN <- ifelse(sleep_tab$exposed=="Unexposed", n_un, n_exp)
-
 
 x <- data.frame(table(cohort_severity$severity))
 sleep_tab <- sleep_tab %>% left_join(x, by = c("severity" = "Var1"))

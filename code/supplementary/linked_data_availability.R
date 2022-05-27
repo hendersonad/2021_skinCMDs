@@ -7,13 +7,12 @@ library(ggplot2)
 
 if(Sys.info()["user"]=="lsh1510922"){
   if(Sys.info()["sysname"]=="Darwin"){
-    datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
+    datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if(Sys.info()["sysname"]=="Windows"){
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
 }
-
 
 XX <- c("psoriasis", "eczema")
 
@@ -111,10 +110,5 @@ gt_carstairs <- carstairs_data %>%
 gt_carstairs %>% 
   gt::gtsave(
     filename =  paste0("carstairs_data_availability.html"),
-    path = here::here("out/supplementary")
-  )
-gt_carstairs %>% 
-  gt::gtsave(
-    filename =  paste0("carstairs_data_availability.rtf"),
     path = here::here("out/supplementary")
   )
