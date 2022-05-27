@@ -13,7 +13,6 @@ library(lubridate)
 
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
-    #datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
@@ -32,8 +31,8 @@ for(exposure in XX){
   ABBRVexp <- substr(exposure, 1, 3)
   .dib(exposure)
   #for(outcome in YY){
-  df_model_anx_imputed <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety_imputed.rds"))
-  df_model_dep_imputed <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression_imputed.rds"))
+  df_model_anx_imputed <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_anxiety.rds"))
+  df_model_dep_imputed <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_depression.rds"))
   
   ## combine these datasets
   ## filter to one row
@@ -45,14 +44,14 @@ for(exposure in XX){
     
     if(exp == "ecz"){
       temp %>% 
-        select(setid, patid, dob, indexdate, gender, exposed, eth_edited, carstairs, cal_period, comorbid, cci, bmi2, bmi, alc, smokstatus, smoking_original, sleep, gc90days) %>% 
-        rename(smoking_imputed = smokstatus, obesity_categorised = bmi2, ethnicity = eth_edited) %>% 
+        select(setid, patid, dob, indexdate, gender, exposed, eth_edited, carstairs, cal_period, comorbid, cci, bmi_cat, bmi, alc, smokstatus, smokstatus_original, sleep, gc90days) %>% 
+        rename(smoking_imputed = smokstatus, obesity_categorised = bmi_cat, ethnicity = eth_edited) %>% 
         mutate(age = as.numeric(indexdate - dob)/365.25) %>% 
         select(-dob, -indexdate)
     } else if(exp == "pso"){
       temp %>% 
-        select(setid, patid, dob, indexdate, gender, exposed, eth_edited, carstairs, cal_period, comorbid, cci, bmi2, bmi, alc, smokstatus, smoking_original) %>% 
-        rename(smoking_imputed = smokstatus, obesity_categorised = bmi2, ethnicity = eth_edited) %>% 
+        select(setid, patid, dob, indexdate, gender, exposed, eth_edited, carstairs, cal_period, comorbid, cci, bmi_cat, bmi, alc, smokstatus, smokstatus_original) %>% 
+        rename(smoking_imputed = smokstatus, obesity_categorised = bmi_cat, ethnicity = eth_edited) %>% 
         mutate(age = as.numeric(indexdate - dob)/365.25) %>% 
         select(-dob, -indexdate)
     }
@@ -110,7 +109,7 @@ for(exposure in XX){
   
   ## describe characteristics by missing status 
   missing_data <- NULL
-  for(var in c("carstairs", "smoking_original", "bmi","obesity_categorised", "smoking_imputed", "ethnicity")){
+  for(var in c("carstairs", "smokstatus_original", "bmi","obesity_categorised", "smoking_imputed", "ethnicity")){
     patids_missing <- df_model_merge %>% 
       select(setid, patid, all_of(var)) %>% 
       filter(is.na(get(var))) %>% 
@@ -137,7 +136,7 @@ for(exposure in XX){
   var_label(df_model_miss_1obs$age) <- "Age at index"
   var_label(df_model_miss_1obs$ethnicity) <- "Ethnicity"
   var_label(df_model_miss_1obs$carstairs) <- "Carstairs index of deprivation"
-  var_label(df_model_miss_1obs$smoking_original) <- "Original smoking data"
+  var_label(df_model_miss_1obs$smokstatus_original) <- "Original smoking data"
   var_label(df_model_miss_1obs$bmi) <- "Body Mass Index (BMI)"
   var_label(df_model_miss_1obs$obesity_categorised) <- "Obesity status"
   var_label(df_model_miss_1obs$cal_period) <- "Calendar Period"

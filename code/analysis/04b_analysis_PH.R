@@ -31,9 +31,9 @@ XX <- c("psoriasis", "eczema")
 for(exposure in XX){
   ABBRVexp <- substr(exposure, 1, 3)
   for (outcome in YY){
+    .dib(paste0(exposure,"~",outcome))
     # load df_model -----------------------------------------------------------
-    df_model <-
-      readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_", outcome,".rds"))
+    df_model <- readRDS(paste0(datapath, "out/df_model", ABBRVexp, "_", outcome,".rds"))
     
     cox_fit <- readRDS(paste0(datapath, "out/models_data/", ABBRVexp, "_", outcome, "_mod1_modeldata.rds"))
     cox_fit3 <- readRDS(paste0(datapath, "out/models_data/", ABBRVexp, "_", outcome, "_mod3_modeldata.rds"))

@@ -12,7 +12,6 @@ library(glue)
 if (Sys.info()["user"] == "lsh1510922") {
   if (Sys.info()["sysname"] == "Darwin") {
     datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-    datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
   }
   if (Sys.info()["sysname"] == "Windows") {
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
@@ -106,7 +105,7 @@ for (exposure in XX) {
           eth_edited = "Ethnicity",
           bmi = "BMI",
           bmi2 = "BMI (centred)",
-          bmi_cat = "BMI (categorised)",
+          bmi_cat = "Obesity (categorised)",
           alc = "Harmful alcohol use",
           comorbid = ifelse(
             exposure == "eczema",
@@ -205,7 +204,7 @@ for (exposure in XX) {
           agegroup = "Age (categorised)",
           eth_edited = "Ethnicity",
           bmi = "BMI",
-          bmi_cat = "BMI (categorised)",
+          bmi_cat = "Obesity (categorised)",
           #everOut = outcome_cohort,
           everAlc = "Harmful alcohol use",
           everComorbid = ifelse(
@@ -296,7 +295,7 @@ for (exposure in XX) {
           name == "gender" ~ "Sex",
           name == "agegroup" ~ "Age (categorised)",
           name == "eth_edited" ~ "Ethnicity",
-          name == "bmi_cat" ~ "BMI (categorised)",
+          name == "bmi_cat" ~ "Obesity (categorised)",
           name == "alc" ~ "Harmful alcohol use",
           name == "comorbid" ~ ifelse(
             exposure == "eczema",
