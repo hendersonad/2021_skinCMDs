@@ -256,8 +256,9 @@ tibble_plot2 <- tibble_out %>%
 
 tibble_plot2$nice_z_level <- fct_reorder(tibble_plot2$nice_z_level, tibble_plot2$estimate)
 
+pdf(here::here("out/analysis/forest_plot4_ethnicity.pdf"), width = 8, height = 6)
 pd <- position_dodge(width = 0.2)
-ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax = conf.high, group = nice_z_level, colour = nice_z_level)) + 
+p1 <- ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax = conf.high, group = nice_z_level, colour = nice_z_level)) + 
   geom_point(position = pd, size = 3) +
   geom_errorbar(position = pd, width = 0.25) +
   geom_hline(yintercept = 1, lty=2) +  
@@ -273,7 +274,8 @@ ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax =
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
-dev.copy(pdf, here::here("out/analysis/forest_plot4_ethnicity.pdf"), width = 8, height = 6); dev.off()
+print(p1)
+dev.off()
 
 
 # table of skin HRs with and without ethnicity -----------------------------

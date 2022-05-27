@@ -80,7 +80,9 @@ pd <- position_dodge(width = 0.3)
 ybase <- -0.1 + severity_results$conf.low %>% min() %>% round(digits = 2) 
 yheight <- 0.1 + severity_results$conf.high %>% max() %>% round(digits = 2) 
 
-ggplot(severity_results, aes(x = severity, y = estimate, ymin = conf.low, ymax = conf.high, group = outcome, colour = outcome)) +
+pdf(here::here("out/analysis/forest_plot2_severity.pdf"), width = 6, height = 4) 
+
+p1 <- ggplot(severity_results, aes(x = severity, y = estimate, ymin = conf.low, ymax = conf.high, group = outcome, colour = outcome)) +
   geom_point(position = pd, size = 3, shape = 1) +
   geom_errorbar(position = pd, width = 0.25) +
   geom_hline(yintercept = 1, lty=2) +  
@@ -96,8 +98,8 @@ ggplot(severity_results, aes(x = severity, y = estimate, ymin = conf.low, ymax =
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
-
-dev.copy(pdf, here::here("out/analysis/forest_plot2_severity.pdf"), width = 6, height = 4); dev.off()
+print(p1)
+dev.off()
 
 
 make_gt_results <- function(exposure){

@@ -178,7 +178,7 @@ for(exposure in XX) {
     df_model <-
       readRDS(paste0(
         datapath,
-        "out/models_data/df_model",
+        "out/df_model",
         ABBRVexp, 
         "_",
         outcome, 
@@ -273,7 +273,8 @@ pd <- position_dodge(width = 0.3)
 ybase <- -0.1 + tibble_plot$conf.low %>% min() %>% round(digits = 2) 
 yheight <- 0.1 + tibble_plot$conf.high %>% max() %>% round(digits = 2) 
 
-ggplot(tibble_plot, aes(x = lincom, y = estimate, ymin = conf.low, ymax = conf.high, group = y, colour = y)) + 
+pdf(here::here("out/analysis/forest_plot3_interactions.pdf"), width = 8, height = 6)
+p1 <- ggplot(tibble_plot, aes(x = lincom, y = estimate, ymin = conf.low, ymax = conf.high, group = y, colour = y)) + 
   geom_point(position = pd, size = 3, shape = 1) +
   geom_errorbar(position = pd, width = 0.25) +
   geom_hline(yintercept = 1, lty=2) +  
@@ -289,8 +290,8 @@ ggplot(tibble_plot, aes(x = lincom, y = estimate, ymin = conf.low, ymax = conf.h
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
-
-dev.copy(pdf, here::here("out/analysis/forest_plot3_interactions.pdf"), width = 8, height = 6); dev.off()
+print(p1)
+dev.off()
 
 
 tibble_plot2 <- tibble_out %>% 
@@ -310,7 +311,8 @@ tibble_plot2 <- tibble_out %>%
                                               "Age group"))))) %>% 
   mutate(nice_z_level= paste0(nice_z, ": ", str_remove(z_level, str_to_lower(z)))) 
 
-ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax = conf.high, group = z, colour = z)) + 
+pdf(here::here("out/analysis/forest_plot3_interactions_v2.pdf"), width = 8, height = 6)
+p1 <- ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax = conf.high, group = z, colour = z)) + 
   geom_point(position = pd, size = 3) +
   geom_errorbar(position = pd, width = 0.25) +
   geom_hline(yintercept = 1, lty=2) +  
@@ -326,5 +328,6 @@ ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax =
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
-dev.copy(pdf, here::here("out/analysis/forest_plot3_interactions_v2.pdf"), width = 8, height = 6); dev.off()
+print(p1)
+dev.off()
 

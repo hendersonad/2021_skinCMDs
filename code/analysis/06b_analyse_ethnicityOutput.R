@@ -290,6 +290,7 @@ plot_df$ciU %>% max()
 
 saveRDS(plot_df, here::here("out/data/df_forest_ethnicity.rds"))
 
+pdf(here::here("out/analysis/forest_plot13_ethnicity.pdf"), width = 6, height = 4)
 pd <- position_dodge(width = 0.3)
 plot_new <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure, colour = exposure, alpha = a)) +
   geom_point(position = pd, size = 3, shape = 1) +
@@ -310,7 +311,7 @@ plot_new <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group
         legend.position = "bottom")
 
 print(plot_new)
-dev.copy(pdf, here::here("out/analysis/forest_plot13_ethnicity.pdf"), width = 6, height = 4); dev.off()
+dev.off()
 
 
 # import the original main analysis forest plot data to merge ------------------
@@ -324,6 +325,7 @@ if(does_exist) {
     mutate(analysis = "Main") %>% 
     bind_rows(mutate(plot_df_ethnicity, analysis = "Includes ethnicity"))
   
+  pdf(here::here("out/analysis/forest_plot14_sens_mainVethnicity.pdf"), width = 6, height = 6)
   pd <- position_dodge(width = 0.3)
   plot_both <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = outcome, colour = outcome, alpha = a)) +
     geom_point(position = pd, size = 3, shape = 1) +
@@ -344,7 +346,7 @@ if(does_exist) {
           legend.position = "bottom")
   
   print(plot_both)
-  dev.copy(pdf, here::here("out/analysis/forest_plot14_sens_mainVethnicity.pdf"), width = 6, height = 6); dev.off()
+  dev.off()
 }
 
 

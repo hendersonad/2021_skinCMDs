@@ -15,7 +15,6 @@ if (Sys.info()["user"] == "lsh1510922") {
   }
 }
 
-
 dir.create(file.path(here("out")), showWarnings = FALSE)
 dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
 dir.create(file.path(here("out", "data")), showWarnings = FALSE)
@@ -330,7 +329,8 @@ plot_df$a[plot_df$model == "Mediator adjusted"] <- 1
 plot_df$ciU %>% max()
 
 pd <- position_dodge(width = 0.3)
-ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure, colour = exposure, alpha = a)) +
+pdf(here::here("out/analysis/forest_plot1.pdf"), width = 6, height = 4)
+p1 <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure, colour = exposure, alpha = a)) +
   geom_point(position = pd, size = 3, shape = 1) +
   geom_errorbar(position = pd, width = 0.25) +
   geom_hline(yintercept = 1, lty=2) +  
@@ -347,7 +347,7 @@ ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = exposure,
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
-
+print(p1)
+dev.off()
 saveRDS(plot_df, here::here("out/data/df_forest_main.rds"))
-dev.copy(pdf, here::here("out/analysis/forest_plot1.pdf"), width = 6, height = 4); dev.off()
 
