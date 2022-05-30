@@ -84,7 +84,7 @@ make_regression_tab <- function(exposure){
     vars <- attr(terms(model), "term.labels")
     vars <- vars[1:length(vars) - 1]
     df <- data %>%
-      dplyr::sesetid, patid, gender, age, pracid, out, all_of(vars), dob, indexdate, enddate, tstart, tstop, t) 
+      dplyr::select(setid, patid, gender, age, pracid, out, all_of(vars), dob, indexdate, enddate, tstart, tstop, t) 
     dim(df)
     
     # convert to data.table for speed of selecting the last row by group
@@ -282,9 +282,9 @@ tab3_out %>%
 # make the plot -----------------------------------------------------------
 get_plot_data <- function(pretty_table) {
   numeric_tab <- pretty_table %>%
-    dplyr::se-starts_with("n")) %>%
-    dplyr::se-starts_with("events")) %>%
-    dplyr::se-characteristic,-outcome) %>%
+    dplyr::select(-starts_with("n")) %>%
+    dplyr::select(-starts_with("events")) %>%
+    dplyr::select(-characteristic,-outcome) %>%
     separate(ci1, c("ciL1", "ciU1"), sep = "-") %>%
     separate(ci2, c("ciL2", "ciU2"), sep = "-") %>%
     separate(ci3, c("ciL3", "ciU3"), sep = "-") %>%
@@ -293,7 +293,7 @@ get_plot_data <- function(pretty_table) {
     mutate_if(is.character, as.numeric) 
   
   plot_tab1 <- pretty_table %>%
-    dplyr::se2) %>%
+    dplyr::select(2) %>%
     filter(outcome != " ") %>%
     bind_cols(numeric_tab)
 }
@@ -344,43 +344,6 @@ plot_new <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group
 
 print(plot_new)
 dev.off()
-
-
-# import the original main analysis forest plot data to merge ------------------
-does_exist <- list.files(here::here("out/data"), "df_forest_main.rds") %>% length() %>% as.logical()
-
-if(does_exist) {
-  plot_df_main <- readRDS(here::here("out/data/df_forest_main.rds"))
-  plot_df_noghosts <- plot_df
-  
-  plot_df <- plot_df_main %>% 
-    mutate(analysis = "Main") %>% 
-    bind_rows(mutate(plot_df_noghosts, analysis = "Consult < 1yr before entry"))
-  
-  pdf(here::here("out/analysis/forest_plot7_sens_mainVnoghosts.pdf"), width = 6, height = 6)
-  pd <- position_dodge(width = 0.3)
-  plot_both <- ggplot(plot_df, aes(x = model, y = hr, ymin = ciL, ymax = ciU, group = outcome, colour = outcome, alpha = a)) +
-    geom_point(position = pd, size = 3, shape = 1) +
-    geom_errorbar(position = pd, width = 0.25) +
-    geom_hline(yintercept = 1, lty=2) +  
-    #ylim(c(0,NA)) +
-    scale_y_log10(breaks=seq(0.5,2,0.1),position="left",limits=c(0.9,1.35)) +
-    scale_x_discrete(limits=rev) +
-    facet_grid(rows = vars(analysis), cols = vars(exposure)) +
-    coord_flip() +
-    guides(colour = guide_legend("Exposure"), 
-           alpha = "none") +
-    labs(y = "Hazard ratio", x = "Model") +
-    scale_alpha_identity() +
-    theme_bw() +
-    theme(strip.background = element_blank(),
-          strip.text = element_text(face = "bold"),
-          legend.position = "bottom")
-  
-  print(plot_both)
-  dev.off()
-}
-
 
 # make table summarising the consult  drop_out  ---------------------------
 ecz_cohort <- readstata13::read.dta13(paste0(datapath, "out/getmatchedcohort-eczema-main-mhealth.dta"))

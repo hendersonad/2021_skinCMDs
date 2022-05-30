@@ -58,7 +58,7 @@ load_data_fn <- function(X, Y, fupmax = Inf){
     mutate(rownum = 1:n(), 
            sumfup = cumsum(t)) %>% 
     ungroup() %>% 
-    select(rownum,sumfup, patid, comorbid, cci, severity, alc, sleep, gc90days, out) %>%
+    dplyr::select(rownum,sumfup, patid, comorbid, cci, severity, alc, sleep, gc90days, out) %>%
     filter(rownum == 1 | sumfup <= fupmax) %>% # filter to events only up to fupmax (argument to function)
     mutate_if(is.factor, ~as.integer(ordered(.))) %>% 
     group_by(patid) %>%
@@ -74,12 +74,12 @@ load_data_fn <- function(X, Y, fupmax = Inf){
   ## variables we just want the value at indexdate
   df_exp_index <- df_exp_select %>%
     group_by(patid) %>%
-    select(indexdate, enddate, exposed, gender, dob, age, bmi, bmi_cat, eth_edited, country, ruc, carstairs, cal_period) %>%
+    dplyr::select(indexdate, enddate, exposed, gender, dob, age, bmi, bmi_cat, eth_edited, country, ruc, carstairs, cal_period) %>%
     slice(1)
   
   ## need to add duration of disease (in 1-year increments)
   df_exp_fup <- df_exp %>%
-    select(setid, patid, tstart, tstop, t) %>%
+    dplyr::select(setid, patid, tstart, tstop, t) %>%
     group_by(setid, patid) %>%
     mutate(t = tstop[n()] - tstart[1]) %>% 
     mutate(years = t/365.25) %>% 
@@ -145,7 +145,7 @@ for(exposure in XX) {
       df_predictions <- df_exp_train %>% 
         filter(!is.na(get(covariate))) %>% 
         mutate(lp = pred_vals) %>% 
-        select(patid, all_of(covariate), out, lp) %>% 
+        dplyr::select(patid, all_of(covariate), out, lp) %>% 
         mutate(risk = 1/(1 + exp(-lp)))
       
       # report AUC  -------------------------------------------------------------
@@ -222,17 +222,17 @@ for(exposure in XX) {
       janitor::clean_names()
     predict_gt <- broom::tidy(multi_1, conf.int = F) %>% 
       bind_cols(predict_cis) %>% 
-      select(variable = term, logOR = estimate, conf.low = x2_5_percent, conf.high = x97_5_percent, p.value) %>%
+      dplyr::select(variable = term, logOR = estimate, conf.low = x2_5_percent, conf.high = x97_5_percent, p.value) %>%
       drop_na() %>% 
       mutate(conf_int = paste0(signif(conf.low, 2), " , ", signif(conf.high, 2)),
              p = ifelse(p.value < 0.0001, "*", paste0(signif(p.value, 1)))) %>% 
-      select(-conf.low, -conf.high, -p.value) %>% 
+      dplyr::select(-conf.low, -conf.high, -p.value) %>% 
       separate(variable, into = c("delete", "level"), paste(model_covars, collapse = "|"), remove = FALSE) %>% 
       mutate(level=str_remove(level, "\\)")) %>% 
       mutate(temp = str_extract(variable, paste(model_covars, collapse = "|"))) %>% 
       left_join(pretty_model_covars, by = c("temp" = "model_covars")) %>% 
       mutate(OR = exp(logOR)) %>% 
-      select(var = pretty, level, OR, logOR, conf_int, p) %>% 
+      dplyr::select(var = pretty, level, OR, logOR, conf_int, p) %>% 
       gt() %>% 
       cols_align(columns = 3:6, align = "right") %>% 
       fmt_number(n_sigfig = 3, columns = where(is.numeric)) %>% 
@@ -247,11 +247,6 @@ for(exposure in XX) {
     predict_gt
     gt::gtsave(
       predict_gt,
-      filename =  paste0("tab1_", ABBRVexp, "_", substr(outcome, 1, 3), "_predictmodel_logistic.rtf"),
-      path = here::here("out/predictions/")
-    )
-    gt::gtsave(
-      predict_gt,
       filename =  paste0("tab1_", ABBRVexp, "_", substr(outcome, 1, 3), "_predictmodel_logistic.html"),
       path = here::here("out//predictions//")
     )  
@@ -262,13 +257,13 @@ for(exposure in XX) {
     df_predictions_train <- df_exp_train %>% 
      #filter_at(all_of(model_covars[-1]), all_vars(!is.na(.))) %>% 
       mutate(lp = pred_vals_train) %>% 
-      select(patid, all_of(model_covars[-1]), out, lp) %>% 
+      dplyr::select(patid, all_of(model_covars[-1]), out, lp) %>% 
       mutate(risk = 1/(1 + exp(-lp)))
     
     df_predictions_test <- df_exp_test %>% 
       #filter_at(all_of(model_covars[-1]), all_vars(!is.na(.))) %>% 
       mutate(lp = pred_vals_test) %>% 
-      select(patid, all_of(model_covars[-1]), out, lp) %>% 
+      dplyr::select(patid, all_of(model_covars[-1]), out, lp) %>% 
       mutate(risk = 1/(1 + exp(-lp)))
     
     # PLOT PLOTS PLOTS 
@@ -419,7 +414,7 @@ dev.off()
 
 
 # 2a - up to 1 year -------------------------------------------------------
-pdf(paste0(here("out/predictions/"), "03_multimodel_logisticpredict_1year.pdf"), 10, 10)
+pdf(paste0(here("out/predictions"), "/03_multimodel_logisticpredict_1year.pdf"), 10, 10)
 par(mfrow = c(4,4), mgp=c(3,1,0))
 ii <- 0
 for(exposure in XX) {
@@ -467,17 +462,17 @@ for(exposure in XX) {
       janitor::clean_names()
     predict_gt <- broom::tidy(multi_1, conf.int = F) %>% 
       bind_cols(predict_cis) %>% 
-      select(variable = term, logOR = estimate, conf.low = x2_5_percent, conf.high = x97_5_percent, p.value) %>%
+      dplyr::select(variable = term, logOR = estimate, conf.low = x2_5_percent, conf.high = x97_5_percent, p.value) %>%
       drop_na() %>% 
       mutate(conf_int = paste0(signif(conf.low, 2), " , ", signif(conf.high, 2)),
              p = ifelse(p.value < 0.0001, "*", paste0(signif(p.value, 1)))) %>% 
-      select(-conf.low, -conf.high, -p.value) %>% 
+      dplyr::select(-conf.low, -conf.high, -p.value) %>% 
       separate(variable, into = c("delete", "level"), paste(model_covars, collapse = "|"), remove = FALSE) %>% 
       mutate(level=str_remove(level, "\\)")) %>% 
       mutate(temp = str_extract(variable, paste(model_covars, collapse = "|"))) %>% 
       left_join(pretty_model_covars, by = c("temp" = "model_covars")) %>% 
       mutate(OR = exp(logOR)) %>% 
-      select(var = pretty, level, OR, logOR, conf_int, p) %>% 
+      dplyr::select(var = pretty, level, OR, logOR, conf_int, p) %>% 
       gt() %>% 
       cols_align(columns = 3:6, align = "right") %>% 
       fmt_number(n_sigfig = 3, columns = where(is.numeric)) %>% 
@@ -507,13 +502,13 @@ for(exposure in XX) {
     df_predictions_train <- df_exp_train %>% 
       #filter_at(all_of(model_covars[-1]), all_vars(!is.na(.))) %>% 
       mutate(lp = pred_vals_train) %>% 
-      select(patid, all_of(model_covars[-1]), out, lp) %>% 
+      dplyr::select(patid, all_of(model_covars[-1]), out, lp) %>% 
       mutate(risk = 1/(1 + exp(-lp)))
     
     df_predictions_test <- df_exp_test %>% 
       #filter_at(all_of(model_covars[-1]), all_vars(!is.na(.))) %>% 
       mutate(lp = pred_vals_test) %>% 
-      select(patid, all_of(model_covars[-1]), out, lp) %>% 
+      dplyr::select(patid, all_of(model_covars[-1]), out, lp) %>% 
       mutate(risk = 1/(1 + exp(-lp)))
     
     # PLOT PLOTS PLOTS 
@@ -710,17 +705,17 @@ for(exposure in XX) {
       janitor::clean_names()
     predict_gt <- broom::tidy(multi_1, conf.int = F) %>% 
       bind_cols(predict_cis) %>% 
-      select(variable = term, logOR = estimate, conf.low = x2_5_percent, conf.high = x97_5_percent, p.value) %>%
+      dplyr::select(variable = term, logOR = estimate, conf.low = x2_5_percent, conf.high = x97_5_percent, p.value) %>%
       drop_na() %>% 
       mutate(conf_int = paste0(signif(conf.low, 2), " , ", signif(conf.high, 2)),
              p = ifelse(p.value < 0.0001, "*", paste0(signif(p.value, 1)))) %>% 
-      select(-conf.low, -conf.high, -p.value) %>% 
+      dplyr::select(-conf.low, -conf.high, -p.value) %>% 
       separate(variable, into = c("delete", "level"), paste(model_covars, collapse = "|"), remove = FALSE) %>% 
       mutate(level=str_remove(level, "\\)")) %>% 
       mutate(temp = str_extract(variable, paste(model_covars, collapse = "|"))) %>% 
       left_join(pretty_model_covars, by = c("temp" = "model_covars")) %>% 
       mutate(OR = exp(logOR)) %>% 
-      select(var = pretty, level, OR, logOR, conf_int, p) %>% 
+      dplyr::select(var = pretty, level, OR, logOR, conf_int, p) %>% 
       gt() %>% 
       cols_align(columns = 3:6, align = "right") %>% 
       fmt_number(n_sigfig = 3, columns = where(is.numeric)) %>% 
@@ -745,13 +740,13 @@ for(exposure in XX) {
     df_predictions_train <- df_exp_train %>% 
       #filter_at(all_of(model_covars[-1]), all_vars(!is.na(.))) %>% 
       mutate(lp = pred_vals_train) %>% 
-      select(patid, all_of(model_covars[-1]), out, lp) %>% 
+      dplyr::select(patid, all_of(model_covars[-1]), out, lp) %>% 
       mutate(risk = 1/(1 + exp(-lp)))
     
     df_predictions_test <- df_exp_test %>% 
       #filter_at(all_of(model_covars[-1]), all_vars(!is.na(.))) %>% 
       mutate(lp = pred_vals_test) %>% 
-      select(patid, all_of(model_covars[-1]), out, lp) %>% 
+      dplyr::select(patid, all_of(model_covars[-1]), out, lp) %>% 
       mutate(risk = 1/(1 + exp(-lp)))
     
     # PLOT PLOTS PLOTS 
