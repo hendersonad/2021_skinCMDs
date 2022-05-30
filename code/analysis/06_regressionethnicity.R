@@ -171,9 +171,13 @@ for (exposure in XX) {
       )
     mod_confound_new <- modEth
     mod_mediator_new <- modEth2
+    mod_confound_small <- mod1_small
+    mod_mediator_small <- mod2_small
     
     mod1_old <- broom::tidy(mod_confound_old, conf.int = T, exponentiate = T, conf.level = 0.95)
     mod2_old <- broom::tidy(mod_mediator_old, conf.int = T, exponentiate = T, conf.level = 0.95)
+    mod1_small <- broom::tidy(mod_confound_small, conf.int = T, exponentiate = T, conf.level = 0.95)
+    mod2_small <- broom::tidy(mod_mediator_small, conf.int = T, exponentiate = T, conf.level = 0.95)
     mod1_new <- broom::tidy(mod_confound_new, conf.int = T, exponentiate = T, conf.level = 0.95)
     mod2_new <- broom::tidy(mod_mediator_new, conf.int = T, exponentiate = T, conf.level = 0.95)
     mod3_new <- broom::tidy(modEth3, conf.int = T, exponentiate = T, conf.level = 0.95)
@@ -186,6 +190,8 @@ for (exposure in XX) {
     }
     fmt_mod1_old <- fmt_tab(mod1_old) %>% mutate(model = "mod1_old", n = mod_confound_old$n, n_event = mod_confound_old$nevent, pval = NA)
     fmt_mod2_old <- fmt_tab(mod2_old) %>% mutate(model = "mod2_old", n = mod_mediator_old$n, n_event = mod_mediator_old$nevent, pval = NA)
+    fmt_mod1_small <- fmt_tab(mod1_small) %>% mutate(model = "mod1_small", n = mod_confound_small$n, n_event = mod_confound_small$nevent, pval = NA)
+    fmt_mod2_small <- fmt_tab(mod2_small) %>% mutate(model = "mod2_small", n = mod_mediator_small$n, n_event = mod_mediator_small$nevent, pval = NA)
     fmt_mod1_new <- fmt_tab(mod1_new) %>% mutate(model = "mod1_new", n = mod_confound_new$n, n_event = mod_confound_new$nevent, pval = lr1$`Pr(>Chisq)`[2])
     fmt_mod2_new <- fmt_tab(mod2_new) %>% mutate(model = "mod2_new", n = mod_mediator_new$n, n_event = mod_mediator_new$nevent, pval = lr2$`Pr(>Chisq)`[2])
     fmt_mod3_new <- fmt_tab(mod3_new) %>% mutate(model = "mod3_new", n = modEth3$n, n_event = modEth3$nevent, pval = lr3$`Pr(>Chisq)`[2])
@@ -193,7 +199,7 @@ for (exposure in XX) {
     ## add lincom estimates for interaction
     coeffs <- modEth3$coefficients %>% names()
     int_var <- "eth_edited"
-    int_levels <- df_model_eth_nonmiss[, int_var] %>% levels()
+    int_levels <- df_model_eth_nonmiss[, int_var] %>% pull() %>% levels()
     n_int_levels <- length(int_levels) - 1 # -1 because of reference category
     coeffs_interaction <- coeffs[str_detect(coeffs, int_var)]
     
@@ -228,6 +234,8 @@ for (exposure in XX) {
     full_ethnicity <- full_ethnicity %>% 
       bind_rows(fmt_mod1_old,
                 fmt_mod2_old,
+                fmt_mod1_small,
+                fmt_mod2_small,
                 fmt_mod1_new,
                 fmt_mod2_new,
                 fmt_mod3_new,
@@ -293,8 +301,12 @@ ethnicity_table <- full_ethnicity %>%
 ethnicity_table_long <- ethnicity_table %>% 
   pivot_longer(cols = model) %>% 
   mutate(rowname = ifelse(str_detect(value, "^mod1."), "Confounder adjusted", "Mediator adjusted")) %>% 
-  mutate(runnum = str_extract(value, "old|new")) %>% 
-  mutate(runnum = ifelse(runnum == "old", "Main", "With Ethnicity")) %>% 
+  mutate(runnum = str_extract(value, "old|new|small")) %>% 
+  mutate(runnum = case_when(
+    runnum == "old" ~ "Main",
+    runnum == "small" ~ "Restricted dataset (people with ethnicity recorded but ethnicity not in the model)",
+    runnum == "new" ~ "With ethnicity in the model")
+    ) %>% 
   dplyr::select(rowname, n, n_event, everything(), -name, - value) %>% 
   arrange(X, rowname) 
 
