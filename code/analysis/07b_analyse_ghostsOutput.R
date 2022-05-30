@@ -84,7 +84,7 @@ make_regression_tab <- function(exposure){
     vars <- attr(terms(model), "term.labels")
     vars <- vars[1:length(vars) - 1]
     df <- data %>%
-      select(setid, patid, gender, age, pracid, out, all_of(vars), dob, indexdate, enddate, tstart, tstop, t) 
+      dplyr::sesetid, patid, gender, age, pracid, out, all_of(vars), dob, indexdate, enddate, tstart, tstop, t) 
     dim(df)
     
     # convert to data.table for speed of selecting the last row by group
@@ -282,9 +282,9 @@ tab3_out %>%
 # make the plot -----------------------------------------------------------
 get_plot_data <- function(pretty_table) {
   numeric_tab <- pretty_table %>%
-    select(-starts_with("n")) %>%
-    select(-starts_with("events")) %>%
-    select(-characteristic,-outcome) %>%
+    dplyr::se-starts_with("n")) %>%
+    dplyr::se-starts_with("events")) %>%
+    dplyr::se-characteristic,-outcome) %>%
     separate(ci1, c("ciL1", "ciU1"), sep = "-") %>%
     separate(ci2, c("ciL2", "ciU2"), sep = "-") %>%
     separate(ci3, c("ciL3", "ciU3"), sep = "-") %>%
@@ -293,7 +293,7 @@ get_plot_data <- function(pretty_table) {
     mutate_if(is.character, as.numeric) 
   
   plot_tab1 <- pretty_table %>%
-    select(2) %>%
+    dplyr::se2) %>%
     filter(outcome != " ") %>%
     bind_cols(numeric_tab)
 }

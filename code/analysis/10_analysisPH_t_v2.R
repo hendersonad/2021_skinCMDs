@@ -198,10 +198,11 @@ for(exposure in XX) {
 dev.off()
 
 pdf(paste0(here::here("out/analysis"), "/fig3_linear_time_estimates.pdf"), 8, 8)
-cowplot::plot_grid(
+p1 <- cowplot::plot_grid(
   interaction_ploteczanx,
   interaction_ploteczdep,
   interaction_plotpsoanx,
   interaction_plotpsodep
 )
+print(p1)
 dev.off()
