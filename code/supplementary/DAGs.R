@@ -1,79 +1,62 @@
+library(here)
+devtools::install_github("jtextor/dagitty/r")
+library(dagitty)
+
+g1 <- dagitty('
 dag {
-	"Age/sex/calendar period" [pos="-0.360,-1.252"]
-	"Drug abuse" [pos="-0.640,0.947"]
-	"Lifestyle factors" [pos="-0.757,0.125"]
-	"Psoriasis TRT" [pos="-0.156,1.282"]
-	CMDs [outcome,pos="1.222,-0.172"]
-	Comorbidities [pos="1.092,0.668"]
-	Deprivation [pos="-0.552,-0.446"]
-	Ethnicity [pos="-0.665,-0.802"]
-	Genetics [latent,pos="-1.746,-1.433"]
-	Inflammation [pos="-1.976,1.090"]
-	Psoriasis [exposure,pos="-1.838,-0.133"]
-	Stigma [pos="-0.849,1.331"]
-	Stress [pos="-0.319,-1.614"]
-	"Age/sex/calendar period" -> CMDs
-	"Age/sex/calendar period" -> Psoriasis
-	"Drug abuse" -> CMDs
-	"Lifestyle factors" -> CMDs
-	"Psoriasis TRT" -> CMDs
-	Comorbidities -> CMDs
-	Deprivation -> CMDs
-	Deprivation -> Psoriasis
-	Ethnicity -> CMDs
-	Ethnicity -> Psoriasis
-	Genetics -> CMDs
-	Genetics -> Psoriasis
-	Inflammation -> CMDs
-	Psoriasis -> "Drug abuse"
-	Psoriasis -> "Lifestyle factors"
-	Psoriasis -> "Psoriasis TRT"
-	Psoriasis -> CMDs
-	Psoriasis -> Comorbidities
-	Psoriasis -> Inflammation
-	Psoriasis -> Stigma
-	Stigma -> CMDs
-	Stress -> CMDs
-	Stress -> Psoriasis
+"Age/sex/GP practice" [adjusted,pos="0.179,-1.255"]
+"Attending GP practice" [adjusted,pos="-0.332,0.834"]
+"Calendar period" [adjusted,pos="0.105,-1.100"]
+"Genetic risk" [latent,pos="-1.694,-1.148"]
+"Harmful alcohol use" [pos="-0.078,0.144"]
+"High dose oral glucocorticoids" [pos="0.172,0.599"]
+"Physical activity" [latent,pos="-1.394,0.113"]
+"Rash position on body" [latent,pos="-1.352,0.298"]
+"Sleep problems" [pos="0.126,0.458"]
+"anxiety or depression" [outcome,pos="0.525,-0.275"]
+Asthma [adjusted,pos="0.035,-0.952"]
+BMI [pos="-0.138,0.041"]
+Deprivation [adjusted,pos="0.296,-1.416"]
+Eczema [exposure,pos="-1.717,-0.283"]
+Ethnicity [latent,pos="-1.546,-0.856"]
+Multimorbidity [adjusted,pos="-0.029,-0.804"]
+Smoking [pos="0.014,0.309"]
+"Age/sex/GP practice" -> "anxiety or depression" [pos="0.842,-0.793"]
+"Age/sex/GP practice" -> Eczema [pos="-0.396,-1.079"]
+"Calendar period" -> "anxiety or depression" [pos="0.864,-0.848"]
+"Calendar period" -> Eczema [pos="-0.960,-0.765"]
+"Genetic risk" -> "anxiety or depression" [pos="-1.172,-0.514"]
+"Genetic risk" -> Eczema [pos="-1.740,-0.713"]
+"Harmful alcohol use" -> "anxiety or depression" [pos="0.006,0.085"]
+"High dose oral glucocorticoids" -> "anxiety or depression" [pos="0.521,0.584"]
+"Physical activity" -> "anxiety or depression" [pos="-1.256,-0.174"]
+"Rash position on body" -> "anxiety or depression" [pos="-1.218,-0.172"]
+"Sleep problems" -> "anxiety or depression" [pos="0.176,0.150"]
+"anxiety or depression" -> "Attending GP practice" [pos="0.920,0.922"]
+Asthma -> "anxiety or depression" [pos="0.828,-0.721"]
+Asthma -> Eczema [pos="-0.964,-0.752"]
+BMI -> "anxiety or depression" [pos="-0.018,-0.068"]
+Deprivation -> "anxiety or depression" [pos="0.828,-0.874"]
+Deprivation -> Eczema [pos="-0.357,-1.159"]
+Eczema -> "Attending GP practice" [pos="-1.810,0.837"]
+Eczema -> "Harmful alcohol use" [pos="-0.350,0.078"]
+Eczema -> "High dose oral glucocorticoids" [pos="-0.526,0.375"]
+Eczema -> "Physical activity" [pos="-1.595,0.026"]
+Eczema -> "Rash position on body" [pos="-1.687,0.312"]
+Eczema -> "Sleep problems" [pos="-0.533,0.344"]
+Eczema -> "anxiety or depression"
+Eczema -> BMI [pos="-0.346,0.004"]
+Eczema -> Smoking [pos="-0.244,0.181"]
+Ethnicity -> "anxiety or depression" [pos="-0.981,-0.516"]
+Ethnicity -> Eczema [pos="-1.747,-0.695"]
+Multimorbidity -> "anxiety or depression" [pos="0.768,-0.619"]
+Multimorbidity -> Eczema [pos="-0.932,-0.774"]
+Smoking -> "anxiety or depression" [pos="0.038,0.091"]
 }
+')
+plot(g1)
+exposures(g1) <- "Eczema"
+outcomes(g1) <- "anxiety or depression"
+adjustmentSets(g1)
 
-
-dag {
-	"Age/sex/calendar period" [adjusted,pos="-0.488,-1.302"]
-	"Psoriasis/eczema" [exposure,pos="-1.324,-0.203"]
-	CMDs [outcome,pos="0.951,-0.244"]
-	Deprivation [adjusted,pos="-0.503,-1.511"]
-	Ethnicity [adjusted,pos="-0.488,-1.077"]
-	Genetics [adjusted,pos="-2.091,-1.687"]
-	alcohol [pos="-0.296,0.019"]
-	bmi [pos="-0.274,0.198"]
-	comorbidity [adjusted,pos="-0.451,-0.856"]
-	sleep [pos="-0.231,0.585"]
-	smoking [pos="-0.248,0.370"]
-	steroids [pos="-0.205,0.794"]
-	"Age/sex/calendar period" -> "Psoriasis/eczema"
-	"Age/sex/calendar period" -> CMDs
-	"Psoriasis/eczema" -> CMDs
-	"Psoriasis/eczema" -> alcohol
-	"Psoriasis/eczema" -> bmi
-	"Psoriasis/eczema" -> sleep
-	"Psoriasis/eczema" -> smoking
-	"Psoriasis/eczema" -> steroids
-	Deprivation -> "Psoriasis/eczema"
-	Deprivation -> CMDs
-	Ethnicity -> "Psoriasis/eczema"
-	Ethnicity -> CMDs
-	Genetics -> "Psoriasis/eczema"
-	Genetics -> CMDs
-	alcohol -> CMDs
-	bmi -> CMDs
-	comorbidity -> "Psoriasis/eczema"
-	comorbidity -> CMDs
-	sleep -> CMDs
-	smoking -> CMDs
-	steroids -> CMDs
-}
-
-# v2 ----------------------------------------------------------------------
-
-
+## marking adjusted/unobserved variables was done by hand on dagitty.net
