@@ -69,7 +69,7 @@ for(exposure in XX){
     
     # test interaction with t -------------------------------------------------
     cox_test <- coxph(Surv(t, out) ~ exposed + exposed*t, data = df_model)
-    interaction_test_val <- broom::tidy(cox_test, exp = T, conf.int = T, conf.level = 0.99) %>% slice(3)
+    interaction_test_val <- broom::tidy(cox_test, exp = T, conf.int = T, conf.level = 0.95) %>% slice(3)
     gamma <- interaction_test_val$estimate %>% signif(digits = 3)
     gamma_lci <- interaction_test_val$conf.low %>% signif(digits = 3)
     gamma_uci <- interaction_test_val$conf.high %>% signif(digits = 3)
@@ -79,8 +79,8 @@ for(exposure in XX){
     # schoenfeld  -------------------------------------------------------------
     sch_resid1 <- cox.zph(cox_fit, transform = 'identity')
     sch_resid3 <- cox.zph(cox_fit3, transform = 'identity')
-    minimal_est <- broom::tidy(cox_fit, conf.int = T, conf.level = 0.99, exp = T) %>% slice(1)
-    mediator_est <- broom::tidy(cox_fit3, conf.int = T, conf.level = 0.99, exp = T) %>% slice(1)
+    minimal_est <- broom::tidy(cox_fit, conf.int = T, conf.level = 0.95, exp = T) %>% slice(1)
+    mediator_est <- broom::tidy(cox_fit3, conf.int = T, conf.level = 0.95, exp = T) %>% slice(1)
     
     ## simple minimally adjusted model
     plot_schonfeld(sch_resid1[1], col = "darkgreen", df = 5,
