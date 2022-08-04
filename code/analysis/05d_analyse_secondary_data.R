@@ -156,7 +156,7 @@ for(exposure in XX){
 	    tab_spanner = c("**Confounder adjusted**",
 	                    "**Mediator adjusted**")
 	  )
-	    mod4_tab %>%
+	  tbls_severity %>%
 	      gtsummary::as_gt() %>%
 	      gt::gtsave(
 	        filename =  paste0("tab9_", ABBRVexp, "_", outcome, "_severity.html"),
