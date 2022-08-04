@@ -1,0 +1,69 @@
+,lincom,estimate,conf.low,conf.high,y,x,z,z_level,nice_z,nice_z_level
+1,exposedPsoriasis+agegroup50-59,1.34,1.29,1.40,Depression,Psoriasis,Agegroup,agegroup50-59,Age group,Age group: 50-59
+2,exposedPsoriasis+exposedPsoriasis:agegroup18-39,1.31,1.27,1.34,Depression,Psoriasis,Agegroup,agegroup18-39,Age group,Age group: 18-39
+3,exposedPsoriasis+exposedPsoriasis:agegroup40-49,1.32,1.27,1.37,Depression,Psoriasis,Agegroup,agegroup40-49,Age group,Age group: 40-49
+4,exposedPsoriasis+exposedPsoriasis:agegroup60-69,1.31,1.25,1.38,Depression,Psoriasis,Agegroup,agegroup60-69,Age group,Age group: 60-69
+5,exposedPsoriasis+exposedPsoriasis:agegroup70-79,1.26,1.19,1.33,Depression,Psoriasis,Agegroup,agegroup70-79,Age group,Age group: 70-79
+6,exposedPsoriasis+exposedPsoriasis:agegroup80+,1.23,1.16,1.32,Depression,Psoriasis,Agegroup,agegroup80+,Age group,Age group: 80+
+7,exposedPsoriasis+comorbidNo,1.31,1.29,1.33,Depression,Psoriasis,Comorbid,comorbidNo,Arthritis,Arthritis: No
+8,exposedPsoriasis+exposedPsoriasis:comorbidYes,1.23,1.05,1.44,Depression,Psoriasis,Comorbid,comorbidYes,Arthritis,Arthritis: Yes
+9,exposedPsoriasis+cal_period1997-2002,1.24,1.19,1.30,Depression,Psoriasis,Cal_period,cal_period1997-2002,Calendar period,Calendar period: 1997-2002
+10,exposedPsoriasis+exposedPsoriasis:cal_period2002-08,1.27,1.23,1.31,Depression,Psoriasis,Cal_period,cal_period2002-08,Calendar period,Calendar period: 2002-08
+11,exposedPsoriasis+exposedPsoriasis:cal_period2008-14,1.32,1.29,1.36,Depression,Psoriasis,Cal_period,cal_period2008-14,Calendar period,Calendar period: 2008-14
+12,exposedPsoriasis+exposedPsoriasis:cal_period2014-19,1.37,1.33,1.42,Depression,Psoriasis,Cal_period,cal_period2014-19,Calendar period,Calendar period: 2014-19
+13,exposedPsoriasis+carstairs1 (least deprived),1.32,1.27,1.38,Depression,Psoriasis,Carstairs,carstairs1 (least deprived),Carstairs (deprivation),Carstairs (deprivation): 1 (least deprived)
+14,exposedPsoriasis+exposedPsoriasis:carstairs2,1.30,1.25,1.35,Depression,Psoriasis,Carstairs,carstairs2,Carstairs (deprivation),Carstairs (deprivation): 2
+15,exposedPsoriasis+exposedPsoriasis:carstairs3,1.27,1.22,1.32,Depression,Psoriasis,Carstairs,carstairs3,Carstairs (deprivation),Carstairs (deprivation): 3
+16,exposedPsoriasis+exposedPsoriasis:carstairs4,1.27,1.23,1.32,Depression,Psoriasis,Carstairs,carstairs4,Carstairs (deprivation),Carstairs (deprivation): 4
+17,exposedPsoriasis+exposedPsoriasis:carstairs5 (most deprived),1.38,1.33,1.44,Depression,Psoriasis,Carstairs,carstairs5 (most deprived),Carstairs (deprivation),Carstairs (deprivation): 5 (most deprived)
+18,exposedPsoriasis+agegroup50-59,1.25,1.19,1.30,Anxiety,Psoriasis,Agegroup,agegroup50-59,Age group,Age group: 50-59
+19,exposedPsoriasis+exposedPsoriasis:agegroup18-39,1.27,1.24,1.31,Anxiety,Psoriasis,Agegroup,agegroup18-39,Age group,Age group: 18-39
+20,exposedPsoriasis+exposedPsoriasis:agegroup40-49,1.25,1.20,1.31,Anxiety,Psoriasis,Agegroup,agegroup40-49,Age group,Age group: 40-49
+21,exposedPsoriasis+exposedPsoriasis:agegroup60-69,1.22,1.16,1.29,Anxiety,Psoriasis,Agegroup,agegroup60-69,Age group,Age group: 60-69
+22,exposedPsoriasis+exposedPsoriasis:agegroup70-79,1.16,1.09,1.23,Anxiety,Psoriasis,Agegroup,agegroup70-79,Age group,Age group: 70-79
+23,exposedPsoriasis+exposedPsoriasis:agegroup80+,1.13,1.04,1.23,Anxiety,Psoriasis,Agegroup,agegroup80+,Age group,Age group: 80+
+24,exposedPsoriasis+comorbidNo,1.24,1.22,1.27,Anxiety,Psoriasis,Comorbid,comorbidNo,Arthritis,Arthritis: No
+25,exposedPsoriasis+exposedPsoriasis:comorbidYes,1.17,0.98,1.40,Anxiety,Psoriasis,Comorbid,comorbidYes,Arthritis,Arthritis: Yes
+26,exposedPsoriasis+cal_period1997-2002,1.15,1.09,1.21,Anxiety,Psoriasis,Cal_period,cal_period1997-2002,Calendar period,Calendar period: 1997-2002
+27,exposedPsoriasis+exposedPsoriasis:cal_period2002-08,1.25,1.21,1.29,Anxiety,Psoriasis,Cal_period,cal_period2002-08,Calendar period,Calendar period: 2002-08
+28,exposedPsoriasis+exposedPsoriasis:cal_period2008-14,1.23,1.19,1.27,Anxiety,Psoriasis,Cal_period,cal_period2008-14,Calendar period,Calendar period: 2008-14
+29,exposedPsoriasis+exposedPsoriasis:cal_period2014-19,1.30,1.26,1.35,Anxiety,Psoriasis,Cal_period,cal_period2014-19,Calendar period,Calendar period: 2014-19
+30,exposedPsoriasis+carstairs1 (least deprived),1.27,1.21,1.33,Anxiety,Psoriasis,Carstairs,carstairs1 (least deprived),Carstairs (deprivation),Carstairs (deprivation): 1 (least deprived)
+31,exposedPsoriasis+exposedPsoriasis:carstairs2,1.20,1.15,1.25,Anxiety,Psoriasis,Carstairs,carstairs2,Carstairs (deprivation),Carstairs (deprivation): 2
+32,exposedPsoriasis+exposedPsoriasis:carstairs3,1.24,1.19,1.29,Anxiety,Psoriasis,Carstairs,carstairs3,Carstairs (deprivation),Carstairs (deprivation): 3
+33,exposedPsoriasis+exposedPsoriasis:carstairs4,1.25,1.21,1.30,Anxiety,Psoriasis,Carstairs,carstairs4,Carstairs (deprivation),Carstairs (deprivation): 4
+34,exposedPsoriasis+exposedPsoriasis:carstairs5 (most deprived),1.25,1.20,1.30,Anxiety,Psoriasis,Carstairs,carstairs5 (most deprived),Carstairs (deprivation),Carstairs (deprivation): 5 (most deprived)
+35,exposedEczema+agegroup50-59,1.29,1.25,1.33,Depression,Eczema,Agegroup,agegroup50-59,Age group,Age group: 50-59
+36,exposedEczema+exposedEczema:agegroup18-39,1.14,1.12,1.16,Depression,Eczema,Agegroup,agegroup18-39,Age group,Age group: 18-39
+37,exposedEczema+exposedEczema:agegroup40-49,1.27,1.23,1.30,Depression,Eczema,Agegroup,agegroup40-49,Age group,Age group: 40-49
+38,exposedEczema+exposedEczema:agegroup60-69,1.28,1.24,1.33,Depression,Eczema,Agegroup,agegroup60-69,Age group,Age group: 60-69
+39,exposedEczema+exposedEczema:agegroup70-79,1.20,1.16,1.24,Depression,Eczema,Agegroup,agegroup70-79,Age group,Age group: 70-79
+40,exposedEczema+exposedEczema:agegroup80+,1.19,1.15,1.24,Depression,Eczema,Agegroup,agegroup80+,Age group,Age group: 80+
+41,exposedEczema+comorbidNo,1.24,1.22,1.25,Depression,Eczema,Comorbid,comorbidNo,Asthma,Asthma: No
+42,exposedEczema+exposedEczema:comorbidYes,1.07,1.05,1.10,Depression,Eczema,Comorbid,comorbidYes,Asthma,Asthma: Yes
+43,exposedEczema+cal_period1997-2002,1.22,1.19,1.25,Depression,Eczema,Cal_period,cal_period1997-2002,Calendar period,Calendar period: 1997-2002
+44,exposedEczema+exposedEczema:cal_period2002-08,1.19,1.17,1.22,Depression,Eczema,Cal_period,cal_period2002-08,Calendar period,Calendar period: 2002-08
+45,exposedEczema+exposedEczema:cal_period2008-14,1.18,1.16,1.20,Depression,Eczema,Cal_period,cal_period2008-14,Calendar period,Calendar period: 2008-14
+46,exposedEczema+exposedEczema:cal_period2014-19,1.21,1.19,1.24,Depression,Eczema,Cal_period,cal_period2014-19,Calendar period,Calendar period: 2014-19
+47,exposedEczema+carstairs1 (least deprived),1.25,1.21,1.28,Depression,Eczema,Carstairs,carstairs1 (least deprived),Carstairs (deprivation),Carstairs (deprivation): 1 (least deprived)
+48,exposedEczema+exposedEczema:carstairs2,1.21,1.18,1.24,Depression,Eczema,Carstairs,carstairs2,Carstairs (deprivation),Carstairs (deprivation): 2
+49,exposedEczema+exposedEczema:carstairs3,1.18,1.15,1.20,Depression,Eczema,Carstairs,carstairs3,Carstairs (deprivation),Carstairs (deprivation): 3
+50,exposedEczema+exposedEczema:carstairs4,1.17,1.15,1.20,Depression,Eczema,Carstairs,carstairs4,Carstairs (deprivation),Carstairs (deprivation): 4
+51,exposedEczema+exposedEczema:carstairs5 (most deprived),1.19,1.16,1.22,Depression,Eczema,Carstairs,carstairs5 (most deprived),Carstairs (deprivation),Carstairs (deprivation): 5 (most deprived)
+52,exposedEczema+agegroup50-59,1.26,1.22,1.30,Anxiety,Eczema,Agegroup,agegroup50-59,Age group,Age group: 50-59
+53,exposedEczema+exposedEczema:agegroup18-39,1.19,1.17,1.21,Anxiety,Eczema,Agegroup,agegroup18-39,Age group,Age group: 18-39
+54,exposedEczema+exposedEczema:agegroup40-49,1.28,1.24,1.31,Anxiety,Eczema,Agegroup,agegroup40-49,Age group,Age group: 40-49
+55,exposedEczema+exposedEczema:agegroup60-69,1.29,1.25,1.34,Anxiety,Eczema,Agegroup,agegroup60-69,Age group,Age group: 60-69
+56,exposedEczema+exposedEczema:agegroup70-79,1.24,1.20,1.29,Anxiety,Eczema,Agegroup,agegroup70-79,Age group,Age group: 70-79
+57,exposedEczema+exposedEczema:agegroup80+,1.28,1.22,1.34,Anxiety,Eczema,Agegroup,agegroup80+,Age group,Age group: 80+
+58,exposedEczema+comorbidNo,1.27,1.25,1.29,Anxiety,Eczema,Comorbid,comorbidNo,Asthma,Asthma: No
+59,exposedEczema+exposedEczema:comorbidYes,1.12,1.09,1.15,Anxiety,Eczema,Comorbid,comorbidYes,Asthma,Asthma: Yes
+60,exposedEczema+cal_period1997-2002,1.24,1.20,1.28,Anxiety,Eczema,Cal_period,cal_period1997-2002,Calendar period,Calendar period: 1997-2002
+61,exposedEczema+exposedEczema:cal_period2002-08,1.22,1.20,1.25,Anxiety,Eczema,Cal_period,cal_period2002-08,Calendar period,Calendar period: 2002-08
+62,exposedEczema+exposedEczema:cal_period2008-14,1.24,1.21,1.26,Anxiety,Eczema,Cal_period,cal_period2008-14,Calendar period,Calendar period: 2008-14
+63,exposedEczema+exposedEczema:cal_period2014-19,1.23,1.20,1.25,Anxiety,Eczema,Cal_period,cal_period2014-19,Calendar period,Calendar period: 2014-19
+64,exposedEczema+carstairs1 (least deprived),1.26,1.23,1.30,Anxiety,Eczema,Carstairs,carstairs1 (least deprived),Carstairs (deprivation),Carstairs (deprivation): 1 (least deprived)
+65,exposedEczema+exposedEczema:carstairs2,1.24,1.21,1.27,Anxiety,Eczema,Carstairs,carstairs2,Carstairs (deprivation),Carstairs (deprivation): 2
+66,exposedEczema+exposedEczema:carstairs3,1.21,1.18,1.24,Anxiety,Eczema,Carstairs,carstairs3,Carstairs (deprivation),Carstairs (deprivation): 3
+67,exposedEczema+exposedEczema:carstairs4,1.23,1.20,1.26,Anxiety,Eczema,Carstairs,carstairs4,Carstairs (deprivation),Carstairs (deprivation): 4
+68,exposedEczema+exposedEczema:carstairs5 (most deprived),1.22,1.19,1.25,Anxiety,Eczema,Carstairs,carstairs5 (most deprived),Carstairs (deprivation),Carstairs (deprivation): 5 (most deprived)
