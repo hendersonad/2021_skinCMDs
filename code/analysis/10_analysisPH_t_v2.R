@@ -24,13 +24,12 @@ dir.create(file.path(here("out", "PHchecks")), showWarnings = FALSE)
 YY <- c("depression", "anxiety")
 XX <- c("psoriasis", "eczema")
 
-exposure <- XX[2]
-outcome <- YY[2]
+exposure <- XX[1]
+outcome <- YY[1]
 
-pdf(paste0(here::here("out/analysis"), "/fig2_spline_time_estimates.pdf"), 8, 8)
+pdf(paste0(here::here("out/analysis"), "/fig2_spline_time_estimates_withBootstrap.pdf"), 8, 8)
 par(mfrow = c(2,2))
 ii=1
-
 for(exposure in XX) {
   ABBRVexp <- substr(exposure, 1, 3)
   for(outcome in YY) {
@@ -105,90 +104,106 @@ for(exposure in XX) {
     df_model$exp <- as.numeric(df_model$exposed)-1 ## need a numeric exposure variable for tt() to work
     
     ## Therneau and time dependent variables 
-    mediator_est <- broom::tidy(cox_fit, conf.int = T, conf.level = 0.99, exp = T) %>% slice(1)
+    mediator_est <- broom::tidy(cox_fit, conf.int = T, conf.level = 0.95, exp = T) %>% slice(1)
     
-    zpI1 <- cox.zph(cox_fit, transform = "identity")
-    #plot(zpI1, resid = F)
-    # zp1 <- cox.zph(cox_fit, transform = function(time) log(time + 20))
-    # plot(zp1, resid = F)
-    # terry <- coxph(Surv(t, out) ~ exp + tt(exp) + strata(setid),
-    #                data = df_model,
-    #                tt = function(x, t, ...) x * log(t+20))
-    # terry
-    # plot(zp[1], col = 12, lwd = 2, resid = F)
-    # abline(h = coef(cox_fit)[1], lwd = 2, lty = 1, col = 9)
-    # abline(coef(terry)[1:2], lwd = 2, lty = 1, col = 2)
-    # 
-    ## try with pspline
-    
-    .dib("Running model 3 (mediator)")
-    if (ABBRVexp == "ecz") {
-      pspline <-
-        coxph(
-          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + sleep + alc + smokstatus + gc90days + strata(setid),
-          data = df_model,
-          tt = function(x, t, ...) x * pspline(t/365.25)
-        )
-    } else if (ABBRVexp == "pso") {
-      pspline <-
-        coxph(
-          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
-          data = df_model,
-          tt = function(x, t, ...) x * pspline(t/365.25)
-        ) 
-    }
-    
-    pspline$coefficients[1] %>% exp()
-    pspline$coefficients[-1]
-    basis_fn <- length(pspline$coefficients[!is.na(pspline$coefficients)])
+    ## Bootstrap to get a confidence interval
     output <- data.frame(fup = seq(min(df_model$exp + df_model$t) / 365.25,
                                    max(df_model$exp + df_model$t) / 365.25,
                                    0.01))
     
-    pspline_time <- pspline(output$fup)
-    pspline_time_coeffs <- pspline$coefficients[str_detect(string = names(pspline$coefficients), pattern = "ps\\(")]
-    output$HR <- pspline$coefficients[1] + (pspline_time %*% pspline_time_coeffs)
+    b <- 100
+    data_ids <- unique(df_model$setid) 
+    n <- length(data_ids)
     
-    ## try with splines::bs
-    kk <- c(1, 2, 3)
-    .dib("Running model 3 (mediator)")
-    if (ABBRVexp == "ecz") {
-      spline <-
-        coxph(
-          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + sleep + alc + smokstatus + gc90days + strata(setid),
-          data = df_model,
-          tt = function(x, t, ...) x * splines::bs(t/365.25, degree = 3, knots = kk)
-      )
-    } else if (ABBRVexp == "pso") {
-      spline <-
-        coxph(
-          Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
-          data = df_model,
-          tt = function(x, t, ...) x * splines::bs(t/365.25, degree = 3, knots = kk)
-      ) 
+    output_Pspline <- matrix(NA, nrow = b, ncol = length(output$fup))
+    output_Bspline <- matrix(NA, nrow = b, ncol = length(output$fup))
+    
+    tstart <- Sys.time()
+    set.seed(105351)
+    for(btsp in 1:b){
+      if(btsp %% 1 == 0){print(paste("run", btsp, "..."))}
+      
+      if(btsp == 1){ # for the first run just use the actual data 
+        sample_data <- df_model
+      }else{ # then sample and jumble up the data on each iteration of the bootstrap 
+        sample <- sample(data_ids, size = n, replace = TRUE)
+        sample_ids <- tibble(setid = sample) %>% arrange(setid)
+        sample_data <- sample_ids %>% 
+          left_join(df_model, by = "setid")
+      }
+      
+      # bspline
+      kk <- c(1, 2, 3)
+      if (ABBRVexp == "ecz") {
+        pspline_model <-
+          coxph(
+            Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + sleep + alc + smokstatus + gc90days + strata(setid),
+            data = sample_data,
+            tt = function(x, t, ...) x * pspline(t/365.25)
+          )
+        bspline_model <-
+          coxph(
+            Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + sleep + alc + smokstatus + gc90days + strata(setid),
+            data = sample_data,
+            tt = function(x, t, ...) x * splines::bs(t/365.25, degree = 3, knots = kk)
+          )
+      } else if (ABBRVexp == "pso") {
+        pspline_model <-
+          coxph(
+            Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
+            data = sample_data,
+            tt = function(x, t, ...) x * pspline(t/365.25)
+          ) 
+        bspline_model <-
+          coxph(
+            Surv(t, out) ~ exp + tt(exp) + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
+            data = sample_data,
+            tt = function(x, t, ...) x * splines::bs(t/365.25, degree = 3, knots = kk)
+          ) 
+      }
+      pspline_time <- pspline(output$fup)
+      pspline_time_coeffs <- pspline_model$coefficients[str_detect(string = names(pspline_model$coefficients), pattern = "ps\\(")]
+      out_Pspline <- pspline_model$coefficients[1] + (pspline_time %*% pspline_time_coeffs)
+      
+      spline_time <- splines::bs(output$fup, degree = 3, knots = kk)
+      spline_time_coeffs <- bspline_model$coefficients[str_detect(string = names(bspline_model$coefficients), pattern = "tt\\(exp")]
+      out_Bspline <- bspline_model$coefficients[1] + (spline_time %*% spline_time_coeffs)
+      
+      output_Pspline[btsp, ] <- out_Pspline
+      output_Bspline[btsp, ] <- out_Bspline
     }
-    spline_time <- splines::bs(output$fup, degree = 3, knots = kk)
-    spline_time_coeffs <- spline$coefficients[str_detect(string = names(spline$coefficients), pattern = "tt\\(exp")]
-    output$HRspline <- spline$coefficients[1] + (spline_time %*% spline_time_coeffs)
+    tstop <- Sys.time()
+    print(tstop-tstart)
     
-    # plot_schonfeld(zpI1[1], col = "darkgreen", df = 5, se = F,
-    #                lwd = 1.5, resid = F, xlab = "Time (in days)", hr = T, ylab = "")
-    # mtext(expression(e^{hat(beta)(t)} ~ "for" ~ exposed), side = 2, padj = -2, cex = 0.7)
-    # lines(range(output$fup), rep(minimal_est$estimate,2), lwd = 2, lty = 2, col = 2)
-    # polygon(c(range(output$fup), rev(range(output$fup))),
-    #         c(rep(minimal_est$conf.low, 2),rep(minimal_est$conf.high, 2)),
-    #         col = ggplot2::alpha(2, 0.2), lty = 0)
-    # abline(h = 1, lwd = 2, lty = 2, col = 9)
+    medP <- apply(output_Pspline,2,function(x){median(x, na.rm=T)}) %>% exp()
+    ciP1 <- apply(output_Pspline,2,function(x){quantile(x,0.025, na.rm=T)}) %>% exp()
+    ciP2 <- apply(output_Pspline,2,function(x){quantile(x,0.975, na.rm=T)}) %>% exp()
+    medB <- apply(output_Bspline,2,function(x){median(x, na.rm=T)}) %>% exp()
+    ciB1 <- apply(output_Bspline,2,function(x){quantile(x,0.025, na.rm=T)}) %>% exp()
+    ciB2 <- apply(output_Bspline,2,function(x){quantile(x,0.975, na.rm=T)}) %>% exp()
     
-    plot(range(output$fup), range(c(exp(output$HR),exp(output$HRspline))), type = "n",
-         xlab="Time (in years)", ylab="", ylim = c(0.8, max(c(exp(output$HR),exp(output$HRspline)))))
-    mtext(paste0("HR(t) for ", exposure), side = 2, padj = -4, cex = 0.9)
-    lines(output$fup, exp(output$HR))
-    lines(output$fup, exp(output$HRspline), col = 4)
-    lines(range(output$fup), rep(mediator_est$estimate,2), lwd = 2, lty = 2, col = 2)
+    main_Pspline <- output_Pspline[1,] %>% exp()
+    main_Bspline <- output_Bspline[1,] %>% exp()
+    
+    plot(range(output$fup), range(c(main_Pspline,main_Bspline)), type = "n",
+         xlab="Time (in years)", ylab="", ylim = c(0.8, max(c(ciP2,ciB2))))
+    lines(range(output$fup), rep(mediator_est$estimate,2), lwd = 2, lty = 1, col = 2)
     polygon(c(range(output$fup), rev(range(output$fup))),
             c(rep(mediator_est$conf.low, 2),rep(mediator_est$conf.high, 2)),
             col = ggplot2::alpha(2, 0.2), lty = 0)
+    mtext(paste0("HR(t) for ", exposure), side = 2, padj = -4, cex = 0.9)
+    # pspline
+    lines(output$fup, main_Pspline, col = 1)
+    #lines(output$fup, medP, col = 1, lty = 2)
+    polygon(c(output$fup, rev(output$fup)),
+            c(ciP1,rev(ciP2)),
+            col = ggplot2::alpha(1, 0.2), lty = 0)
+    lines(output$fup, main_Bspline, col = 4)
+    #lines(output$fup, medB, col = 4, lty = 2)
+    polygon(c(output$fup, rev(output$fup)),
+            c(ciB1,rev(ciB2)),
+            col = ggplot2::alpha(4, 0.2), lty = 0)
+    
     abline(h = 1, lwd = 2, lty = 2, col = 9)
     legend(0, 0.9, legend = c("Proportional hazards", "Penalised spline", "Basis spline (1,2,3 years)"), col = c(2, 1,4), lty = 1, bty = "n")
     mtext(paste0(LETTERS[ii], ": ", str_to_title(exposure), " ~ ", str_to_title(outcome)), side=3, line=2, col=1, cex=1, font=2, adj = 0)
