@@ -49,8 +49,7 @@ for (exposure in XX) {
   
   # Build flat baseline char. -----------------------------------------------------------------
   build_baseline <- function(df_in = slice(df_anx_split, 1:10000)) {
-    df_in$severity[df_in$exposed == "Unexposed"] <-
-      "None" ## MANUAL SUPPRESSION: not ideal but 94 unexposed~severe in psoriasis (at baseline) so not too big an issue
+    df_in$severity[df_in$exposed == "Unexposed"] <- "None" ## MANUAL SUPPRESSION: not ideal but 94 unexposed~severe in psoriasis (at baseline) so not too big an issue
     if (exposure == "eczema") {
       df_in <- df_in %>%
         mutate(comorbid = asthma)
@@ -68,27 +67,13 @@ for (exposure in XX) {
     tab1 <- df_out %>%
       ungroup() %>%
       mutate(fup = (enddate - indexdate) / 365.25) %>%
-      select(setid,patid,exposed,gender,age,agegroup,country,ruc,fup,cal_period,eth_edited,carstairs,ruc,bmi,bmi2,bmi_cat,alc,smokstatus,sleep,sleep_all,comorbid,cci,severity,out) ## need to add DEATH here once it is working properly but seems to have been corrupted by the stsplit (death=1 being copied over multiple lines which is non-sensical)
+      dplyr::select(setid,patid,exposed,gender,age,agegroup,country,ruc,fup,cal_period,eth_edited,carstairs,ruc,bmi,bmi_cat,alc,smokstatus,sleep,sleep_all,comorbid,cci,severity,out) ## need to add DEATH here once it is working properly but seems to have been corrupted by the stsplit (death=1 being copied over multiple lines which is non-sensical)
     table(tab1$exposed, tab1$severity, useNA = "always")
-    
-    # tab1 <- df_out %>%
-    #   mutate_at("exposed", ~ifelse(. == 0, "Matched controls", paste0("With ", exposure)))
-    ## reorder value labels
-    # tab1 <- tab1 %>%
-    # 	mutate(alc = factor(alc, levels = 0:1, labels = c("No", "Yes")),
-    # 				 #smokstatus = factor(smokstatus, levels = 0:1, labels = c("No", "Yes")),
-    # 				 sleep = factor(sleep, levels = 0:1, labels = c("No", "Yes")),
-    # 				 sleep_all = factor(sleep_all, levels = 0:1, labels = c("No", "Yes")),
-    # 				 comorbid = factor(comorbid, levels = 0:1, labels = c("No", "Yes")),
-    # 				 cci = factor(cci, levels = 0:2, labels = c("0 Low (0)", "1 Moderate (1-2)", "2 Severe (3 or more)")),
-    # 				 out = factor(out, levels = 0:1, labels = c("No", "Yes"))
-    # 	)
-    ## investigating the unexposed people with severe psoriasis Rx codes
     
     ## make table with nice gtsummary
     table1 <- tab1 %>%
       ungroup() %>%
-      select(-patid,-setid,-out) %>%
+      dplyr::select(-patid,-setid,-out) %>%
       tbl_summary(
         by = exposed,
         statistic = list(
@@ -104,7 +89,6 @@ for (exposure in XX) {
           agegroup = "Age (categorised)",
           eth_edited = "Ethnicity",
           bmi = "BMI",
-          bmi2 = "BMI (centred)",
           bmi_cat = "Obesity (categorised)",
           alc = "Harmful alcohol use",
           comorbid = ifelse(
@@ -124,7 +108,6 @@ for (exposure in XX) {
       ) %>%
       add_overall() %>%
       bold_labels() %>%
-      #modify_table_styling(align = "right", columns=6:8) %>%
       modify_footnote(all_stat_cols() ~ "Median (IQR) or Frequency (%)")
     
     table1
@@ -165,7 +148,7 @@ for (exposure in XX) {
       slice(1) %>%
       ungroup() %>%
       mutate(fup = (enddate - indexdate) / 365.25) %>%
-      select(
+      dplyr::select(
         setid,
         patid,
         exposed,
@@ -185,10 +168,10 @@ for (exposure in XX) {
     
     ## make table with nice gtsummary
     if (exposure == "psoriasis") {
-      tab2 <- select(tab2,-everSteroid)
+      tab2 <- dplyr::select(tab2,-everSteroid)
     }
     table2 <- tab2 %>%
-      select(-patid,-setid,-everOut) %>%
+      dplyr::select(-patid,-setid,-everOut) %>%
       tbl_summary(
         by = exposed,
         statistic = list(
@@ -266,7 +249,7 @@ for (exposure in XX) {
     
     x <- tab1 %>%
       select_if(is.factor) %>%
-      select(-arthritis,-asthma,-age_cat, -exposed) %>%
+      dplyr::select(-arthritis,-asthma,-age_cat, -exposed) %>%
       names() %>% 
       as.list()
     
@@ -313,7 +296,7 @@ for (exposure in XX) {
           name == "severity" ~ "Severity",
         )
       ) %>%
-      select(-name) %>%
+      dplyr::select(-name) %>%
       arrange(new_lab)
     
     gt_pyars_table %>%
