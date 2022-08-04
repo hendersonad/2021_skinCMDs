@@ -230,7 +230,7 @@ for(exposure in XX) {
       lincom_out <- lincom(interaction_model,
                            interactions,
                            eform = TRUE,
-                           level = 0.99)
+                           level = 0.95)
       rownames(lincom_out)[1] <-
         paste0(rownames(lincom_out)[1], "+", int_var, int_levels[1])
       
@@ -239,8 +239,8 @@ for(exposure in XX) {
         janitor::clean_names() %>%
         dplyr::select(lincom,
                       estimate,
-                      conf.low = x0_5_percent,
-                      conf.high = x99_5_percent) %>%
+                      conf.low = x2_5_percent,
+                      conf.high = x97_5_percent) %>%
         mutate_at(c("estimate", "conf.low", "conf.high"), ~ unlist(.)) %>% 
         mutate(y = outcome, x = exposure, z = ZZ)
       
@@ -278,6 +278,8 @@ tibble_plot2 <- tibble_out %>%
                                        ifelse(z == "Comorbid" & x == "Eczema", "Asthma", 
                                               "Age group"))))) %>% 
   mutate(nice_z_level= paste0(nice_z, ": ", str_remove(z_level, str_to_lower(z)))) 
+
+write.csv(tibble_plot2, here::here("out/supplementary/interaction_HRs.csv"))
 
 pdf(here::here("out/analysis/forest_plot3_interactions_v2.pdf"), width = 8, height = 6)
 p1 <- ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax = conf.high, group = z, colour = z)) + 
