@@ -15,6 +15,7 @@ if (Sys.info()["user"] == "lsh1510922") {
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
 }
+source(here("code/programs/fn_getplotdata.R")) # will need this little function later and in other codes
 
 dir.create(file.path(here("out")), showWarnings = FALSE)
 dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
@@ -281,46 +282,7 @@ tab3_out %>%
   )
 
 # make the plot -----------------------------------------------------------
-get_plot_data <- function(pretty_table) {
-  numeric_tab <- pretty_table %>%
-    dplyr::select(-starts_with("n")) %>%
-    dplyr::select(-starts_with("events")) %>%
-    dplyr::select(-characteristic,-outcome) %>%
-    separate(ci1, c("ciL1", "ciU1"), sep = "-") %>%
-    separate(ci2, c("ciL2", "ciU2"), sep = "-") %>%
-    separate(ci3, c("ciL3", "ciU3"), sep = "-") %>%
-    drop_na() %>% 
-    filter(hr1 != "-") %>% 
-    mutate_if(is.character, as.numeric) 
-  
-  plot_tab1 <- pretty_table %>%
-    dplyr::select(2) %>%
-    filter(outcome != " ") %>%
-    bind_cols(numeric_tab)
-}
-
-ecz_plot <- get_plot_data(ecz_table) %>%
-  mutate(exposure = "Atopic eczema")
-pso_plot <- get_plot_data(pso_table) %>%
-  mutate(exposure = "Psoriasis")
-
-plot_df <- bind_rows(ecz_plot, pso_plot)
-plot_df <- plot_df %>% 
-  pivot_longer(cols = starts_with(c("hr", "ci")),
-               names_to = c("metric", "model"),
-               names_pattern = "(.*)([0-9])") %>% 
-  pivot_wider(id_cols = c(outcome, exposure, model), names_from = metric)
-
-##  models as factors 
-plot_df <- plot_df %>%
-  mutate(model = factor(model, labels = c("Crude", "Confounder Adjusted", "Mediator adjusted")))
-
-## add alpha parameter to grey out other models
-plot_df$a <- 0.5
-plot_df$a[plot_df$model == "Mediator adjusted"] <- 1
-
-plot_df$ciU %>% max()
-
+plot_df <- make_df_forest()
 saveRDS(plot_df, here::here("out/data/df_forest_noghosts-3yrs.rds"))
 
 pdf(here::here("out/analysis/forest_plot8_noghosts_3yrs.pdf"), width = 6, height = 4)
@@ -347,7 +309,7 @@ print(plot_new)
 dev.off()
 
 # make table summarising the consult  drop_out  ---------------------------
-ecz_cohort <- readstata13::read.dta13(paste0(datapath, "out/getmatchedcohort-eczema-main-mhealth.dta"))
+ecz_cohort <- haven::read_dta(paste0(datapath, "out/getmatchedcohort-eczema-main-mhealth.dta"))
 ecz_nonghosts <- haven::read_dta(paste0(datapath, "out/variables-ecz-consultations-yrbeforeindex-3yrs.dta"))
 
 pso_cohort <- haven::read_dta(paste0(datapath, "out/getmatchedcohort-psoriasis-main-mhealth.dta"))
