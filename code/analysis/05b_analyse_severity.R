@@ -13,6 +13,7 @@ if (Sys.info()["user"] == "lsh1510922") {
     datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
   }
 }
+source(here("code/programs/fn_getplotdata.R")) # will need this little function later and in other codes get_plot_data
 
 dir.create(file.path(here("out")), showWarnings = FALSE)
 dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
@@ -60,7 +61,7 @@ for(exposure in XX){
     mod4results <- mod4tab %>% 
       filter(str_detect(string = term, pattern = "^severity.")) %>% 
       mutate(Y = paste0(outcome), X = paste0(exposure)) %>% 
-      select(X, Y, term, estimate, conf.low, conf.high)
+      dplyr::select(X, Y, term, estimate, conf.low, conf.high)
     
     severity_results <- severity_results %>% 
       bind_rows(mod4results)
@@ -81,7 +82,6 @@ ybase <- -0.1 + severity_results$conf.low %>% min() %>% round(digits = 2)
 yheight <- 0.1 + severity_results$conf.high %>% max() %>% round(digits = 2) 
 
 pdf(here::here("out/analysis/forest_plot2_severity.pdf"), width = 6, height = 4) 
-
 p1 <- ggplot(severity_results, aes(x = severity, y = estimate, ymin = conf.low, ymax = conf.high, group = outcome, colour = outcome)) +
   geom_point(position = pd, size = 3, shape = 1) +
   geom_errorbar(position = pd, width = 0.25) +
@@ -147,7 +147,7 @@ make_gt_results <- function(exposure){
     vars <- attr(terms(model), "term.labels")
     vars <- vars[1:length(vars) - 1]
     df <- data %>%
-      select(setid, patid, gender, age, pracid, out, all_of(vars), t) %>%
+      dplyr::select(setid, patid, gender, age, pracid, out, all_of(vars), t) %>%
       distinct(setid, patid, .keep_all = TRUE) %>%
       drop_na()
     dfsum <- df %>%
@@ -266,7 +266,7 @@ make_gt_results <- function(exposure){
       characteristic = char,
       outcome = out,
       n = colN,
-      nevents = colevents,
+      events = colevents,
       hr4 = mod4HR,
       ci4 = mod4Ci,
       p4 = mod4P
@@ -299,7 +299,7 @@ tab3_out <- tab3 %>%
     characteristic = md("**Exposure severity**"),
     outcome = md("**Event**"),
     n = md("**N (total)**"),
-    nevents = md("**No. events/person-years (mil)**"),
+    events = md("**No. events/person-years (mil)**"),
     hr4 = md("**HR**"),
     ci4 = md("**95% CI**"),
     p4 = md("***p***")
@@ -331,3 +331,69 @@ tab3_out %>%
     filename =  paste0("tab7_regressionseverity.html"),
     path = here::here("out/tables")
   )
+
+# make forest plot with HRs printed ---------------------------------------
+get_n_ecz <- tab1 %>% 
+  dplyr::select(characteristic, starts_with("n")) %>% 
+  filter(n != " ") %>% 
+  mutate_all(~str_remove_all(.,",")) %>% 
+  mutate_at("n", as.numeric) %>% 
+  mutate(outcome = c(rep("Anxiety",4), rep("Depression",4))) %>% 
+  mutate_if(is.character, ~str_remove_all(., " ")) %>% 
+  mutate(exposure = "Eczema")
+get_n_pso <- tab2 %>% 
+  dplyr::select(characteristic, starts_with("n")) %>% 
+  filter(n != " ") %>% 
+  mutate_all(~str_remove_all(.,",")) %>% 
+  mutate_at("n", as.numeric) %>% 
+  mutate(outcome = c(rep("Anxiety",3), rep("Depression",3))) %>% 
+  mutate_if(is.character, ~str_remove_all(., " ")) %>% 
+  mutate(exposure = "Psoriasis")
+
+  
+plot_df <- get_n_pso %>% 
+  bind_rows(get_n_ecz) %>% 
+  left_join(severity_results, by = c("outcome", "exposure", "characteristic" = "severity")) %>% 
+  drop_na()
+  
+# convert results to string and pad so they have same width for printing on plots
+plot_df$text_hr <- str_pad(round(plot_df$estimate,2), 4, pad = "0", side = "right")
+plot_df$text_ciL <- str_pad(round(plot_df$conf.low,2), 4, pad = "0", side = "right")
+plot_df$text_ciU <- str_pad(round(plot_df$conf.high,2), 4, pad = "0", side = "right")
+plot_df$text_n <- prettyNum(plot_df$n, big.mark = ",")
+plot_df$text_to_plot <- str_pad(paste0("(",
+                                       plot_df$text_n,
+                                       ") ",
+                                       plot_df$text_hr, 
+                                       " [", 
+                                       plot_df$text_ciL,
+                                       ",", 
+                                       plot_df$text_ciU,
+                                       "]"),
+                                28, pad = " ", side = "left")
+
+pdf(here::here("out/analysis/forest_plot2_severity_v2.pdf"), width = 7.5, height = 4.5)
+pd <- position_dodge(width = 0.75)
+p1 <- ggplot(plot_df, aes(y = characteristic, x = estimate, xmin = conf.low, xmax = conf.high, group = outcome, colour = outcome, label = text_to_plot)) +
+  geom_point(position = pd, size = 3, shape = 1) +
+  geom_errorbar(position = pd, width = 0.25) +
+  geom_vline(xintercept = 1, lty=2, col = alpha(1,0.4)) +  
+  geom_text(aes(x = 0.95),
+            alpha = 1,
+            position = pd,
+            size = 3.6,
+            #colour = 1,
+            show.legend = FALSE, 
+            hjust = 1) +
+  scale_x_log10(breaks=seq(0.5,2,0.1),limits=c(0.8,NA)) +
+  scale_y_discrete(limits=rev) +
+  facet_grid(rows = vars(exposure), drop = TRUE, space = "free", scales = "free") +
+  guides(colour = guide_legend("Outcome"), 
+         alpha = "none") +
+  labs(y = "Hazard ratio", x = "Exposure severity", caption = "(n) HR [95% CI]") +
+  theme_ali() +
+  theme(strip.background = element_blank(),
+        strip.text = element_text(face = "bold"),
+        legend.position = "bottom")
+print(p1)
+dev.off()
