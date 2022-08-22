@@ -111,7 +111,7 @@ for(exposure in XX) {
                                    max(df_model$exp + df_model$t) / 365.25,
                                    0.01))
     
-    b <- 100
+    b <- 500
     data_ids <- unique(df_model$setid) 
     n <- length(data_ids)
     
@@ -185,39 +185,40 @@ for(exposure in XX) {
     main_Pspline <- output_Pspline[1,] %>% exp()
     main_Bspline <- output_Bspline[1,] %>% exp()
     
+    ymax <- max(c(ciP2,ciB2))
     plot(range(output$fup), range(c(main_Pspline,main_Bspline)), type = "n",
-         xlab="Time (in years)", ylab="", ylim = c(0.8, max(c(ciP2,ciB2))))
+         xlab="Time (in years)", ylab="", ylim = c(0.8, 1.4))
     lines(range(output$fup), rep(mediator_est$estimate,2), lwd = 2, lty = 1, col = 2)
     polygon(c(range(output$fup), rev(range(output$fup))),
             c(rep(mediator_est$conf.low, 2),rep(mediator_est$conf.high, 2)),
             col = ggplot2::alpha(2, 0.2), lty = 0)
     mtext(paste0("HR(t) for ", exposure), side = 2, padj = -4, cex = 0.9)
     # pspline
-    lines(output$fup, main_Pspline, col = 1)
-    #lines(output$fup, medP, col = 1, lty = 2)
+    #lines(output$fup, main_Pspline, col = 1)
+    lines(output$fup, medP, col = 1, lty = 2)
     polygon(c(output$fup, rev(output$fup)),
             c(ciP1,rev(ciP2)),
             col = ggplot2::alpha(1, 0.2), lty = 0)
-    lines(output$fup, main_Bspline, col = 4)
-    #lines(output$fup, medB, col = 4, lty = 2)
+    #lines(output$fup, main_Bspline, col = 4)
+    lines(output$fup, medB, col = 4, lty = 2)
     polygon(c(output$fup, rev(output$fup)),
             c(ciB1,rev(ciB2)),
             col = ggplot2::alpha(4, 0.2), lty = 0)
     
     abline(h = 1, lwd = 2, lty = 2, col = 9)
-    legend(0, 0.9, legend = c("Proportional hazards", "Penalised spline", "Basis spline (1,2,3 years)"), col = c(2, 1,4), lty = 1, bty = "n")
+    legend(0, 0.99, legend = c("Proportional hazards", "Penalised spline", "Basis spline (1,2,3 years)"), col = c(2, 1,4), lty = 1, bty = "n")
     mtext(paste0(LETTERS[ii], ": ", str_to_title(exposure), " ~ ", str_to_title(outcome)), side=3, line=2, col=1, cex=1, font=2, adj = 0)
     ii <- ii+1
   }
 }
 dev.off()
-
-pdf(paste0(here::here("out/analysis"), "/fig3_linear_time_estimates.pdf"), 8, 8)
-p1 <- cowplot::plot_grid(
-  interaction_ploteczanx,
-  interaction_ploteczdep,
-  interaction_plotpsoanx,
-  interaction_plotpsodep
-)
-print(p1)
-dev.off()
+# 
+# pdf(paste0(here::here("out/analysis"), "/fig3_linear_time_estimates.pdf"), 8, 8)
+# p1 <- cowplot::plot_grid(
+#   interaction_ploteczanx,
+#   interaction_ploteczdep,
+#   interaction_plotpsoanx,
+#   interaction_plotpsodep
+# )
+# print(p1)
+# dev.off()
