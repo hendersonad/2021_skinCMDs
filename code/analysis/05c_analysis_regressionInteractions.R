@@ -1,5 +1,6 @@
 library(here)
 library(tidyverse)
+library(ggprism)
 library(gtsummary)
 library(gt)
 library(survival)
@@ -21,8 +22,6 @@ dir.create(paste0(datapath, "out/analysis/"), showWarnings = FALSE)
 YY <- c("depression", "anxiety")
 XX <- c("psoriasis", "eczema")
 
-# exposure <- XX[1]
-# outcome <- YY[1]
 pval_interactions <- function(exposure, outcome) {
   ABBRVexp <- substr(exposure, 1, 3)
   
@@ -56,31 +55,10 @@ pval_interactions <- function(exposure, outcome) {
         ABBRVexp,
         "_",
         outcome,
-        "_mod6_interaction_comorbid_modeldata.rds"
+        "_mod6_interaction_sex_modeldata.rds"
       )
     )
-  mod7 <-
-    readRDS(
-      paste0(
-        datapath,
-        "out/models_data/",
-        ABBRVexp,
-        "_",
-        outcome,
-        "_mod7_interaction_calendar_modeldata.rds"
-      )
-    )
-  mod8 <-
-    readRDS(
-      paste0(
-        datapath,
-        "out/models_data/",
-        ABBRVexp,
-        "_",
-        outcome,
-        "_mod8_interaction_carstairs_modeldata.rds"
-      )
-    )
+ 
   
   # lrtest ------------------------------------------------------------------
   simple_model <-
@@ -94,24 +72,14 @@ pval_interactions <- function(exposure, outcome) {
         "_mod2_modeldata.rds"
       )
     )
-  summary(simple_model, conf.int = F)
-  summary(mod5, conf.int = F)
-  summary(mod6, conf.int = F)
-  summary(mod7, conf.int = F)
-  summary(mod8, conf.int = F)
-  
   lr1 <- lrtest(simple_model, mod5)
   lr2 <- lrtest(simple_model, mod6)
-  lr3 <- lrtest(simple_model, mod7)
-  lr4 <- lrtest(simple_model, mod8)
   
-  interactions <- c("Age group", "Comorbidity", "Calendar period", "Carstairs")
+  interactions <- c("Age group", "Sex")
   inter_pval <- cbind.data.frame(interactions = interactions,
                                  pval = rbind(
                                    signif(lr1$`Pr(>Chisq)`[2], digits = 2),
-                                   signif(lr2$`Pr(>Chisq)`[2], digits = 2),
-                                   signif(lr3$`Pr(>Chisq)`[2], digits = 2),
-                                   signif(lr4$`Pr(>Chisq)`[2], digits = 2)
+                                   signif(lr2$`Pr(>Chisq)`[2], digits = 2)
                                  )) %>%
     as_tibble()
   names(inter_pval)[2] <-
@@ -184,20 +152,17 @@ for(exposure in XX) {
         outcome, 
         ".rds"
       ))
+    # bodge of gender levels 
+    levels(df_model$gender) <- c(NA, "Male", "Female", NA, NA)
+    df_model$gender <- factor(df_model$gender, levels = c("Female", "Male")) ## set Female as baseline
     
-    for (ZZ in c("agegroup", "comorbid", "cal_period", "carstairs")) {
+    for (ZZ in c("agegroup", "gender")) {
       
       if(ZZ == "agegroup"){
         data_name <- "_mod5_interaction_age_modeldata"
       }
-      if(ZZ == "comorbid"){
-        data_name <- "_mod6_interaction_comorbid_modeldata"
-      }
-      if(ZZ == "cal_period"){
-        data_name <- "_mod7_interaction_calendar_modeldata"
-      }
-      if(ZZ == "carstairs"){
-        data_name <- "_mod8_interaction_carstairs_modeldata"
+      if(ZZ == "gender"){
+        data_name <- "_mod6_interaction_sex_modeldata"
       }
       # take a model: pso - dep modified by age group
       interaction_model <-
@@ -212,17 +177,18 @@ for(exposure in XX) {
             ".rds"
           )
         )
-
-      coeffs <- interaction_model$coefficients %>% names()
+      
+      coeffs <- tidy(interaction_model) %>% drop_na() %>% pull(term)
       int_var <- ZZ
-      int_levels <- df_model[, int_var] %>% pull() %>% levels()
+      int_levels_tbl <- table(df_model[, int_var]) %>% as.data.frame()
+      int_levels <- int_levels_tbl %>% filter(Freq>0) %>% pull(ZZ) %>% as.character()
       n_int_levels <- length(int_levels) - 1 # -1 because of reference category
-      coeffs_interaction <- coeffs[str_detect(coeffs, int_var)]
+      coeffs_interaction <- coeffs[str_detect(coeffs, paste0(":", int_var))]
       
       interactions <- c(coeffs[1])
       for (ii in 1:n_int_levels) {
         X <-
-          paste0(c(coeffs[1], coeffs_interaction[ii + n_int_levels]),
+          paste0(c(coeffs[1], coeffs_interaction[ii]),
                  collapse = "+")
         interactions <- c(interactions, X)
       }
@@ -230,7 +196,8 @@ for(exposure in XX) {
       lincom_out <- lincom(interaction_model,
                            interactions,
                            eform = TRUE,
-                           level = 0.95)
+                           level = 0.95,
+                           singular.ok = TRUE) ## may be collinearity in the model for sex because the "gender" coefficient is NA (because of the matched sets)
       rownames(lincom_out)[1] <-
         paste0(rownames(lincom_out)[1], "+", int_var, int_levels[1])
       
@@ -250,17 +217,13 @@ for(exposure in XX) {
   }
 }
 
-tibble_plot <- tibble_out %>% 
+tibble_plot <- tibble_out %>%
   mutate_at("lincom", ~str_remove(., "Psoriasis")) %>% 
   mutate_at("lincom", ~str_remove(., "Eczema")) %>% 
   mutate_at("lincom", ~str_remove(., "exposed")) %>% 
   mutate_at("lincom", ~str_remove(., "exposedPsoriasis")) %>% 
   mutate_at("lincom", ~str_remove(., "exposedEczema")) %>% 
   mutate_at("lincom", ~str_remove(., "^+.")) 
-pd <- position_dodge(width = 0.3)
-
-ybase <- -0.1 + tibble_plot$conf.low %>% min() %>% round(digits = 2) 
-yheight <- 0.1 + tibble_plot$conf.high %>% max() %>% round(digits = 2) 
 
 tibble_plot2 <- tibble_out %>% 
   mutate(lincom2 = lincom) %>% 
@@ -272,32 +235,56 @@ tibble_plot2 <- tibble_out %>%
   dplyr::select(-exposed) %>%
   mutate(z_level = as.factor(z_level)) %>% 
   mutate_at(c("x", "y", "z"), ~stringr::str_to_title(.)) %>% 
-  mutate(nice_z = ifelse(z == "Carstairs", "Carstairs (deprivation)", 
-                         ifelse(z == "Cal_period", "Calendar period", 
-                                ifelse(z == "Comorbid" & x == "Psoriasis", "Arthritis", 
-                                       ifelse(z == "Comorbid" & x == "Eczema", "Asthma", 
-                                              "Age group"))))) %>% 
-  mutate(nice_z_level= paste0(nice_z, ": ", str_remove(z_level, str_to_lower(z)))) 
+  mutate(nice_z_level = paste0(ifelse(z == "Gender", "Sex", z), ": ", str_remove(z_level, str_to_lower(z)))) 
 
-write.csv(tibble_plot2, here::here("out/supplementary/interaction_HRs.csv"))
+## merge on p-values
+int_table_merge <- int_table %>% 
+  pivot_longer(cols = ecz_anx:pso_dep) %>% 
+  separate(name, into = c("exposure", "outcome"), sep = "_") %>% 
+  mutate(x = ifelse(exposure == "ecz", "Eczema", "Psoriasis")) %>% 
+  mutate(y = ifelse(outcome == "anx", "Anxiety", "Depression")) %>% 
+  mutate(z = ifelse(interactions == "Age group", "Agegroup", "Gender")) %>% 
+  mutate(p = as.numeric(value)) %>% 
+  mutate(nice_p = ifelse(p<0.001, "*", paste0("p=", signif(p, digits = 1))))
+tibble_plot3 <- tibble_plot2 %>% 
+  left_join(int_table_merge, by = c("z", "x", "y"))
+write.csv(tibble_plot3, here::here("out/supplementary/interaction_HRs.csv"))
+
+tibble_plot3$text_hr <- str_pad(round(tibble_plot3$estimate,2), 4, pad = "0", side = "right")
+tibble_plot3$text_ciL <- str_pad(round(tibble_plot3$conf.low,2), 4, pad = "0", side = "right")
+tibble_plot3$text_ciU <- str_pad(round(tibble_plot3$conf.high,2), 4, pad = "0", side = "right")
+
+tibble_plot3$text_to_plot <- paste0(tibble_plot3$text_hr, 
+                                    " [", 
+                                    tibble_plot3$text_ciL, 
+                                    ",", 
+                                    tibble_plot3$text_ciU,
+                                    "]")
+# add pvalue
+tibble_plot3$text_to_plot <- str_pad(paste(tibble_plot3$text_to_plot, tibble_plot3$nice_p), 23, pad = " ", side = "right")
 
 pdf(here::here("out/analysis/forest_plot3_interactions_v2.pdf"), width = 8, height = 6)
-p1 <- ggplot(tibble_plot2, aes(x = nice_z_level, y = estimate, ymin = conf.low, ymax = conf.high, group = z, colour = z)) + 
-  geom_point(position = pd, size = 3) +
-  geom_errorbar(position = pd, width = 0.25) +
-  geom_hline(yintercept = 1, lty=2) +  
-  #ylim(c(0,NA)) +
+pd <- position_dodge(width = 0.3)
+p1 <- ggplot(tibble_plot3, aes(x = nice_z_level, group = z, colour = z, label = text_to_plot)) + 
+  geom_point(aes(y = estimate), position = pd, size = 3, shape = 1) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), position = pd, width = 0.25) +
+  geom_hline(yintercept = 1, lty=2, col = alpha(1,0.4)) +  
+  geom_text(aes(y = 0.999), 
+            size = 3.6,
+            colour = 1,
+            show.legend = FALSE, 
+            hjust = 1) +
   scale_y_log10(breaks=seq(0,4,0.1), limits = c(0.9, NA)) +
   scale_x_discrete(limits=rev) +
   coord_flip() +
   facet_grid(y~x, drop = TRUE, space = "free", scales = "free") +
   guides(colour = "none") +
   labs(y = "Hazard ratio", x = "Level") +
+  labs(caption = "* p<0.001") + 
   scale_alpha_identity() +
-  theme_bw() +
+  theme_ali() +
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
 print(p1)
 dev.off()
-
