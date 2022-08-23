@@ -88,16 +88,22 @@ for(exposure in XX){
     pull(name)
   fct_labels <- stringr::str_replace(fct_levels, "_", " ")
   fct_labels <- stringr::str_to_title(fct_labels)
-  
+  fct_labels[fct_labels == "Bmi"] <- "BMI"
+  fct_labels[fct_labels == "Smoking Imputed"] <- "Smoking status"
+  fct_labels[fct_labels == "Carstairs"] <- "Carstairs index of deprivation"
   df_missingplot$plotname <- factor(df_missingplot$name, levels = fct_levels, labels = fct_labels)
   
   
-  df_missingplot
+  df_missingplot2 <- df_missingplot %>% 
+    filter(name != "smokstatus_original") %>%
+    mutate(text_to_plot = paste0(round(pc,1)))
+ 
   
-  pdf(paste0(here::here("out/supplementary"), "/missing_", ABBRVexp, ".pdf"), width = 8, height = 6)
-    p1 <- ggplot(df_missingplot, aes(x = plotname, y = pc, ymax = pc, ymin = 0, group = exposed, col = exposed)) +
+  pdf(paste0(here::here("out/supplementary"), "/missing_", ABBRVexp, ".pdf"), width = 6, height = 5)
+    p1 <- ggplot(df_missingplot2, aes(x = plotname, y = pc, ymax = pc, ymin = 0, group = exposed, col = exposed, label = text_to_plot)) +
       geom_linerange() +
       geom_point() +
+      geom_text(nudge_x = 0.25) +
       coord_flip() +
       facet_wrap(~exposed) +
       labs(x = "Variable", y = "% missing") +
@@ -109,7 +115,7 @@ for(exposure in XX){
   
   ## describe characteristics by missing status 
   missing_data <- NULL
-  for(var in c("carstairs", "smokstatus_original", "bmi","obesity_categorised", "smoking_imputed", "ethnicity")){
+  for(var in c("carstairs", "bmi","obesity_categorised", "smoking_imputed", "ethnicity")){
     patids_missing <- df_model_merge %>% 
       select(setid, patid, all_of(var)) %>% 
       filter(is.na(get(var))) %>% 
