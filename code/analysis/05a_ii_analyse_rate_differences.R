@@ -88,7 +88,7 @@ get_rate_difference <- function(exposure){
     ## bootstrap confidence interval 
     patids <- unique(exposed_data$patid) 
     n <- patids %>% length()
-    b <- 500
+    b <- 5000
     
     exp_btsp <- vector(length = b)
     unexp_btsp <- vector(length = b)
@@ -164,3 +164,23 @@ gt_rates <- rate_differences %>%
 
 rate_differences %>% write_csv(here::here("out/supplementary/rate_difference.csv"))
 gt_rates %>% gt::gtsave(filename = "rate_difference.html", path = here::here("out/supplementary/"))
+
+gt_rates_publication <- rate_differences %>%
+  dplyr::select(-exp, -pyears, -events, -hr, -hr_CI) %>% 
+  mutate(out = str_to_title(out)) %>% 
+  gt::gt() %>%
+  tab_row_group(label = "Eczema",
+                rows = 3:4) %>%
+  tab_row_group(label = "Psoriasis",
+                rows = 1:2) %>%
+  gt::fmt_number(columns = c(2,4,6), decimals = 1) %>%
+  cols_merge(columns = c(2,3), pattern = "{1} ({2})") %>% 
+  cols_merge(columns = c(4,5), pattern = "{1} ({2})") %>% 
+  cols_merge(columns = c(6,7), pattern = "{1} ({2})") %>% 
+  cols_label(out = "Outcome",
+             rate_exposed = "Rate (exposed group)",
+             rate_unexposed = "Rate (unexposed group)",
+             rate_diff = "Rate difference"
+  ) 
+gt_rates_publication %>% gt::gtsave(filename = "rate_difference_pub.html", path = here::here("out/supplementary/"))
+
