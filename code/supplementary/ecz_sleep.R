@@ -124,13 +124,8 @@ plot_sleep_breakdowns <- function(cohort = a_dataset){
            drug_def = max(drug_def)) %>% 
     slice(1)
   
-  table(df_tab$severity)
-  table(baseline_sleep$severity)
-  table(baseline_sleep$exposed, baseline_sleep$severity)
-  
   df_tab$sleep_def <- df_tab$readcode + df_tab$drug_def
   df_tab$sleep_def[df_tab$sleep_def == 2] <- 1
-  
   
   # 2x2 tables for sleep  ---------------------------------------------------
   # by severity
@@ -213,8 +208,9 @@ plot_sleep_breakdowns <- function(cohort = a_dataset){
   	  labs(x = "Eczema severity", y = "") +
   	  guides(size = guide_legend(title.theme = element_text(angle = 0, face = "italic"))) +
   	  scale_y_discrete(limits=rev) +
+      guides(size = "none") + 
   	  theme_ali() +
-  	  theme(legend.position = "right", 
+  	  theme(legend.position = "top", 
   	        legend.title = element_markdown(),
   	        axis.line = element_line(size = rel(0.5)),
   	        panel.grid.major.y = element_blank(),
@@ -284,7 +280,7 @@ plot_sleep_breakdowns <- function(cohort = a_dataset){
     labs(x = "Sleep codes", 
          caption = "Codes in at least 0.1% of population",
          fill ="") + 
-    scale_y_continuous(name="Prevalence", labels = scales::comma) + 
+    scale_y_continuous(name="% with code at study entry", labels = scales::comma) + 
     theme_ali() +
     theme(legend.position = "bottom",
           strip.background = element_blank(),
@@ -349,24 +345,33 @@ plot_sleep_breakdowns <- function(cohort = a_dataset){
 anxiety_plots <- plot_sleep_breakdowns(cohort = anxiety_baseline)
 depression_plots <- plot_sleep_breakdowns(cohort = depression_baseline)
 
-p3_edit <- anxiety_plots$p3 + guides(size = "none") + theme(legend.position = "top")
-p_all <- plot_grid(p3_edit, anxiety_plots$p1, ncol = 1 , rel_heights = c(1, 1.5), labels = "AUTO")
-p_exp <- plot_grid(p3_edit, anxiety_plots$p2, ncol = 1 , rel_heights = c(1, 1.5), labels = "AUTO")
+p_all_anx <- plot_grid(anxiety_plots$p3 + theme(plot.background = element_rect(color = 1)), anxiety_plots$p1 + theme(plot.background = element_rect(color = 1)), ncol = 1 , rel_heights = c(1, 1.5), labels = "AUTO")
+p_exp_anx <- plot_grid(anxiety_plots$p3 + theme(plot.background = element_rect(color = 1)), anxiety_plots$p2 + theme(plot.background = element_rect(color = 1)), ncol = 1 , rel_heights = c(1, 1.5), labels = "AUTO")
+p_all_dep <- plot_grid(depression_plots$p3 + theme(plot.background = element_rect(color = 1)), depression_plots$p1 + theme(plot.background = element_rect(color = 1)), ncol = 1 , rel_heights = c(1, 1.5), labels = "AUTO")
+p_exp_dep <- plot_grid(depression_plots$p3 + theme(plot.background = element_rect(color = 1)), depression_plots$p2 + theme(plot.background = element_rect(color = 1)), ncol = 1 , rel_heights = c(1, 1.5), labels = "AUTO")
+
+p1 <- anxiety_plots$p3 + labs(title = "Eczema ~ Anxiety cohort") + theme(plot.background = element_rect(color = 1), plot.title = element_text(face = 2, size = 16, hjust = 0.5))
+p2 <- depression_plots$p3 + labs(title = "Eczema ~ Depression cohort") + theme(plot.background = element_rect(color = 1), plot.title = element_text(face = 2, size = 16, hjust = 0.5))
+p3 <- anxiety_plots$p1 + theme(plot.background = element_rect(color = 1))
+p4 <- depression_plots$p1 + theme(plot.background = element_rect(color = 1))
+
+p_all <- plot_grid(p1, p2, p3, p4, 
+                   nrow = 2, labels = "AUTO", 
+                   rel_heights = c(1, 1.5), align = "v", axis = "r")
+pdf(here::here("out", "supplementary", "sleep_codes_all.pdf"), width = 13, height = 10)
+  p_all
+dev.off()
 
 pdf(here::here("out", "supplementary", "anxiety_sleep_codes_all.pdf"), width = 8, height = 12)
-  p_all
+  p_all_anx
 dev.off()
 pdf(here::here("out", "supplementary", "anxiety_sleep_codes_exp.pdf"), width = 8, height = 12)
-  p_exp
+  p_exp_anx
 dev.off()
-
-p3_edit <- depression_plots$p3 + guides(size = "none") + theme(legend.position = "top")
-p_all <- plot_grid(p3_edit, depression_plots$p1, ncol = 1 , rel_heights = c(1, 1.5), labels = "AUTO")
-p_exp <- plot_grid(p3_edit, depression_plots$p2, ncol = 1 , rel_heights = c(1, 1.5), labels = "AUTO")
 
 pdf(here::here("out", "supplementary", "depression_sleep_codes_all.pdf"), width = 8, height = 12)
-  p_all
+  p_all_dep
 dev.off()
 pdf(here::here("out", "supplementary", "depression_sleep_codes_exp.pdf"), width = 8, height = 12)
-  p_exp
+  p_exp_dep
 dev.off()
