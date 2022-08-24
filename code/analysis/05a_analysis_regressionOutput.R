@@ -321,13 +321,13 @@ p1 <- ggplot(plot_df, aes(y = model, x = hr, xmin = ciL, xmax = ciU, group = exp
   geom_point(position = pd, size = 3, shape = 1) +
   geom_errorbar(position = pd, width = 0.25) +
   geom_vline(xintercept = 1, lty=2, col = alpha(1,0.4)) +  
-  geom_text(aes(x = 0.999),
+  geom_text(aes(x = 0.801),
             alpha = 1,
             position = pd,
             size = 3.6,
             #colour = 1,
             show.legend = FALSE, 
-            hjust = 1) +
+            hjust = 0) +
   scale_x_log10(breaks=seq(0.5,2,0.1),limits=c(0.8,1.35)) +
   scale_y_discrete(limits=rev) +
   facet_wrap(~outcome, ncol = 1) +
