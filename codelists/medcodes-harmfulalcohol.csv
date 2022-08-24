@@ -1,0 +1,156 @@
+medcode,readterm,readcode
+669,"Nondependent alcohol abuse, unspecified",E250000
+1399,Alcohol problem drinking,E23..12
+1476,Delirium tremens,E010.12
+1618,Heavy drinker - 7-9u/day,1365.00
+2081,Alcoholism,E23..11
+2082,Alcohol withdrawal syndrome,E01y000
+2083,Alcohol detoxification,8BA8.00
+2084,Alcohol dependence syndrome,E23..00
+2925,Alcoholic polyneuropathy,F375.00
+3216,Acute alcoholic hepatitis,J611.00
+4500,Korsakov's alcoholic psychosis,E011000
+4506,Alcoholic gastritis,J153.00
+4743,Alcoholic cirrhosis of liver,J612.00
+4915,Alcoholic cardiomyopathy,G555.00
+5611,[X]Mental and behavioural disorders due to use of alcohol,Eu10.00
+5740,Acute alcoholic intoxication in alcoholism,E230.00
+5758,[X]Chronic alcoholism,Eu10212
+6169,Alcohol dependence syndrome NOS,E23z.00
+6467,[X]Alcoholic hallucinosis,Eu10511
+7123,[V]Personal history of alcoholism,ZV11300
+7602,Chronic alcoholic hepatitis,J617000
+7692,Patient advised about alcohol,8CAM.00
+7885,Alcoholic liver damage unspecified,J613.00
+7943,Alcoholic hepatitis,J617.00
+8030,[V]Alcohol abuse counselling and surveillance,ZV6D600
+8363,Oesophageal varices in alcoholic cirrhosis of the liver,G852300
+8388,[V]Alcohol rehabilitation,ZV57A00
+8999,Heavy drinker,136P.00
+9169,[D]Alcohol blood level excessive,R103.00
+9489,Under care of community alcohol team,9NN2.00
+9508,[X]Acute alcoholic drunkenness,Eu10011
+9849,Referral to community alcohol team,8H7p.00
+10161,O/E - alcoholic breath,2577.11
+10691,Alcoholic fatty liver,J610.00
+11106,Korsakov's alcoholic psychosis with peripheral neuritis,E011100
+11140,Advice on alcohol consumption,ZG23100
+11670,"[X]Korsakov's psychosis, alcohol induced",Eu10611
+11740,Alcohol misuse - enhanced services administration,9k1..00
+12353,[X]Mental & behav dis due to use alcohol: psychotic disorder,Eu10500
+12554,Referral to community drug and alcohol team,8HHe.00
+12974,"Nondependent alcohol abuse, episodic",E250200
+12976,Suspect alcohol abuse - denied,1369.00
+12977,Very heavy drinker - >9u/day,1366.00
+12982,Alcohol intake above recommended sensible limits,136K.00
+12984,Very heavy drinker,136Q.00
+16225,Alcohol withdrawal delirium,E010.00
+16237,Alcoholic psychoses,E01..00
+16587,[V]Problems related to lifestyle alcohol use,ZV11311
+17259,"[X]Delirium tremens, alcohol induced",Eu10411
+17330,Alcoholic hepatic failure,J613000
+17607,[X]Alcoholic psychosis NOS,Eu10514
+18156,Alcoholics anonymous,13Y8.00
+18636,Wernicke-Korsakov syndrome,E011200
+18711,Lifestyle advice regarding alcohol,67H0.00
+19217,Alcohol causing toxic effect,SM0..00
+19401,Binge drinker,136R.00
+19494,Hazardous alcohol use,136S.00
+20407,Drunkenness - pathological,E014.11
+20514,[X]Mental and behav dis due to use alcohol: withdrawal state,Eu10300
+20762,Alcohol amnestic syndrome,E011.00
+21624,Episodic acute alcoholic intoxication in alcoholism,E230200
+21650,Admitted to alcohol detoxification centre,8H35.00
+21713,Alcoholic fibrosis and sclerosis of liver,J612000
+21879,[X]Mental and behav dis due to use of alcohol: harmful use,Eu10100
+22277,DTs - delirium tremens,E010.11
+22707,Drinking problem scale,ZRBJ.00
+23610,"Nondependent alcohol abuse, continuous",E250100
+24064,Continuous chronic alcoholism,E231100
+24735,O/E - breath - alcohol smell,2577.00
+24984,Alcohol-induced chronic pancreatitis,J671000
+25110,Alcohol withdrawal hallucinosis,E013.00
+26106,Episodic chronic alcoholism,E231200
+26323,[X]Alcoholic dementia NOS,Eu10711
+27342,Alcoholic dementia NOS,E012.11
+27670,Maternal care for (suspected) damage to fetus from alcohol,L255300
+28150,Nondependent alcohol abuse NOS,E250z00
+28780,[X]Alcohol addiction,Eu10211
+29691,Aversion therapy - alcoholism,8G32.00
+30162,[X]Alcoholic paranoia,Eu10513
+30404,Alcoholic paranoia,E015.00
+30460,Alcoholism counselling,Z4B1.00
+30604,Alcohol-induced epilepsy,F25B.00
+30695,Harmful alcohol use,136T.00
+31443,Chronic alcoholism,E231.00
+31569,Nondependent alcohol abuse in remission,E250300
+31742,Alcoholic myopathy,F394100
+32927,[X]Alcohol withdrawal-induced seizure,Eu10800
+33635,Chronic alcoholism NOS,E231z00
+33670,Other alcoholic psychosis,E01y.00
+33839,Cerebellar ataxia due to alcoholism,F144000
+35330,Alcohol consumption counselling,9k11.00
+36296,Acute alcoholic intoxication in alcoholism NOS,E230z00
+36748,Alcoholic encephalopathy,F11x011
+37264,Alcohol leaflet given,8CE1.00
+37691,[X]Chronic alcoholic brain syndrome,Eu10712
+37946,Chronic alcoholic brain syndrome,E012000
+38061,Alcohol induced hallucinations,1B1c.00
+39327,[X]Mental and behav dis due to use alcohol: dependence syndr,Eu10200
+39799,[X]Mental and behav dis due to use alcohol: amnesic syndrome,Eu10600
+40530,"Acute alcoholic intoxication, unspecified, in alcoholism",E230000
+41920,Alcohol amnestic syndrome NOS,E011z00
+41983,Alcohol detoxification,Z191.00
+42843,Other non-alcoholic chronic liver disease,J61y.00
+43193,Unspecified chronic alcoholism,E231000
+44299,[X]Mental & behav dis due to use alcohol: acute intoxication,Eu10000
+45169,[X]Men & behav dis due to use alcohol: oth men & behav dis,Eu10y00
+46677,Alcohol withdrawal regime,Z191100
+46848,DPS - Drinking problem scale,ZRBJ.11
+47123,Alcohol counselling by other agencies,9k14.00
+47555,Cerebral degeneration due to alcoholism,F11x000
+54209,Advice to change alcohol intake,ZC2H.00
+54505,Other alcoholic dementia,E012.00
+56410,Delivery of rehabilitation for alcohol addiction,7P22100
+56947,Continuous acute alcoholic intoxication in alcoholism,E230100
+57714,Alcohol dependence with acute alcoholic intoxication,E230.11
+57939,Pathological alcohol intoxication,E014.00
+59574,"Acute alcoholic intoxication in remission, in alcoholism",E230300
+61383,Planned reduction of alcohol consumption,Z191200
+63529,Alcohol misuse - enhanced service completed,9k12.00
+64389,[X]Ment & behav dis due use alcohol: unsp ment & behav dis,Eu10z00
+64409,Self-monitoring of alcohol intake,Z191400
+65754,Alcohol-induced pseudo-Cushing's syndrome,C150500
+65932,[X]Alcoholic jealousy,Eu10512
+66019,Suspect fetal damage from maternal alcohol,L254.11
+66699,Fetus and newborn affected by maternal use of alcohol,PK83.00
+67651,Alcoholic psychosis NOS,E01z.00
+68111,Other alcoholic psychosis NOS,E01yz00
+84218,Disqualified from driving due to excess alcohol,13ZY.00
+94553,Referral to specialist alcohol treatment service,8HkG.00
+94670,Alcohol misuse,136W.00
+95181,Alcohol reduction programme,Z191211
+95650,Advice to change drink intake,ZC22100
+96053,Brief intervention for excessive alcohol consumptn completed,9k1A.00
+96054,Extended intervention for excessive alcohol consumptn complt,9k1B.00
+96993,Referral to alcohol brief intervention service,8HkJ.00
+97163,Advice to change alcoholic drink intake,ZC22200
+97261,Brief intervention for excessive alcohol consumptn declined,8IAF.00
+97309,Advised to contact primary care alcohol worker,8CAv.00
+97680,Declined referral to specialist alcohol treatment service,8IAJ.00
+99877,Feels should cut down drinking,136b.00
+101718,Drinks in morning to get rid of hangover,136Y.00
+102247,Extended interven for excessive alcohol consumption declined,8IAt.00
+102448,Higher risk drinking,136c.00
+102665,Increasing risk drinking,136a.00
+103459,Referral to community alcohol team declined,8IEA.00
+104611,Alcohol-induced acute pancreatitis,J670800
+108644,In-house alcohol detoxification,9NJz.00
+109105,Refer to MH services deferred until alcohol misuse resolved,8W2..00
+109241,Alcohol Use Disorders Identification Test declined,8IH4.00
+109668,Specialist alcohol treatment service signposted,8CdK.00
+109675,Hospital alcohol liaison team report received,9EVD.00
+109800,Hospital attendance related to personal alcohol consumption,9NzA.00
+110382,Withdrawn from alcohol detoxification programme,9NgzH00
+110494,Alcohol harm reduction programme,8BAu.00
+110671,Controlled drinking regime,Z191300

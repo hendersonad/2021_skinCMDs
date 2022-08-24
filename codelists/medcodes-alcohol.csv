@@ -1,0 +1,189 @@
+medcode,readterm,alcstatus,alclevel
+12949,Teetotaller,non,
+12970,Non drinker alcohol,non,
+4447,Non-drinker alcohol,non,
+12975,Trivial drinker - <1u/day,curr,L
+385,Drinks rarely,curr,L
+749,Drinks occasionally,curr,L
+12972,Light drinker - 1-2u/day,curr,L
+322,Moderate drinker - 3-6u/day,curr,M
+1618,Heavy drinker - 7-9u/day,curr,H
+12977,Very heavy drinker - >9u/day,curr,H
+967,Stopped drinking alcohol,ex,
+12976,Suspect alcohol abuse - denied,curr,H
+22933,Ex-trivial drinker (<1u/day),ex,
+26471,Ex-light drinker - (1-2u/day),ex,
+19495,Ex-moderate drinker - (3-6u/d),ex,
+19493,Ex-heavy drinker - (7-9u/day),ex,
+12983,Ex-very heavy drinker-(>9u/d),ex,
+12971,Spirit drinker,curr,
+2689,Beer drinker,curr,
+12968,Drinks beer and spirits,curr,
+12969,Drinks wine,curr,
+956,Social drinker,curr,L
+12982,Alcohol intake above recommended sensible limits,curr,H
+26472,Alcohol intake within recommended sensible limits,curr,L
+12979,Current non drinker,non,
+12980,Light drinker,curr,L
+12985,Moderate drinker,curr,M
+8999,Heavy drinker,curr,H
+12984,Very heavy drinker,curr,H
+19401,Binge drinker,curr,H
+19494,Hazardous alcohol use,curr,H
+30695,Harmful alcohol use,curr,H
+94670,Alcohol misuse,curr,H
+101718,Drinks in morning to get rid of hangover,curr,H
+102665,Increasing risk drinking,curr,H
+99877,Feels should cut down drinking,curr,H
+102448,Higher risk drinking,curr,H
+103230,Lower risk drinking,curr,L
+18156,Alcoholics anonymous,curr,H
+84218,Disqualified from driving due to excess alcohol,curr,H
+38061,Alcohol induced hallucinations,curr,H
+44783,Pain in lymph nodes after alcohol consumption,curr,
+24735,O/E - breath - alcohol smell,curr,H
+10161,O/E - alcoholic breath,curr,H
+11491,Health ed. - alcohol,curr,
+18711,Lifestyle advice regarding alcohol,curr,H
+56410,Delivery of rehabilitation for alcohol addiction,curr,H
+2083,Alcohol detoxification,curr,H
+110624,Alcohol relapse prevention,ex,
+110494,Alcohol harm reduction programme,curr,H
+7692,Patient advised about alcohol,curr,H
+97309,Advised to contact primary care alcohol worker,curr,H
+37264,Alcohol leaflet given,curr,H
+109668,Specialist alcohol treatment service signposted,curr,H
+29691,Aversion therapy - alcoholism,curr,H
+21650,Admitted to alcohol detoxification centre,curr,H
+9849,Referral to community alcohol team,curr,H
+12554,Referral to community drug and alcohol team,curr,H
+94553,Referral to specialist alcohol treatment service,curr,H
+96993,Referral to alcohol brief intervention service,curr,H
+97261,Brief intervention for excessive alcohol consumptn declined,curr,H
+97680,Declined referral to specialist alcohol treatment service,curr,H
+102247,Extended interven for excessive alcohol consumption declined,curr,H
+103459,Referral to community alcohol team declined,curr,H
+109241,Alcohol Use Disorders Identification Test declined,curr,H
+109105,Refer to MH services deferred until alcohol misuse resolved,curr,H
+109675,Hospital alcohol liaison team report received,curr,H
+108644,In-house alcohol detoxification,curr,H
+9489,Under care of community alcohol team,curr,H
+110382,Withdrawn from alcohol detoxification programme,curr,H
+109800,Hospital attendance related to personal alcohol consumption,curr,H
+11740,Alcohol misuse - enhanced services administration,curr,H
+35330,Alcohol consumption counselling,curr,H
+63529,Alcohol misuse - enhanced service completed,curr,H
+47123,Alcohol counselling by other agencies,curr,H
+96053,Brief intervention for excessive alcohol consumptn completed,curr,H
+96054,Extended intervention for excessive alcohol consumptn complt,curr,H
+65754,Alcohol-induced pseudo-Cushing's syndrome,curr,H
+16237,Alcoholic psychoses,curr,H
+16225,Alcohol withdrawal delirium,curr,H
+22277,DTs - delirium tremens,curr,H
+1476,Delirium tremens,curr,H
+20762,Alcohol amnestic syndrome,curr,H
+4500,Korsakov's alcoholic psychosis,curr,H
+11106,Korsakov's alcoholic psychosis with peripheral neuritis,curr,H
+18636,Wernicke-Korsakov syndrome,curr,H
+41920,Alcohol amnestic syndrome NOS,curr,H
+54505,Other alcoholic dementia,curr,H
+27342,Alcoholic dementia NOS,curr,H
+37946,Chronic alcoholic brain syndrome,curr,H
+25110,Alcohol withdrawal hallucinosis,curr,H
+57939,Pathological alcohol intoxication,curr,H
+20407,Drunkenness - pathological,curr,H
+30404,Alcoholic paranoia,curr,H
+33670,Other alcoholic psychosis,curr,H
+2082,Alcohol withdrawal syndrome,curr,H
+68111,Other alcoholic psychosis NOS,curr,H
+67651,Alcoholic psychosis NOS,curr,H
+2084,Alcohol dependence syndrome,curr,H
+2081,Alcoholism,curr,H
+1399,Alcohol problem drinking,curr,H
+5740,Acute alcoholic intoxication in alcoholism,curr,H
+57714,Alcohol dependence with acute alcoholic intoxication,curr,H
+40530,"Acute alcoholic intoxication, unspecified, in alcoholism",curr,H
+56947,Continuous acute alcoholic intoxication in alcoholism,curr,H
+21624,Episodic acute alcoholic intoxication in alcoholism,curr,H
+59574,"Acute alcoholic intoxication in remission, in alcoholism",curr,H
+36296,Acute alcoholic intoxication in alcoholism NOS,curr,H
+31443,Chronic alcoholism,curr,H
+43193,Unspecified chronic alcoholism,curr,H
+24064,Continuous chronic alcoholism,curr,H
+26106,Episodic chronic alcoholism,curr,H
+24485,Chronic alcoholism in remission,ex,
+33635,Chronic alcoholism NOS,curr,H
+6169,Alcohol dependence syndrome NOS,curr,H
+7746,Nondependent alcohol abuse,curr,
+27518,Hangover (alcohol),curr,
+3782,Intoxication - alcohol,curr,
+669,"Nondependent alcohol abuse, unspecified",curr,H
+23610,"Nondependent alcohol abuse, continuous",curr,H
+12974,"Nondependent alcohol abuse, episodic",curr,H
+31569,Nondependent alcohol abuse in remission,curr,H
+28150,Nondependent alcohol abuse NOS,curr,H
+5611,[X]Mental and behavioural disorders due to use of alcohol,curr,H
+44299,[X]Mental & behav dis due to use alcohol: acute intoxication,curr,H
+9508,[X]Acute alcoholic drunkenness,curr,H
+21879,[X]Mental and behav dis due to use of alcohol: harmful use,curr,H
+39327,[X]Mental and behav dis due to use alcohol: dependence syndr,curr,H
+28780,[X]Alcohol addiction,curr,H
+5758,[X]Chronic alcoholism,curr,H
+20514,[X]Mental and behav dis due to use alcohol: withdrawal state,curr,H
+17259,"[X]Delirium tremens, alcohol induced",curr,H
+12353,[X]Mental & behav dis due to use alcohol: psychotic disorder,curr,H
+6467,[X]Alcoholic hallucinosis,curr,H
+65932,[X]Alcoholic jealousy,curr,H
+30162,[X]Alcoholic paranoia,curr,H
+17607,[X]Alcoholic psychosis NOS,curr,H
+39799,[X]Mental and behav dis due to use alcohol: amnesic syndrome,curr,H
+11670,"[X]Korsakov's psychosis, alcohol induced",curr,H
+26323,[X]Alcoholic dementia NOS,curr,H
+37691,[X]Chronic alcoholic brain syndrome,curr,H
+32927,[X]Alcohol withdrawal-induced seizure,curr,H
+45169,[X]Men & behav dis due to use alcohol: oth men & behav dis,curr,H
+64389,[X]Ment & behav dis due use alcohol: unsp ment & behav dis,curr,H
+47555,Cerebral degeneration due to alcoholism,curr,H
+36748,Alcoholic encephalopathy,curr,H
+33839,Cerebellar ataxia due to alcoholism,curr,H
+30604,Alcohol-induced epilepsy,curr,H
+2925,Alcoholic polyneuropathy,curr,H
+31742,Alcoholic myopathy,curr,H
+4915,Alcoholic cardiomyopathy,curr,H
+8363,Oesophageal varices in alcoholic cirrhosis of the liver,curr,H
+4506,Alcoholic gastritis,curr,H
+10691,Alcoholic fatty liver,curr,H
+3216,Acute alcoholic hepatitis,curr,H
+4743,Alcoholic cirrhosis of liver,curr,H
+21713,Alcoholic fibrosis and sclerosis of liver,curr,H
+7885,Alcoholic liver damage unspecified,curr,H
+17330,Alcoholic hepatic failure,curr,H
+7943,Alcoholic hepatitis,curr,H
+7602,Chronic alcoholic hepatitis,curr,H
+42843,Other non-alcoholic chronic liver disease,curr,H
+104611,Alcohol-induced acute pancreatitis,curr,H
+24984,Alcohol-induced chronic pancreatitis,curr,H
+66019,Suspect fetal damage from maternal alcohol,curr,H
+27670,Maternal care for (suspected) damage to fetus from alcohol,curr,H
+66699,Fetus and newborn affected by maternal use of alcohol,curr,H
+9169,[D]Alcohol blood level excessive,curr,H
+19217,Alcohol causing toxic effect,curr,H
+23978,[X]Evid of alcohol involv determind by level of intoxication,curr,
+41983,Alcohol detoxification,curr,H
+46677,Alcohol withdrawal regime,curr,H
+61383,Planned reduction of alcohol consumption,curr,H
+95181,Alcohol reduction programme,curr,H
+110671,Controlled drinking regime,curr,H
+64409,Self-monitoring of alcohol intake,curr,H
+30460,Alcoholism counselling,curr,H
+95650,Advice to change drink intake,curr,H
+97163,Advice to change alcoholic drink intake,curr,H
+54209,Advice to change alcohol intake,curr,H
+11140,Advice on alcohol consumption,curr,H
+22707,Drinking problem scale,curr,H
+46848,DPS - Drinking problem scale,curr,H
+7123,[V]Personal history of alcoholism,curr,H
+16587,[V]Problems related to lifestyle alcohol use,curr,H
+7545,[V] Alcohol use,curr,
+8388,[V]Alcohol rehabilitation,curr,H
+8030,[V]Alcohol abuse counselling and surveillance,curr,H

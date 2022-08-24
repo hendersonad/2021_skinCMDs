@@ -1,0 +1,122 @@
+medcode,readterm,definite
+78,asthma,1
+81,asthma monitoring,1
+185,acute exacerbation of asthma,1
+232,asthma attack,1
+233,severe asthma attack,1
+1555,bronchial asthma,1
+2290,allergic asthma,1
+3018,mild asthma,1
+3366,severe asthma,1
+3458,occasional asthma,1
+3665,late onset asthma,1
+4442,asthma unspecified,1
+4606,exercise induced asthma,1
+4892,status asthmaticus nos,1
+5267,intrinsic asthma,1
+5627,hay fever with asthma,1
+5798,chronic asthmatic bronchitis,1
+5867,exercise induced asthma,1
+6707,extrinsic asthma with asthma attack,1
+7058,"emergency admission, asthma",1
+7146,extrinsic (atopic) asthma,1
+7191,asthma limiting activities,1
+7378,asthma management plan given,1
+7416,asthma disturbing sleep,1
+7731,pollen asthma,1
+8335,asthma attack nos,1
+8355,asthma monitored,1
+9018,number of asthma exacerbations in past year,1
+9552,change in asthma management plan,1
+9663,step up change in asthma management plan,1
+10043,asthma annual review,1
+10274,asthma medication review,1
+10487,asthma - currently active,1
+11370,asthma confirmed,1
+12987,late-onset asthma,1
+13064,asthma severity,1
+13065,moderate asthma,1
+13175,asthma disturbs sleep frequently,1
+13176,asthma follow-up,1
+14777,extrinsic asthma without status asthmaticus,1
+15248,hay fever with asthma,1
+16070,asthma nos,1
+16667,asthma control step 2,1
+16785,asthma control step 1,1
+18223,step down change in asthma management plan,1
+18224,asthma control step 3,1
+18323,intrinsic asthma with asthma attack,1
+19167,asthma monitoring by nurse,1
+19519,asthma treatment compliance unsatisfactory,1
+19520,asthma treatment compliance satisfactory,1
+19539,asthma monitoring check done,1
+20860,asthma control step 5,1
+20886,asthma control step 4,1
+21232,allergic asthma nec,1
+22752,occupational asthma,1
+24479,emergency asthma admission since last appointment,1
+24506,further asthma - drug prevent.,1
+24884,asthma causes daytime symptoms 1 to 2 times per week,1
+25181,asthma restricts exercise,1
+25791,asthma clinical management plan,1
+26501,asthma never causes daytime symptoms,1
+26503,asthma causes daytime symptoms most days,1
+26504,asthma never restricts exercise,1
+26506,asthma severely restricts exercise,1
+26861,asthma sometimes restricts exercise,1
+27926,extrinsic asthma with status asthmaticus,1
+29325,intrinsic asthma without status asthmaticus,1
+30458,asthma monitoring by doctor,1
+30815,asthma causing night waking,1
+31167,asthma night-time symptoms,1
+31225,asthma causes daytime symptoms 1 to 2 times per month,1
+38143,asthma never disturbs sleep,1
+38144,asthma limits walking up hills or stairs,1
+38145,asthma limits walking on the flat,1
+38146,asthma disturbs sleep weekly,1
+39478,wood asthma,1
+39570,asthma causes night symptoms 1 to 2 times per month,1
+40823,brittle asthma,1
+41017,aspirin induced asthma,1
+41020,absent from work or school due to asthma,1
+42824,asthma daytime symptoms,1
+45073,intrinsic asthma nos,1
+45782,extrinsic asthma nos,1
+46529,attends asthma monitoring,1
+47337,asthma accident and emergency attendance since last visit,1
+47684,detergent asthma,1
+58196,intrinsic asthma with status asthmaticus,1
+73522,work aggravated asthma,1
+93353,sequoiosis (red-cedar asthma),1
+93736,royal college of physicians asthma assessment,1
+98185,asthma control test,1
+99793,patient has a written asthma personal action plan,1
+100107,health education - asthma self management,1
+100397,asthma control questionnaire,1
+100509,under care of asthma specialist nurse,1
+100740,health education - structured asthma discussion,1
+102170,asthma review using roy colleg of physicians three questions,1
+102209,mini asthma quality of life questionnaire,1
+102301,asthma trigger - seasonal,1
+102341,asthma trigger - pollen,1
+102395,asthma causes symptoms most nights,1
+102400,asthma causes night time symptoms 1 to 2 times per week,1
+102449,asthma trigger - respiratory infection,1
+102713,asthma limits activities 1 to 2 times per month,1
+102871,asthma trigger - exercise,1
+102888,asthma limits activities 1 to 2 times per week,1
+102952,asthma trigger - warm air,1
+103318,health education - structured patient focused asthma discuss,1
+103321,asthma trigger - animals,1
+103612,asthma never causes night symptoms,1
+103631,royal college physician asthma assessment 3 question score,1
+103813,asthma trigger - cold air,1
+103944,asthma trigger - airborne dust,1
+103945,asthma trigger - damp,1
+103952,asthma trigger - emotion,1
+103955,asthma trigger - tobacco smoke,1
+103998,asthma limits activities most days,1
+105420,asthma self-management plan review,1
+105674,asthma self-management plan agreed,1
+106805,chronic asthma with fixed airflow obstruction,1
+107167,number days absent from school due to asthma in past 6 month,1

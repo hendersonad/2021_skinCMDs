@@ -1,0 +1,458 @@
+prodcode,ingredient,productname,bnftext,formulation,routeofadministration,strength,Definitedrugs,Possibledrugs
+10409,,lorazepam .5 mg tab,unknown,,,,0,1
+10909,,diazepam s/r 10 mg cap,unknown,,,,0,1
+12278,,flurazepam 15 mg tab,unknown,,,,0,1
+13612,,temazepam ud 10ml 10 mg/5ml eli,unknown,,,,0,1
+14417,,lorazepam 1 mg sus,unknown,,,,0,1
+18928,,flurazepam 30 mg tab,unknown,,,,0,1
+23002,,lorazepam 5 mg tab,unknown,,,,0,1
+23493,,temazepam planpak,unknown,,,,0,1
+24422,,flurazepam 10 mg tab,unknown,,,,0,1
+24519,,diazepam,unknown,,,,0,1
+24739,,temazepam,unknown,,,,0,1
+28058,,temazepam ud 5ml 10 mg/5ml eli,unknown,,,,0,1
+31163,,temazepam s/f,unknown,,,,0,1
+41900,,nitrazepam,unknown,,,,0,1
+61477,,zopiclone 7.5mg/5ml oral solution,hypnotics,,,,1,0
+62683,,melatonin 3mg modified-release tablets (imported (united states)),hypnotics/nutritional supplements,tablet,oral,,0,1
+63050,,melatonin 2mg modified-release capsules,hypnotics,,,,0,1
+64249,,melatonin 2.5mg/5ml oral solution,hypnotics,,,,0,1
+64951,,melatonin 8mg capsules,hypnotics,,,,0,1
+65135,,nitrazepam 2.5mg/5ml oral suspension sugar free,hypnotics,,,,0,1
+65532,,melatonin 3mg modified-release tablets,hypnotics,,,,0,1
+67192,,diazepam 5mg/5ml oral suspension (sandoz ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,,,,0,1
+67957,,diazepam 5mg/5ml oral suspension (a a h pharmaceuticals ltd),benzodiazepines,,,,0,1
+68344,,melatonin 7.5mg capsules,hypnotics,,,,0,1
+70564,,melatonin 10mg tablets,hypnotics,,,,0,1
+70583,,melatonin 4mg tablets,hypnotics,,,,0,1
+70682,,lorazepam 1mg/ml oral solution sugar free,benzodiazepines/benzodiazepines (peri-operative),,,,0,1
+73751,,diazepam 5mg/5ml oral suspension,benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,,,,0,1
+73934,,melatonin 6mg tablets,hypnotics,,,,0,1
+7652,,oxazepam 15 mg cap,unknown,,,,0,1
+76662,,melatonin 1mg modified-release tablets,hypnotics,,,,0,1
+76682,,melatonin 1mg/1ml oral liquid sugar free alcohol free,hypnotics,,,,0,1
+76687,,melatonin 1mg/ml oral drops,hypnotics,,,,0,1
+76745,,melatonin 5mg modified-release tablets,hypnotics,,,,0,1
+77896,,melatonin 2.5mg tablets,hypnotics,,,,0,1
+77930,,slenyto 1mg modified-release tablets (flynn pharma ltd),hypnotics,,,,0,1
+780,,temazepam 10mg/5ml oral solution sugar free,hypnotics/benzodiazepines (peri-operative),,,,0,1
+78312,,lorazepam 1mg orodispersible tablets,benzodiazepines/benzodiazepines (peri-operative),,,,0,1
+78323,,lorazepam 500microgram tablets,benzodiazepines/benzodiazepines (peri-operative),,,,0,1
+78677,,slenyto 5mg modified-release tablets (flynn pharma ltd),hypnotics,,,,0,1
+78678,,melatonin 1mg/ml oral solution sugar free,hypnotics,,,,0,1
+79561,,melatonin 9mg capsules,hypnotics,,,,0,1
+79861,,lorazepam 2.5mg orodispersible tablets,benzodiazepines/benzodiazepines (peri-operative),,,,0,1
+79978,,melatonin 8mg/5ml oral solution,hypnotics,,,,0,1
+80157,,neomel 1mg/1ml oral liquid sugar free alcohol free (neoceuticals ltd),hypnotics,,,,0,1
+80240,,kidmel 1mg/1ml oral solution sugar free alcohol free (special order),hypnotics,,,,0,1
+10802,alprazolam,xanax 250microgram tablets (pfizer ltd),benzodiazepines,tablet,oral,250microgram,0,1
+11486,alprazolam,alprazolam 500microgram tablets,benzodiazepines,tablet,oral,500microgram,0,1
+12598,alprazolam,xanax 500microgram tablets (pfizer ltd),benzodiazepines,tablet,oral,500microgram,0,1
+9696,alprazolam,alprazolam 250microgram tablets,benzodiazepines,tablet,oral,250microgram,0,1
+11958,bromazepam,lexotan 1.5mg tablet (roche products ltd),anxiolytics,tablet,oral,1.5mg,0,1
+19941,bromazepam,bromazepam 3mg tablets,anxiolytics,tablets,oral,3mg,0,1
+22424,bromazepam,bromazepam 1.5mg tablets,anxiolytics,tablets,oral,1.5mg,0,1
+9721,bromazepam,lexotan 3mg tablet (roche products ltd),anxiolytics,tablet,oral,3mg,0,1
+3110,clobazam,clobazam 10mg capsules,anxiolytics/control of epilepsy,capsules,oral,10mg,0,1
+54759,clobazam,clobazam 5mg/5ml oral suspension sugar free,benzodiazepines/control of epilepsy,oral suspension,oral,1mg/1ml,0,1
+54934,clobazam,tapclob 5mg/5ml oral suspension (martindale pharmaceuticals ltd),benzodiazepines/control of epilepsy,oral suspension,oral,1mg/1ml,0,1
+55481,clobazam,clobazam 10mg/5ml oral suspension sugar free,benzodiazepines/control of epilepsy,oral suspension,oral,2mg/1ml,0,1
+56781,clobazam,tapclob 10mg/5ml oral suspension (martindale pharmaceuticals ltd),benzodiazepines/control of epilepsy,oral suspension,oral,2mg/1ml,0,1
+64879,clobazam,clobazam 5mg/5ml oral suspension sugar free (a a h pharmaceuticals ltd),benzodiazepines/control of epilepsy,oral suspension,oral,1mg/1ml,0,1
+69437,clobazam,perizam 2mg/ml oral suspension (rosemont pharmaceuticals ltd),benzodiazepines/control of epilepsy,oral suspension,oral,2mg/1ml,0,1
+69764,clobazam,perizam 1mg/ml oral suspension (rosemont pharmaceuticals ltd),benzodiazepines/control of epilepsy,oral suspension,oral,1mg/1ml,0,1
+77799,clobazam,zacco 5mg/5ml oral suspension (thame laboratories ltd),benzodiazepines/control of epilepsy,oral suspension,oral,1mg/1ml,0,1
+77999,clobazam,clobazam 5mg/5ml oral suspension sugar free (thame laboratories ltd),benzodiazepines/control of epilepsy,oral suspension,oral,1mg/1ml,0,1
+8487,clobazam,frisium 10mg capsule (aventis pharma),anxiolytics/control of epilepsy,capsule,oral,10mg,0,1
+1134,cloral betaine,cloral betaine 707mg tablets,hypnotics,tablet,oral,707mg,0,1
+18859,cloral betaine,somnwell 707mg film coated tablet (huntley pharmaceuticals ltd),hypnotics,tablet,oral,707mg,0,1
+2300,cloral betaine,welldorm 707mg tablets (marlborough pharmaceuticals ltd),hypnotics,tablet,oral,707mg,0,1
+62006,cloral betaine,cloral betaine 707mg tablets (a a h pharmaceuticals ltd),hypnotics,tablet,oral,707mg,0,1
+62574,cloral betaine,cloral betaine 707mg tablets (marlborough pharmaceuticals ltd),hypnotics,tablet,oral,707mg,0,1
+10274,diazepam,diazepam 2mg/5ml oral solution sugar free,benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),oral solution,oral,400microgram/1ml,0,1
+10402,diazepam,valium 10mg tablet (roche products ltd),hypnotics/anxiolytics,tablet,oral,10mg,0,1
+12849,diazepam,diazepam 10mg/5ml oral suspension,benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral suspension,oral,2mg/1ml,0,1
+1400,diazepam,diazepam 10mg tablets,benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+19299,diazepam,valium 5mg capsule (roche products ltd),hypnotics/anxiolytics,capsule,oral,5mg,0,1
+20164,diazepam,valium 2mg capsule (roche products ltd),hypnotics/anxiolytics,capsule,oral,2mg,0,1
+20968,diazepam,diazepam 2mg/5ml oral solution sugar free (actavis uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),oral solution,oral,400microgram/1ml,0,1
+2352,diazepam,diazepam 2mg/5ml oral solution,benzodiazepines/products used in status epilepticus/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral solution,oral,400microgram/1ml,0,1
+2401,diazepam,valium 2mg tablet (roche products ltd),hypnotics/anxiolytics,tablet,oral,2mg,0,1
+28347,diazepam,diazepam 2mg tablet (crosspharma ltd),hypnotics/anxiolytics,tablet,oral,2mg,0,1
+28703,diazepam,evacalm 5mg tablet (unimed pharmaceuticals ltd),hypnotics/anxiolytics,tablet,oral,5mg,0,1
+29945,diazepam,diazepam 2mg tablets (ranbaxy (uk) ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+30321,diazepam,valium 2mg/5ml oral solution (roche products ltd),hypnotics/anxiolytics,oral solution,oral,400microgram/1ml,0,1
+3205,diazepam,diazepam 5mg,hypnotics/anxiolytics,capsules,oral,5mg,0,1
+32296,diazepam,diazepam 5mg tablets (actavis uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+32853,diazepam,diazepam 2mg/5ml oral solution (sandoz ltd),benzodiazepines/products used in status epilepticus/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral solution,oral,400microgram/1ml,0,1
+33070,diazepam,solis 5mg capsule (galen ltd),hypnotics/anxiolytics,capsule,oral,5mg,0,1
+33672,diazepam,diazepam 2mg tablets (a a h pharmaceuticals ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+34045,diazepam,diazepam 5mg/5ml oral solution (sandoz ltd),benzodiazepines/products used in status epilepticus/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral solution,oral,1mg/1ml,0,1
+34293,diazepam,diazepam 10mg tablets (generics (uk) ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+34335,diazepam,diazepam 2mg tablets (teva uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+34338,diazepam,diazepam 2mg tablets (generics (uk) ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+34340,diazepam,diazepam 10mg tablets (ranbaxy (uk) ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+34482,diazepam,diazepam 5mg tablets (teva uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+34524,diazepam,diazepam 2mg tablets (actavis uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+34561,diazepam,diazepam 2mg tablet (regent laboratories ltd),hypnotics/anxiolytics,tablet,oral,2mg,0,1
+34615,diazepam,diazepam 5mg tablets (generics (uk) ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+34635,diazepam,diazepam 5mg tablets (a a h pharmaceuticals ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+34677,diazepam,diazepam 2mg tablets (ivax pharmaceuticals uk ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+34681,diazepam,diazepam 5mg tablet (crosspharma ltd),hypnotics/anxiolytics,tablet,oral,5mg,0,1
+34807,diazepam,diazepam 10mg tablets (actavis uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+34876,diazepam,diazepam 2mg tablet (berk pharmaceuticals ltd),hypnotics/anxiolytics,tablet,oral,2mg,0,1
+34892,diazepam,diazepam 5mg tablet (berk pharmaceuticals ltd),hypnotics/anxiolytics,tablet,oral,5mg,0,1
+36581,diazepam,atensine 10mg tablet (rorer pharmaceuticals ltd),hypnotics/anxiolytics,tablet,oral,10mg,0,1
+3870,diazepam,diazepam 2mg capsules,hypnotics/anxiolytics,capsules,oral,2mg,0,1
+3973,diazepam,tensium 10mg tablets (ddsa pharmaceuticals ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+41607,diazepam,diazepam 10mg tablets (teva uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+41632,diazepam,diazepam 10mg tablets (a a h pharmaceuticals ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+42503,diazepam,diazepam 5mg/5ml oral solution (a a h pharmaceuticals ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),oral solution,oral,1mg/1ml,0,1
+4338,diazepam,valium 5mg tablet (roche products ltd),hypnotics/anxiolytics,tablet,oral,5mg,0,1
+45135,diazepam,diazepam 2mg tablet (m & a pharmachem ltd),hypnotics/anxiolytics,tablet,oral,2mg,0,1
+45218,diazepam,diazepam 5mg tablets (ranbaxy (uk) ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+45244,diazepam,diazepam 5mg tablets (sandoz ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+45313,diazepam,diazepam 2mg tablets (almus pharmaceuticals ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+46,diazepam,diazepam 2mg tablets,benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+46913,diazepam,diazepam 10mg tablets (ivax pharmaceuticals uk ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+46966,diazepam,diazepam 5mg tablets (ivax pharmaceuticals uk ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+47,diazepam,diazepam 5mg tablets,benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+51335,diazepam,diazepam 10mg/5ml oral solution,benzodiazepines/products used in status epilepticus/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral solution,oral,2mg/1ml,0,1
+51985,diazepam,diazepam 2mg/5ml oral suspension,benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral suspension,oral,400microgram/1ml,0,1
+53461,diazepam,diazepam 2mg/5ml oral solution sugar free (a a h pharmaceuticals ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),oral solution,oral,400microgram/1ml,0,1
+53566,diazepam,diazepam 2.5mg/5ml oral solution,benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral solution,oral,500microgram/1ml,0,1
+54695,diazepam,diazepam 10mg tablet (m & a pharmachem ltd),hypnotics/anxiolytics,tablet,oral,10mg,0,1
+56236,diazepam,diazepam 2mg tablets (wockhardt uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+57749,diazepam,diazepam 5mg tablets (waymade healthcare plc),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+57838,diazepam,diazepam 5mg tablets (sovereign medical ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+58959,diazepam,diazepam 10mg/5ml oral solution (am distributions (yorkshire) ltd),benzodiazepines/products used in status epilepticus/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral solution,oral,2mg/1ml,0,1
+59122,diazepam,diazepam 5mg/5ml oral solution (am distributions (yorkshire) ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),oral solution,oral,1mg/1ml,0,1
+59407,diazepam,diazepam 5mg tablets (de pharmaceuticals),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+60936,diazepam,diazepam 5mg tablets (arrow generics ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+62216,diazepam,diazepam 10mg tablets (almus pharmaceuticals ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+62541,diazepam,diazepam 2mg tablets (sovereign medical ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+63238,diazepam,diazepam 2mg tablets (waymade healthcare plc),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+63694,diazepam,diazepam 2mg tablets (phoenix healthcare distribution ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+64200,diazepam,diazepam 2mg tablets (alliance healthcare (distribution) ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+67193,diazepam,diazepam 2mg/5ml oral suspension (sandoz ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral suspension,oral,400microgram/1ml,0,1
+67297,diazepam,diazepam 25mg/5ml oral solution,benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral solution,oral,5mg/1ml,0,1
+67451,diazepam,diazepam 2mg tablets (mawdsley-brooks & company ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+67785,diazepam,diazepam 5mg tablets (wockhardt uk ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+68414,diazepam,diazepam 2mg/5ml oral solution sugar free (alliance healthcare (distribution) ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),oral solution,oral,400microgram/1ml,0,1
+69783,diazepam,diazepam 2mg/5ml oral suspension (a a h pharmaceuticals ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral suspension,oral,400microgram/1ml,0,1
+69810,diazepam,diazepam 5mg tablets (crescent pharma ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+70536,diazepam,diazepam 1mg/5ml oral solution,benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral solution,oral,200microgram/1ml,0,1
+71245,diazepam,diazepam 5mg tablets (relonchem ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+71336,diazepam,diazepam 2mg tablets (de pharmaceuticals),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+73526,diazepam,diazepam 2mg tablets (crescent pharma ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,2mg,0,1
+73815,diazepam,diazepam 5mg tablets (alliance healthcare (distribution) ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+74342,diazepam,diazepam 5mg tablets (almus pharmaceuticals ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),tablet,oral,5mg,0,1
+74755,diazepam,diazepam 10mg/5ml oral suspension (drug tariff special order),benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral suspension,oral,2mg/1ml,0,1
+74984,diazepam,diazepam 2mg/5ml oral solution sugar free (almus pharmaceuticals ltd),benzodiazepines/other antiepileptic drugs/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative),oral solution,oral,400microgram/1ml,0,1
+75473,diazepam,diazepam 2.5mg/5ml oral suspension (special order),benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral suspension,oral,500microgram/1ml,0,1
+76192,diazepam,diazepam 2.5mg/5ml liquid (rosemont pharmaceuticals ltd),hypnotics/anxiolytics,oral suspension,oral,500microgram/1ml,0,1
+77536,diazepam,atensine 5mg tablet (rorer pharmaceuticals ltd),hypnotics/anxiolytics,tablet,oral,5mg,0,1
+78306,diazepam,diazepam 2mg/5ml oral suspension (alliance healthcare (distribution) ltd),benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral suspension,oral,400microgram/1ml,0,1
+78738,diazepam,diazepam 5mg tablet (m & a pharmachem ltd),hypnotics/anxiolytics,tablet,oral,5mg,0,1
+9045,diazepam,diazepam 1mg/5ml suspension,hypnotics/anxiolytics,suspension,oral,1mg/5ml,0,1
+9065,diazepam,diazepam 5mg/5ml oral solution,benzodiazepines/products used in status epilepticus/febrile convulsions/skeletal muscle relaxants/benzodiazepines (peri-operative),oral solution,oral,1mg/1ml,0,1
+9111,diazepam,diazepam 10mg capsules,hypnotics/anxiolytics,capsules,oral,10mg,0,1
+9430,diazepam,diazepam 2.5mg/5ml oral suspension,benzodiazepines/products used in status epilepticus/febrile convulsions/substance dependence - alcohol dependence/skeletal muscle relaxants/benzodiazepines (peri-operative)/therapy of convulsions due to poisoning,oral suspension,oral,500microgram/1ml,0,1
+14480,flunitrazepam,flunitrazepam 1mg tablets,unknown,tablet,oral,1mg,0,1
+2737,flunitrazepam,rohypnol 1mg tablets (roche products ltd),unknown,tablet,oral,1mg,0,1
+24321,flurazepam hydrochloride,paxane 30mg capsule (m a steinhard ltd),hypnotics,capsule,oral,30mg,0,1
+3105,flurazepam hydrochloride,dalmane 30mg capsules (meda pharmaceuticals ltd),benzodiazepines,capsule,oral,30mg,0,1
+3950,flurazepam hydrochloride,flurazepam 15mg capsules,benzodiazepines,capsule,oral,15mg,0,1
+3956,flurazepam hydrochloride,dalmane 15mg capsules (meda pharmaceuticals ltd),benzodiazepines,capsule,oral,15mg,0,1
+7566,flurazepam hydrochloride,flurazepam 30mg capsules,benzodiazepines,capsule,oral,30mg,0,1
+45064,hops extract/valerian extract/passion flower,sominex herbal tablet (actavis uk ltd),herbal remedy,tablet,oral,,0,1
+62182,hops extract/valerian extract/passion flower extract,sominex herbal tablets (actavis uk ltd),herbal remedy,tablet,oral,200mg + 160mg + 130mg,0,1
+12130,ketazolam,anxon 30mg capsule (beecham research laboratories),anxiolytics,capsule,oral,30mg,0,1
+12452,ketazolam,anxon 15mg capsule (beecham research laboratories),anxiolytics,capsule,oral,15mg,0,1
+23796,ketazolam,ketazolam 15mg capsule,anxiolytics,capsule,oral,15mg,0,1
+28360,ketazolam,ketazolam 30mg capsule,anxiolytics,capsule,oral,30mg,0,1
+23205,loprazolam mesilate,dormonoct 1mg tablet (hoechst marion roussel),hypnotics,tablet,oral,1mg,0,1
+41596,loprazolam mesilate,loprazolam 1mg tablets (zentiva),hypnotics,tablet,oral,1mg,0,1
+5150,loprazolam mesilate,loprazolam 1mg tablets,hypnotics,tablet,oral,1mg,0,1
+66745,loprazolam mesilate,loprazolam 1mg tablets (stephar (u.k.) ltd),hypnotics,tablet,oral,1mg,0,1
+1088,lorazepam,lorazepam 1mg tablets,benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+10954,lorazepam,ativan 1mg tablet (wyeth pharmaceuticals),anxiolytics/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+13279,lorazepam,lorazepam 500micrograms/5ml oral suspension,benzodiazepines/benzodiazepines (peri-operative),oral suspension,oral,100microgram/1ml,0,1
+17830,lorazepam,ativan 2.5mg tablet (wyeth pharmaceuticals),anxiolytics/benzodiazepines (peri-operative),tablet,oral,2.5mg,0,1
+2091,lorazepam,lorazepam 2.5mg tablets,benzodiazepines/benzodiazepines (peri-operative),tablet,oral,2.5mg,0,1
+33086,lorazepam,lorazepam 1mg tablets (teva uk ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+35932,lorazepam,lorazepam 2.5mg tablets (teva uk ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,2.5mg,0,1
+36200,lorazepam,lorazepam 1mg tablets (generics (uk) ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+37566,lorazepam,lorazepam 1mg/5ml oral suspension,benzodiazepines/benzodiazepines (peri-operative),oral suspension,oral,200microgram/1ml,0,1
+37745,lorazepam,lorazepam 1mg/5ml oral solution,benzodiazepines/benzodiazepines (peri-operative),oral solution,oral,200microgram/1ml,0,1
+39284,lorazepam,lorazepam 1mg tablets (thornton & ross ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+41391,lorazepam,lorazepam 1mg tablets (arrow generics ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+42814,lorazepam,lorazepam 2.5mg tablets (thornton & ross ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,2.5mg,0,1
+45829,lorazepam,lorazepam 1mg tablets (sandoz ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+46896,lorazepam,lorazepam 500micrograms/5ml oral solution,benzodiazepines/benzodiazepines (peri-operative),oral solution,oral,100microgram/1ml,0,1
+56551,lorazepam,lorazepam 5mg/5ml oral solution,benzodiazepines/benzodiazepines (peri-operative),oral solution,oral,1mg/1ml,0,1
+57268,lorazepam,lorazepam 2.5mg tablets (sandoz ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,2.5mg,0,1
+61450,lorazepam,lorazepam 1mg tablets (a a h pharmaceuticals ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+61886,lorazepam,lorazepam 5mg/5ml oral suspension,benzodiazepines/benzodiazepines (peri-operative),oral suspension,oral,1mg/1ml,0,1
+64729,lorazepam,lorazepam 1mg tablets (genesis pharmaceuticals ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+64876,lorazepam,lorazepam 2mg/5ml oral suspension,benzodiazepines/benzodiazepines (peri-operative),oral suspension,oral,400microgram/1ml,0,1
+67554,lorazepam,lorazepam 1mg tablets (almus pharmaceuticals ltd),benzodiazepines/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+76218,lorazepam,lorazepam 500micrograms/5ml oral suspension (drug tariff special order),benzodiazepines/benzodiazepines (peri-operative),oral suspension,oral,100microgram/1ml,0,1
+78243,lorazepam,lorazepam 250micrograms/5ml oral solution,benzodiazepines/benzodiazepines (peri-operative),oral solution,oral,50microgram/1ml,0,1
+78434,lorazepam,lorazepam 1mg tablet (c p pharmaceuticals ltd),anxiolytics/benzodiazepines (peri-operative),tablet,oral,1mg,0,1
+18291,lormetazepam,noctamid 1mg tablet (schering health care ltd),hypnotics,tablet,oral,1mg,0,1
+21437,lormetazepam,loramet 1mg capsule (wyeth pharmaceuticals),hypnotics,capsule,oral,1mg,0,1
+3354,lormetazepam,lormetazepam 1mg tablets,hypnotics,tablet,oral,1mg,0,1
+3357,lormetazepam,lormetazepam 1mg capsule,hypnotics,capsule,oral,1mg,0,1
+34292,lormetazepam,lormetazepam 500microgram tablets (a a h pharmaceuticals ltd),hypnotics,tablet,oral,500microgram,0,1
+34361,lormetazepam,lormetazepam 500microgram tablets (genus pharmaceuticals ltd),hypnotics,tablet,oral,500microgram,0,1
+34516,lormetazepam,lormetazepam 1mg tablets (generics (uk) ltd),hypnotics,tablet,oral,1mg,0,1
+34534,lormetazepam,lormetazepam 1mg tablet (wyeth pharmaceuticals),hypnotics,tablet,oral,1mg,0,1
+34642,lormetazepam,lormetazepam 500microgram tablets (generics (uk) ltd),hypnotics,tablet,oral,500microgram,0,1
+34692,lormetazepam,lormetazepam 1mg tablets (genus pharmaceuticals ltd),hypnotics,tablet,oral,1mg,0,1
+3687,lormetazepam,lormetazepam 500microgram tablets,hypnotics,tablet,oral,500microgram,0,1
+48517,lormetazepam,lormetazepam 1mg/5ml oral suspension,hypnotics,oral suspension,oral,200microgram/1ml,0,1
+63665,lormetazepam,noctamid 0.5mg tablet (schering health care ltd),hypnotics,tablet,oral,500microgram,0,1
+10789,medazepam,nobrium 10mg capsule (roche products ltd),anxiolytics,capsule,oral,10mg,0,1
+10790,medazepam,medazepam 10mg capsule,anxiolytics,capsule,oral,10mg,0,1
+10791,medazepam,nobrium 5mg capsule (roche products ltd),anxiolytics,capsule,oral,5mg,0,1
+21464,medazepam,medazepam 5mg capsule,anxiolytics,capsule,oral,5mg,0,1
+10068,melatonin,melatonin 1mg capsules,hypnotics,capsule,oral,1mg,0,1
+13023,melatonin,melatonin 2.5mg capsules,hypnotics,capsule,oral,2.5mg,0,1
+14145,melatonin,melatonin 3mg capsules,hypnotics,capsule,oral,3mg,0,1
+14210,melatonin,melatonin 2.5mg/5ml oral suspension,hypnotics,oral suspension,oral,500microgram/1ml,0,1
+14221,melatonin,melatonin 1mg/ml sugar free oral solution,hypnotics,oral solution,oral,1mg/ml,0,1
+14250,melatonin,melatonin 3mg tablets,hypnotics,tablet,oral,3mg,0,1
+16993,melatonin,melatonin 3mg modified-release capsules,hypnotics,modified-release capsule,oral,3mg,0,1
+17663,melatonin,melatonin 1mg tablets,hypnotics,tablet,oral,1mg,0,1
+26391,melatonin,melatonin 10mg capsules,hypnotics,capsule,oral,10mg,0,1
+35142,melatonin,vytalonin 3mg tablet (idis world medicines),hypnotics,tablet,oral,3mg,0,1
+35224,melatonin,melatonin 5mg capsules,hypnotics,capsule,oral,5mg,0,1
+38208,melatonin,melatonin 2mg modified-release tablets,hypnotics,modified-release tablet,oral,2mg,0,1
+38265,melatonin,circadin 2mg modified-release tablets (flynn pharma ltd),hypnotics,modified-release tablet,oral,2mg,0,1
+41961,melatonin,melatonin tablet,hypnotics,tablet,oral,,0,1
+45230,melatonin,melatonin capsule,hypnotics,capsule,oral,,0,1
+45367,melatonin,bio-melatonin 3mg tablets (imported (denmark)),hypnotics,tablet,oral,3mg,0,1
+45783,melatonin,melatonin 5mg/5ml oral suspension,hypnotics,oral suspension,oral,1mg/1ml,0,1
+45975,melatonin,melatonin 5mg/5ml oral solution,hypnotics,oral solution,oral,1mg/1ml,0,1
+48436,melatonin,melatonin 6mg capsules,hypnotics,capsule,oral,6mg,0,1
+49196,melatonin,melatonin 2mg/5ml oral suspension,hypnotics,oral suspension,oral,400microgram/1ml,0,1
+49576,melatonin,melatonin 500microgram tablets,hypnotics,tablet,oral,500microgram,0,1
+50115,melatonin,melatonin 4mg capsules,hypnotics,capsule,oral,4mg,0,1
+50258,melatonin,melatonin 1mg/1ml oral liquid sugar free,hypnotics,liquid,oral,,0,1
+52079,melatonin,melatonin 2mg tablets,hypnotics,tablet,oral,2mg,0,1
+52289,melatonin,melatonin 3mg/5ml oral suspension,hypnotics,oral suspension,oral,600microgram/1ml,0,1
+52303,melatonin,melatonin 20mg capsules,hypnotics,capsule,oral,20mg,0,1
+52487,melatonin,melatonin 2mg/5ml oral solution,hypnotics,oral solution,oral,400microgram/1ml,0,1
+52683,melatonin,melatonin 1mg/5ml oral suspension,hypnotics,oral suspension,oral,200microgram/1ml,0,1
+53064,melatonin,melatonin 6mg/5ml oral suspension,hypnotics,oral suspension,oral,1.2mg/1ml,0,1
+54717,melatonin,melatonin 10mg/5ml oral suspension,hypnotics,oral suspension,oral,2mg/1ml,0,1
+55100,melatonin,melatonin 5mg/5ml oral solution (drug tariff special order),hypnotics,oral solution,oral,1mg/1ml,0,1
+55191,melatonin,melatonin 6mg/5ml oral solution,hypnotics,oral solution,oral,1.2mg/1ml,0,1
+55860,melatonin,melatonin 3mg modified-release capsules (imported (united states)),hypnotics,modified-release capsule,oral,3mg,0,1
+56393,melatonin,melatonin 5mg tablets,hypnotics,tablet,oral,5mg,0,1
+57406,melatonin,melatonin 1mg/5ml oral solution,hypnotics,oral solution,oral,200microgram/1ml,0,1
+58566,melatonin,melatonin 4mg/5ml oral solution,hypnotics,oral solution,oral,800microgram/1ml,0,1
+58692,melatonin,melatonin 3mg/5ml oral solution,hypnotics,oral solution,oral,600microgram/1ml,0,1
+62411,melatonin,melatonin 3mg orodispersible tablets,hypnotics,orodispersible tablet,oral,3mg,0,1
+62501,melatonin,melatonin 10mg/5ml oral solution,hypnotics,oral solution,oral,2mg/1ml,0,1
+64002,melatonin,melatonin 1mg/1ml oral liquid sugar free (special order) (idis world medicines),hypnotics,liquid,route of administration not applicable,,0,1
+64614,melatonin,melatonin 2mg capsules (alissa healthcare research ltd),hypnotics,capsule,oral,2mg,0,1
+65093,melatonin,melatonin 2mg capsules (imported (denmark)),hypnotics,capsule,oral,2mg,0,1
+65375,melatonin,melatonin 5mg/5ml oral suspension (drug tariff special order),hypnotics,oral suspension,oral,1mg/1ml,0,1
+65844,melatonin,melatonin 3mg capsules (imported (denmark)),hypnotics,capsule,oral,3mg,0,1
+68588,melatonin,melatonin 4mg/5ml oral suspension,hypnotics,oral suspension,oral,800microgram/1ml,0,1
+68938,melatonin,melatonin 3mg/5ml oral solution (drug tariff special order),hypnotics,oral solution,oral,600microgram/1ml,0,1
+69979,melatonin,circadin 2mg modified-release tablets (de pharmaceuticals),hypnotics,modified-release tablet,oral,2mg,0,1
+7099,melatonin,melatonin 2mg capsules,hypnotics,capsule,oral,2mg,0,1
+75220,melatonin,melatonin 3mg capsules (special order),hypnotics,capsule,oral,3mg,0,1
+76002,melatonin,icenia melatonin 5mg capsules (imported (bulgaria)),hypnotics,capsule,oral,5mg,0,1
+77673,melatonin,melatonin 3mg tablets (imported (united states)),hypnotics,tablet,oral,3mg,0,1
+78774,melatonin,melatonin 500microgram capsules,hypnotics,capsule,oral,500microgram,0,1
+79600,melatonin,melatonin 3mg tablets (colonis pharma ltd),hypnotics,tablet,oral,3mg,0,1
+80696,melatonin,melatonin 3mg tablets (pharma nord (uk) ltd),hypnotics,tablet,oral,3mg,0,1
+18925,methyprylone,noludar 200mg tablet (roche products ltd),hypnotics,tablet,oral,200mg,0,1
+18976,methyprylone,methyprylone 200mg tablet,hypnotics,tablet,oral,200mg,0,1
+15492,nitrazepam,nitrados 5mg tablet (rorer pharmaceuticals ltd),hypnotics,tablet,oral,5mg,0,1
+19450,nitrazepam,mogadon 5mg tablets (meda pharmaceuticals ltd),hypnotics,tablet,oral,5mg,0,1
+23874,nitrazepam,somnite 2.5mg/5ml oral suspension (norgine pharmaceuticals ltd),hypnotics,oral suspension,oral,500microgram/1ml,0,1
+2407,nitrazepam,nitrazepam 5mg capsule,hypnotics,capsule,oral,5mg,0,1
+27847,nitrazepam,surem 5mg capsule (galen ltd),hypnotics,capsule,oral,5mg,0,1
+34408,nitrazepam,nitrazepam 5mg tablets (a a h pharmaceuticals ltd),hypnotics,tablet,oral,5mg,0,1
+34555,nitrazepam,nitrazepam 5mg tablets (wockhardt uk ltd),hypnotics,tablet,oral,5mg,0,1
+34686,nitrazepam,nitrazepam 5mg tablets (teva uk ltd),hypnotics,tablet,oral,5mg,0,1
+34770,nitrazepam,nitrazepam 5mg tablet (ddsa pharmaceuticals ltd),hypnotics,tablet,oral,5mg,0,1
+34806,nitrazepam,nitrazepam 5mg tablets (generics (uk) ltd),hypnotics,tablet,oral,5mg,0,1
+34964,nitrazepam,nitrazepam 5mg tablet (berk pharmaceuticals ltd),hypnotics,tablet,oral,5mg,0,1
+35,nitrazepam,nitrazepam 5mg tablets,hypnotics,tablet,oral,5mg,0,1
+3524,nitrazepam,mogadon 5mg capsule (roche products ltd),hypnotics,capsule,oral,5mg,0,1
+3686,nitrazepam,nitrazepam 10mg tablet,hypnotics,tablet,oral,10mg,0,1
+37325,nitrazepam,remnos 10mg tablet (ddsa pharmaceuticals ltd),hypnotics,tablet,oral,10mg,0,1
+41385,nitrazepam,nitrazepam 5mg tablets (actavis uk ltd),hypnotics,tablet,oral,5mg,0,1
+46953,nitrazepam,nitrazepam 5mg tablets (ranbaxy (uk) ltd),hypnotics,tablet,oral,5mg,0,1
+61678,nitrazepam,nitrazepam 2mg/5ml oral suspension,hypnotics,oral suspension,oral,400microgram/1ml,0,1
+64775,nitrazepam,nitrazepam 10mg/5ml oral suspension,hypnotics,oral suspension,oral,2mg/1ml,0,1
+71073,nitrazepam,nitrazepam 5mg tablets (pharmvit ltd),hypnotics,tablet,oral,5mg,0,1
+73660,nitrazepam,nitrazepam 5mg tablets (almus pharmaceuticals ltd),hypnotics,tablet,oral,5mg,0,1
+75197,nitrazepam,nitrazepam oral solution,hypnotics,oral solution,,,0,1
+77589,nitrazepam,nitrazepam 5mg/5ml liquid (rosemont pharmaceuticals ltd),hypnotics,oral suspension,oral,1mg/1ml,0,1
+7786,nitrazepam,mogadon 5mg tablet (icn pharmaceuticals france s.a.),hypnotics,tablet,oral,5mg,0,1
+7924,nitrazepam,nitrazepam 2.5mg/5ml oral suspension,hypnotics,oral suspension,oral,500microgram/1ml,0,1
+79375,nitrazepam,nitrazepam 10mg tablet (ddsa pharmaceuticals ltd),hypnotics,tablet,,10mg,0,1
+9814,nitrazepam,nitrazepam 5mg/5ml oral suspension,hypnotics,oral suspension,oral,1mg/1ml,0,1
+25273,oxazepam,oxanid 10mg tablet (m a steinhard ltd),anxiolytics,tablet,oral,10mg,0,1
+36604,oxazepam,oxazepam 10mg tablets (a a h pharmaceuticals ltd),benzodiazepines,tablet,oral,10mg,0,1
+4140,oxazepam,oxazepam 30mg capsule,anxiolytics,capsule,oral,30mg,0,1
+4141,oxazepam,oxazepam 15mg tablets,benzodiazepines,tablet,oral,15mg,0,1
+41411,oxazepam,oxazepam 15mg tablets (a a h pharmaceuticals ltd),benzodiazepines,tablet,oral,15mg,0,1
+41531,oxazepam,oxazepam 10mg tablets (actavis uk ltd),benzodiazepines,tablet,oral,10mg,0,1
+41542,oxazepam,oxazepam 10mg tablet (ivax pharmaceuticals uk ltd),anxiolytics,tablet,oral,10mg,0,1
+41553,oxazepam,oxazepam 10mg tablets (thornton & ross ltd),benzodiazepines,tablet,oral,10mg,0,1
+41601,oxazepam,oxazepam 15mg tablet (ivax pharmaceuticals uk ltd),anxiolytics,tablet,oral,15mg,0,1
+41602,oxazepam,oxazepam 15mg tablets (actavis uk ltd),benzodiazepines,tablet,oral,15mg,0,1
+4566,oxazepam,oxazepam 10mg tablets,benzodiazepines,tablet,oral,10mg,0,1
+46946,oxazepam,oxazepam 15mg tablets (thornton & ross ltd),benzodiazepines,tablet,oral,15mg,0,1
+8721,oxazepam,oxazepam 30mg tablet,anxiolytics,tablet,oral,30mg,0,1
+25893,prazepam,centrax 10mg tablet (parke-davis research laboratories),anxiolytics,tablet,oral,10mg,0,1
+11004,promethazine hydrochloride,promethazine hydrochloride 20mg tablets,hypnotics,tablet,oral,20mg,1,0
+14955,promethazine hydrochloride,phenergan nightime 25mg tablets (sanofi),hypnotics,tablet,oral,25mg,1,0
+1610,promethazine hydrochloride,phenergan 5mg/5ml elixir (sanofi),"sedating antihistamines/hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",oral solution,oral,1mg/1ml,1,0
+1998,promethazine hydrochloride,promethazine 5mg/5ml oral solution sugar free,"sedating antihistamines/hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",oral solution,oral,1mg/1ml,1,0
+21359,promethazine hydrochloride,sominex 20mg tablets (actavis uk ltd),hypnotics,tablet,oral,20mg,1,0
+31889,promethazine hydrochloride,ziz 10mg tablets (chatfield laboratories),"sedating antihistamines/hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",tablet,oral,10mg,1,0
+3494,promethazine hydrochloride,promethazine hydrochloride 25mg tablets,"hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",tablet,oral,25mg,1,0
+3582,promethazine hydrochloride,phenergan 25mg tablets (sanofi),"hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",tablet,oral,25mg,1,0
+49968,promethazine hydrochloride,phenergan 25mg tablets (de pharmaceuticals),"hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",tablet,oral,25mg,1,0
+5561,promethazine hydrochloride,promethazine hydrochloride 10mg tablets,"sedating antihistamines/hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",tablet,oral,10mg,1,0
+55838,promethazine hydrochloride,phenergan 25mg tablets (lexon (uk) ltd),"hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",tablet,oral,25mg,1,0
+62590,promethazine hydrochloride,promethazine 25mg/5ml oral suspension,"sedating antihistamines/hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",oral suspension,oral,5mg/1ml,1,0
+62980,promethazine hydrochloride,promethazine 25mg/5ml oral solution,"sedating antihistamines/hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",oral solution,oral,5mg/1ml,1,0
+74653,promethazine hydrochloride,promethazine hydrochloride oral solution,sedating antihistamines/hypnotics,,,,1,0
+77739,promethazine hydrochloride,promethazine hydrochloride 25mg tablets (a a h pharmaceuticals ltd),"hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",tablet,oral,25mg,1,0
+918,promethazine hydrochloride,phenergan 10mg tablets (sanofi),"sedating antihistamines/hypnotics/products used against nausea and vertigo - antihistamines, phenothiazines & related products",tablet,oral,10mg,1,0
+10430,temazepam,temazepam 30mg capsules,hypnotics/benzodiazepines (peri-operative),capsules,oral,30mg,0,1
+12293,temazepam,normison 10mg capsule (wyeth pharmaceuticals),hypnotics/benzodiazepines (peri-operative),capsule,oral,10mg,0,1
+12462,temazepam,temazepam gelthix 20mg capsule (pharmacia ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,20mg,0,1
+15110,temazepam,temazepam 10mg/5ml oral solution (generics (uk) ltd),hypnotics/benzodiazepines (peri-operative),oral solution,,10mg/5ml,0,1
+1729,temazepam,temazepam 20mg tablets,hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+20,temazepam,temazepam 10mg tablets,hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+20245,temazepam,temazepam 10mg gel-fill capsules,hypnotics/benzodiazepines (peri-operative),gel-filled capsules,oral,10mg,0,1
+20801,temazepam,temazepam gelthix 30mg capsule (pharmacia ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,30mg,0,1
+21454,temazepam,normison 20mg capsule (wyeth pharmaceuticals),hypnotics/benzodiazepines (peri-operative),capsule,oral,20mg,0,1
+23120,temazepam,temazepam gelthix 15mg capsule (pharmacia ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,15mg,0,1
+2403,temazepam,temazepam 20mg capsules,hypnotics/benzodiazepines (peri-operative),capsules,oral,20mg,0,1
+27367,temazepam,temazepam 10mg/5ml oral solution sugar free (rosemont pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),oral solution,oral,2mg/1ml,0,1
+29441,temazepam,euhypnos forte 20mg capsule (pharmacia ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,20mg,0,1
+30779,temazepam,temazepam 20mg tablet (wyeth pharmaceuticals),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+30985,temazepam,temazepam 20mg tablets (ivax pharmaceuticals uk ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+32320,temazepam,temazepam 20mg gel-fill capsules,hypnotics/benzodiazepines (peri-operative),gel-filled capsules,oral,20mg,0,1
+32847,temazepam,temazepam 10mg/5ml oral solution sugar free (a a h pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),oral solution,oral,2mg/1ml,0,1
+33648,temazepam,temazepam 10mg tablet (wyeth pharmaceuticals),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+34002,temazepam,temazepam 10mg tablets (ivax pharmaceuticals uk ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+34331,temazepam,temazepam 10mg tablets (a a h pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+34406,temazepam,temazepam 10mg tablets (teva uk ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+34508,temazepam,temazepam 10mg tablets (generics (uk) ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+34572,temazepam,temazepam 20mg tablets (generics (uk) ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+36602,temazepam,temazepam 20mg tablet (pharmacia ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+36611,temazepam,euhypnos 10mg/5ml oral solution (pharmacia ltd),hypnotics/benzodiazepines (peri-operative),oral solution,,10mg/5ml,0,1
+38418,temazepam,temazepam 10mg capsule (berk pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,10mg,0,1
+38424,temazepam,temazepam 20mg capsule (berk pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,20mg,0,1
+41516,temazepam,temazepam 10mg tablet (ivax pharmaceuticals uk ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+41562,temazepam,temazepam 10mg tablet (pharmacia ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+41653,temazepam,temazepam 20mg capsule (hillcross pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,20mg,0,1
+41717,temazepam,temazepam 20mg tablets (a a h pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+41718,temazepam,temazepam 10mg capsule (hillcross pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,10mg,0,1
+45254,temazepam,temazepam 10mg tablets (actavis uk ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+45283,temazepam,temazepam 10mg tablets (genus pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+46078,temazepam,temazepam 20mg tablets (genus pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+46939,temazepam,temazepam 20mg tablets (teva uk ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+46964,temazepam,temazepam 20mg tablets (actavis uk ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+49589,temazepam,temazepam 10mg tablets (sandoz ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+55836,temazepam,temazepam 10mg/5ml oral solution sugar free (focus pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),oral solution,oral,2mg/1ml,0,1
+56811,temazepam,temazepam 10mg tablets (f.maltby & sons ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+56927,temazepam,temazepam 10mg tablets (ethigen ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+60825,temazepam,temazepam 20mg tablets (sandoz ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+62645,temazepam,temazepam 20mg tablet (lagap),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+63674,temazepam,temazepam 30mg gel-fill capsules,hypnotics/benzodiazepines (peri-operative),,,,0,1
+70071,temazepam,temazepam 10mg tablets (alliance healthcare (distribution) ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,10mg,0,1
+73483,temazepam,temazepam 20mg capsule (c p pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),capsule,,20mg,0,1
+74783,temazepam,temazepam 20mg tablets (ethigen ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+75594,temazepam,temazepam 10mg capsule (wyeth pharmaceuticals),hypnotics/benzodiazepines (peri-operative),capsule,,10mg,0,1
+7567,temazepam,temazepam planpak capsule (manufacturer unknown),hypnotics/benzodiazepines (peri-operative),capsule,oral,,0,1
+7569,temazepam,temazepam 15mg capsules,hypnotics/benzodiazepines (peri-operative),capsules,oral,15mg,0,1
+76490,temazepam,temazepam 15mg gel-fill capsules,hypnotics/benzodiazepines (peri-operative),,,,0,1
+77686,temazepam,temazepam 20mg tablet (ivax pharmaceuticals uk ltd),hypnotics/benzodiazepines (peri-operative),tablet,oral,20mg,0,1
+79487,temazepam,temazepam 10mg capsule (c p pharmaceuticals ltd),hypnotics/benzodiazepines (peri-operative),capsule,,10mg,0,1
+8798,temazepam,temazepam gelthix 10mg capsule (pharmacia ltd),hypnotics/benzodiazepines (peri-operative),capsule,oral,10mg,0,1
+921,temazepam,temazepam 10mg capsules,hypnotics/benzodiazepines (peri-operative),capsules,oral,10mg,0,1
+5306,zaleplon,sonata 10mg capsules (meda pharmaceuticals ltd),hypnotics,capsule,oral,10mg,1,0
+5352,zaleplon,zaleplon 10mg capsules,hypnotics,capsule,oral,10mg,1,0
+5916,zaleplon,zaleplon 5mg capsules,hypnotics,capsule,oral,5mg,1,0
+9598,zaleplon,sonata 5mg capsules (meda pharmaceuticals ltd),hypnotics,capsule,oral,5mg,1,0
+2017,zolpidem tartrate,zolpidem 5mg tablets,hypnotics,tablet,oral,5mg,1,0
+29869,zolpidem tartrate,zolpidem 5mg tablet (winthrop pharmaceuticals ltd),hypnotics,tablet,oral,5mg,1,0
+30981,zolpidem tartrate,zolpidem 10mg tablets (a a h pharmaceuticals ltd),hypnotics,tablet,oral,10mg,1,0
+3126,zolpidem tartrate,stilnoct 5mg tablets (sanofi),hypnotics,tablet,oral,5mg,1,0
+31710,zolpidem tartrate,zolpidem 5mg tablets (a a h pharmaceuticals ltd),hypnotics,tablet,oral,5mg,1,0
+33841,zolpidem tartrate,zolpidem 10mg tablets (generics (uk) ltd),hypnotics,tablet,oral,10mg,1,0
+3741,zolpidem tartrate,stilnoct 10mg tablets (sanofi),hypnotics,tablet,oral,10mg,1,0
+41539,zolpidem tartrate,zolpidem 10mg tablets (ivax pharmaceuticals uk ltd),hypnotics,tablet,oral,10mg,1,0
+41696,zolpidem tartrate,zolpidem 5mg tablets (teva uk ltd),hypnotics,tablet,oral,5mg,1,0
+41697,zolpidem tartrate,zolpidem 5mg tablets (ivax pharmaceuticals uk ltd),hypnotics,tablet,oral,5mg,1,0
+42089,zolpidem tartrate,zolpidem 10mg tablet (winthrop pharmaceuticals ltd),hypnotics,tablet,oral,10mg,1,0
+43560,zolpidem tartrate,zolpidem 10mg tablets (teva uk ltd),hypnotics,tablet,oral,10mg,1,0
+5459,zolpidem tartrate,zolpidem 10mg tablets,hypnotics,tablet,oral,10mg,1,0
+65190,zolpidem tartrate,zolpidem 10mg tablets (zentiva),hypnotics,tablet,oral,10mg,1,0
+74636,zolpidem tartrate,zolpidem 5mg tablets (sandoz ltd),hypnotics,tablet,oral,5mg,1,0
+74652,zolpidem tartrate,zolpidem 5mg tablets (actavis uk ltd),hypnotics,tablet,oral,5mg,1,0
+75866,zolpidem tartrate,zolpidem 5mg oral powder sachets,hypnotics,powder,oral,5mg,1,0
+77396,zolpidem tartrate,stilnoct 5mg tablets (waymade healthcare plc),hypnotics,tablet,oral,5mg,1,0
+77581,zolpidem tartrate,zolpidem 10mg tablets (sandoz ltd),hypnotics,tablet,oral,10mg,1,0
+14365,zopiclone,zopiclone 3.75mg/5ml oral suspension,hypnotics,oral suspension,oral,750microgram/1ml,1,0
+15852,zopiclone,zileze 7.5 tablets (opus pharmaceuticals ltd),hypnotics,tablet,oral,7.5mg,1,0
+24135,zopiclone,zopiclone 7.5mg tablets (actavis uk ltd),hypnotics,tablet,oral,7.5mg,1,0
+29219,zopiclone,zopiclone 3.75mg tablets (actavis uk ltd),hypnotics,tablet,oral,3.75mg,1,0
+30056,zopiclone,zopiclone 3.75mg tablets (ivax pharmaceuticals uk ltd),hypnotics,tablet,oral,3.75mg,1,0
+30377,zopiclone,zopiclone 3.75mg tablets (generics (uk) ltd),hypnotics,tablet,oral,3.75mg,1,0
+33045,zopiclone,zopiclone 7.5mg tablets (ivax pharmaceuticals uk ltd),hypnotics,tablet,oral,7.5mg,1,0
+3320,zopiclone,zimovane 7.5mg tablets (sanofi),hypnotics,tablet,oral,7.5mg,1,0
+33663,zopiclone,zopiclone 7.5mg tablets (generics (uk) ltd),hypnotics,tablet,oral,7.5mg,1,0
+34372,zopiclone,zopiclone 7.5mg tablets (pliva pharma ltd),hypnotics,tablet,oral,7.5mg,1,0
+34612,zopiclone,zopiclone 3.75mg tablets (a a h pharmaceuticals ltd),hypnotics,tablet,oral,3.75mg,1,0
+34777,zopiclone,zopiclone 3.75mg tablets (teva uk ltd),hypnotics,tablet,oral,3.75mg,1,0
+34823,zopiclone,zopiclone 7.5mg tablets (teva uk ltd),hypnotics,tablet,oral,7.5mg,1,0
+34874,zopiclone,zopiclone 7.5mg tablets (kent pharmaceuticals ltd),hypnotics,tablet,oral,7.5mg,1,0
+34897,zopiclone,zopiclone 3.75mg tablets (kent pharmaceuticals ltd),hypnotics,tablet,oral,3.75mg,1,0
+4187,zopiclone,zimovane ls 3.75mg tablets (sanofi),hypnotics,tablet,oral,3.75mg,1,0
+43445,zopiclone,zopiclone 7.5mg tablets (a a h pharmaceuticals ltd),hypnotics,tablet,oral,7.5mg,1,0
+45353,zopiclone,zopiclone 7.5mg tablets (sandoz ltd),hypnotics,tablet,oral,7.5mg,1,0
+46799,zopiclone,zopiclone 3.75mg/5ml oral solution,hypnotics,oral solution,oral,750microgram/1ml,1,0
+5058,zopiclone,zileze 3.75 tablets (opus pharmaceuticals ltd),hypnotics,tablet,oral,3.75mg,1,0
+52022,zopiclone,zimovane 7.5mg tablets (lexon (uk) ltd),hypnotics,tablet,oral,7.5mg,1,0
+57937,zopiclone,zopiclone 3.75mg tablets (almus pharmaceuticals ltd),hypnotics,tablet,oral,3.75mg,1,0
+59640,zopiclone,zopiclone 7.5mg/5ml oral suspension,hypnotics,oral suspension,oral,1.5mg/1ml,1,0
+63592,zopiclone,zopiclone 7.5mg tablets (sigma pharmaceuticals plc),hypnotics,tablet,oral,7.5mg,1,0
+65637,zopiclone,zopiclone 7.5mg tablets (phoenix healthcare distribution ltd),hypnotics,tablet,oral,7.5mg,1,0
+66,zopiclone,zopiclone 7.5mg tablets,hypnotics,tablet,oral,7.5mg,1,0
+70727,zopiclone,zopiclone 3.75mg tablets (sigma pharmaceuticals plc),hypnotics,tablet,oral,3.75mg,1,0
+71089,zopiclone,zopiclone 3.75mg tablets (bristol laboratories ltd),hypnotics,tablet,oral,3.75mg,1,0
+721,zopiclone,zopiclone 3.75mg tablets,hypnotics,tablet,oral,3.75mg,1,0
+73154,zopiclone,zopiclone 7.5mg tablets (de pharmaceuticals),hypnotics,tablet,oral,7.5mg,1,0
+75455,zopiclone,zopiclone 3.75mg/5ml oral solution (drug tariff special order),hypnotics,oral solution,oral,750microgram/1ml,1,0
+76161,zopiclone,zopiclone 7.5mg tablets (mawdsley-brooks & company ltd),hypnotics,tablet,oral,7.5mg,1,0
+80518,zopiclone,zopiclone 7.5mg tablets (bristol laboratories ltd),hypnotics,tablet,oral,7.5mg,1,0
+1546,hydroxyzine hydrochloride,hydroxyzine 25mg tablets,sedating antihistamines/hypnotics,tablet,oral,25mg,1,0
+17784,hydroxyzine hydrochloride,ucerax 25mg tablets (ucb pharma ltd),sedating antihistamines/hypnotics,tablet,oral,25mg,1,0
+1913,hydroxyzine hydrochloride,atarax 10mg tablet (pfizer ltd),sedating antihistamines/anxiolytics,tablet,oral,10mg,1,0
+3081,hydroxyzine hydrochloride,atarax 10mg/5ml oral solution (pfizer ltd),sedating antihistamines/anxiolytics,oral solution,,10mg/5ml,1,0
+40472,hydroxyzine hydrochloride,atarax 25mg tablets (alliance pharmaceuticals ltd),sedating antihistamines/hypnotics,tablet,oral,25mg,1,0
+40510,hydroxyzine hydrochloride,atarax 10mg tablets (alliance pharmaceuticals ltd),sedating antihistamines/hypnotics,tablet,oral,10mg,1,0
+43446,hydroxyzine hydrochloride,hydroxyzine oral suspension,sedating antihistamines/anxiolytics,oral suspension,oral,,1,0
+4824,hydroxyzine hydrochloride,ucerax 10mg/5ml syrup (ucb pharma ltd),sedating antihistamines,oral solution,oral,2mg/1ml,1,0
+66965,hydroxyzine hydrochloride,hydroxyzine 5mg/5ml oral suspension,sedating antihistamines,oral suspension,oral,1mg/1ml,1,0
+67203,hydroxyzine hydrochloride,hydroxyzine 5mg/5ml oral solution,sedating antihistamines,oral solution,oral,1mg/1ml,1,0
+67873,hydroxyzine hydrochloride,hydroxyzine 25mg/5ml oral solution,sedating antihistamines,oral solution,oral,5mg/1ml,1,0
+683,hydroxyzine hydrochloride,atarax 25mg tablet (pfizer ltd),sedating antihistamines/anxiolytics,tablet,oral,25mg,1,0
+69816,hydroxyzine hydrochloride,hydroxyzine 20mg/5ml oral solution,sedating antihistamines,oral solution,oral,4mg/1ml,1,0
+74486,hydroxyzine hydrochloride,hydroxyzine 2.5mg/5ml oral solution,sedating antihistamines,oral solution,oral,500microgram/1ml,1,0
+878,hydroxyzine hydrochloride,hydroxyzine 10mg tablets,sedating antihistamines/hypnotics,tablet,oral,10mg,1,0
