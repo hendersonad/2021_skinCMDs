@@ -1,30 +1,6 @@
-library(tidyverse)
-library(here)
-library(labelled)
-library(stringr)
-library(janitor)
-library(timetk)
-library(gtsummary)
-library(magrittr)
-library(survival)
-library(survminer)
-library(htmltools)
-library(lubridate)
+source(here::here("code/packages.R"))
+source(here::here("code/file_paths.R"))
 
-library(gtsummary)
-library(survival)
-library(lmtest)
-
-
-if (Sys.info()["user"] == "lsh1510922") {
-  if (Sys.info()["sysname"] == "Darwin") {
-    datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-    datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
-  }
-  if (Sys.info()["sysname"] == "Windows") {
-    datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-}
 dir.create(file.path(here("out", "analysis")), showWarnings = FALSE)
 dir.create(file.path(datapath, "out/models_data"), showWarnings = FALSE)
 

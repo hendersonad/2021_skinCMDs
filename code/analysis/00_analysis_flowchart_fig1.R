@@ -1,20 +1,5 @@
-library(tidyverse)
-library(here)
-library(janitor)
-library(DiagrammeR)
-library(DiagrammeRsvg)
-library(rsvg)
-
-
-if (Sys.info()["user"] == "lsh1510922") {
-	if (Sys.info()["sysname"] == "Darwin") {
-		datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-		datapath <- "/Users/lsh1510922/Documents/Postdoc/2021_extract/"
-	}
-	if (Sys.info()["sysname"] == "Windows") {
-		datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
-	}
-}
+source(here::here("code/packages.R"))
+source(here::here("code/file_paths.R"))
 
 XX <- c("psoriasis", "eczema")
 

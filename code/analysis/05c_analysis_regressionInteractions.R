@@ -1,21 +1,6 @@
-library(here)
-library(tidyverse)
-library(ggprism)
-library(gtsummary)
-library(gt)
-library(survival)
-library(lmtest)
-library(broom)
-library(biostat3)
+source(here::here("code/packages.R"))
+source(here::here("code/file_paths.R"))
 
-if (Sys.info()["user"] == "lsh1510922") {
-  if (Sys.info()["sysname"] == "Darwin") {
-    datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-  if (Sys.info()["sysname"] == "Windows") {
-    datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-}
 dir.create(paste0(datapath, "out/tables/"), showWarnings = FALSE)
 dir.create(paste0(datapath, "out/analysis/"), showWarnings = FALSE)
            

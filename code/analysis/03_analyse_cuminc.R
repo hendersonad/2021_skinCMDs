@@ -1,17 +1,7 @@
-library(cmprsk)
-library(survminer)
-library(tidyverse)
+source(here::here("code/packages.R"))
+source(here::here("code/file_paths.R"))
 
 # cumulative incidence ----------------------------------------------------
-if (Sys.info()["user"] == "lsh1510922") {
-  if (Sys.info()["sysname"] == "Darwin") {
-    datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-  if (Sys.info()["sysname"] == "Windows") {
-    datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-}
-
 YY <- c("depression", "anxiety")
 XX <- c("psoriasis", "eczema")
 

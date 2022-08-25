@@ -1,7 +1,3 @@
-library(here)
-devtools::install_github("jtextor/dagitty/r")
-library(dagitty)
-
 g1 <- dagitty('
 dag {
 "Age/sex/GP practice" [adjusted,pos="0.179,-1.255"]

@@ -1,26 +1,5 @@
-library(here)
-library(survival)
-library(lmtest)
-library(broom)
-library(biostat3)
-library(multcomp)
-library(rms)
-library(splines)
-library(mgcv)
-library(pROC)
-library(gt)
-library(tidyverse)
-library(tidycat)
-library(Hmisc)
-
-if (Sys.info()["user"] == "lsh1510922") {
-  if (Sys.info()["sysname"] == "Darwin") {
-    datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-  if (Sys.info()["sysname"] == "Windows") {
-    datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-}
+source(here::here("code/packages.R"))
+source(here::here("code/file_paths.R"))
 
 dir.create(file.path(here("out")), showWarnings = FALSE)
 dir.create(file.path(here("out", "predictions")), showWarnings = FALSE)
@@ -30,8 +9,6 @@ XX <- c("psoriasis", "eczema")
 
 exposure <- XX[2]
 outcome <- YY[2]
-#
-
 
 # 0 - little function to load data and summarise as static df -----------------
 load_data_fn <- function(X, Y, fupmax = Inf){

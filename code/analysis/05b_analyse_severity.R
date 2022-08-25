@@ -1,18 +1,6 @@
-library(tidyverse)
-library(here)
-library(magrittr)
-library(gt)
-library(gtsummary)
-library(survival)
+source(here::here("code/packages.R"))
+source(here::here("code/file_paths.R"))
 
-if (Sys.info()["user"] == "lsh1510922") {
-  if (Sys.info()["sysname"] == "Darwin") {
-    datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-  if (Sys.info()["sysname"] == "Windows") {
-    datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
-  }
-}
 source(here("code/programs/fn_getplotdata.R")) # will need this little function later and in other codes get_plot_data
 
 dir.create(file.path(here("out")), showWarnings = FALSE)

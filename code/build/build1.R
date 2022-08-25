@@ -1,27 +1,5 @@
-library(here)
-library(tidyverse)
-library(survival)
-library(survminer)
-library(gt)
-library(gtsummary)
-library(janitor)
-library(flextable)
-library(skimr)
-library(clipr)
-library(KMunicate)
-library(data.table)
-library(arrow)
-library(formattable)
-library(labelled)
-
-if(Sys.info()["user"]=="lsh1510922"){
-	if(Sys.info()["sysname"]=="Darwin"){
-	  datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-	}
-	if(Sys.info()["sysname"]=="Windows"){
-		datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
-	}
-}
+source(here::here("code/packages.R"))
+source(here::here("code/file_paths.R"))
 
 samplingsmall <- F ## set to TRUE if using a small sample of cohort to build code 
 rerunSteroids <- F

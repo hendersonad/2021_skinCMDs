@@ -1,28 +1,5 @@
-library(here)
-library(flextable)
-library(gt)
-library(gtsummary)
-library(janitor)
-library(timetk)
-library(skimr)
-library(glue)
-library(gridExtra)
-library(tidyverse)
-library(ggtext)
-library(ggpubr)
-library(cowplot)
-library(patchwork)
-
-
-if(Sys.info()["user"]=="lsh1510922"){
-	if(Sys.info()["sysname"]=="Darwin"){
-		datapath <- "/Volumes/EHR Group/GPRD_GOLD/Ali/2021_skinepiextract/"
-	}
-	if(Sys.info()["sysname"]=="Windows"){
-		datapath <- "Z:/GPRD_GOLD/Ali/2021_skinepiextract/"
-	}
-}
-
+source(here::here("code/packages.R"))
+source(here::here("code/file_paths.R"))
 exposure <- "eczema"
 ABBRVexp <- str_sub(exposure,1 ,3)
 
