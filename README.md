@@ -3,6 +3,8 @@ Alasdair D Henderson, Elizabeth Adesanya, Amy Mulick, Julian Matthewman, Nhung V
 
 Publication link -> to be added
 
+[![DOI](https://zenodo.org/badge/463215430.svg)](https://zenodo.org/badge/latestdoi/463215430)
+
 ## code
 All code to build the cohorts of people with/without eczema or psoriasis and analyse for incidence of anxiety/depression
 
