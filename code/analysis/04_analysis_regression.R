@@ -105,19 +105,11 @@ for (exposure in XX) {
 		
 		# Severity ----------------------------------------------------------------
 		.dib("Running model 4 (severity)")
-		if (ABBRVexp == "ecz") {
 			mod4 <-
 				coxph(
-					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + sleep + gc90days + strata(setid),
+					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + strata(setid),
 					data = df_model
 				) 
-		} else if (ABBRVexp == "pso") {
-			mod4 <-
-				coxph(
-					Surv(t, out) ~ severity + carstairs + cal_period + comorbid + cci + bmi_cat + alc + smokstatus + strata(setid),
-					data = df_model
-				) 
-		}
 		
 		# Interaction -------------------------------------------------------------
 		.dib("Running model 5 (interaction age)")
