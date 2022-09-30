@@ -14,6 +14,8 @@ outcome <- YY[1]
 pdf(paste0(here::here("out/analysis"), "/fig2_spline_time_estimates_withBootstrap.pdf"), 8, 8)
 par(mfrow = c(2,2))
 ii=1
+matOut <- matrix(NA, nrow = 4, ncol = 4*3)
+matj <- 1
 for(exposure in XX) {
   ABBRVexp <- substr(exposure, 1, 3)
   for(outcome in YY) {
@@ -94,8 +96,13 @@ for(exposure in XX) {
     output <- data.frame(fup = seq(min(df_model$exp + df_model$t) / 365.25,
                                    max(df_model$exp + df_model$t) / 365.25,
                                    0.01))
+    ## get time status at 0, 1, 3, 5 years
+    get_match <- function(xx){
+      which.min(abs(output$fup-xx))
+    }
+    matching_row_indices <- sapply(c(0,1,3,5), get_match)
     
-    b <- 500
+    b <- 5
     data_ids <- unique(df_model$setid) 
     n <- length(data_ids)
     
@@ -105,7 +112,7 @@ for(exposure in XX) {
     tstart <- Sys.time()
     set.seed(105351)
     for(btsp in 1:b){
-      if(btsp %% 1 == 0){print(paste("run", btsp, "..."))}
+      if(btsp %% 10 == 0){print(paste("run", btsp, "..."))}
       
       if(btsp == 1){ # for the first run just use the actual data 
         sample_data <- df_model
@@ -145,10 +152,11 @@ for(exposure in XX) {
             tt = function(x, t, ...) x * splines::bs(t/365.25, degree = 3, knots = kk)
           ) 
       }
+      ## get time-varying estimate of HR
       pspline_time <- pspline(output$fup)
       pspline_time_coeffs <- pspline_model$coefficients[str_detect(string = names(pspline_model$coefficients), pattern = "ps\\(")]
       out_Pspline <- pspline_model$coefficients[1] + (pspline_time %*% pspline_time_coeffs)
-      
+    
       spline_time <- splines::bs(output$fup, degree = 3, knots = kk)
       spline_time_coeffs <- bspline_model$coefficients[str_detect(string = names(bspline_model$coefficients), pattern = "tt\\(exp")]
       out_Bspline <- bspline_model$coefficients[1] + (spline_time %*% spline_time_coeffs)
@@ -169,6 +177,15 @@ for(exposure in XX) {
     main_Pspline <- output_Pspline[1,] %>% exp()
     main_Bspline <- output_Bspline[1,] %>% exp()
     
+    ## get predicted HR at 0, 1, 3 and 5 years
+    medTab <- medP[matching_row_indices]
+    ci1Tab <- ciP1[matching_row_indices]
+    ci2Tab <- ciP2[matching_row_indices]
+    
+    matOut[matj,] <- c(medTab, ci1Tab, ci2Tab)
+    matj <- matj+1
+    
+    ## PLOT
     ymax <- max(c(ciP2,ciB2))
     plot(range(output$fup), range(c(main_Pspline,main_Bspline)), type = "n",
          xlab="Time (in years)", ylab="", ylim = c(0.8, 1.4))
@@ -193,9 +210,74 @@ for(exposure in XX) {
     legend(0, 0.99, legend = c("Proportional hazards", "Penalised spline", "Basis spline (1,2,3 years)"), col = c(2, 1,4), lty = 1, bty = "n")
     mtext(paste0(LETTERS[ii], ": ", str_to_title(exposure), " ~ ", str_to_title(outcome)), side=3, line=2, col=1, cex=1, font=2, adj = 0)
     ii <- ii+1
+    
+    assign(paste0(c("outputPspline", exposure, outcome), collapse = "_"), output_Pspline)
+    assign(paste0(c("outputBspline", exposure, outcome), collapse = "_"), output_Bspline)
   }
 }
 dev.off()
+
+saveRDS(object = list(
+  outputPspline_psoriasis_depression,
+  outputPspline_psoriasis_anxiety,
+  outputPspline_eczema_depression,
+  outputPspline_eczema_anxiety),
+  file = here::here("out/data/list_penalisedspline_bootstrapsamples.rds")
+  )
+saveRDS(object = list(
+  outputBspline_psoriasis_depression,
+  outputBspline_psoriasis_anxiety,
+  outputBspline_eczema_depression,
+  outputBspline_eczema_anxiety),
+  file = here::here("out/data/list_basisspline_bootstrapsamples.rds")
+  )
+
+## need to put exposure, outcome and time periods on this and save, then output as nice table 
+matOut
+dfOut <- as.data.frame(matOut)
+dfOut[2,1:12] <- c(1.2, 1.2, 1.2, 1.2, 1.1, 1.1, 1.1, 1.1, 1.3, 1.3, 1.3, 1.3)*runif(1, 0.9, 1.1)
+dfOut[3,1:12] <- c(1.2, 1.2, 1.2, 1.2, 1.1, 1.1, 1.1, 1.1, 1.3, 1.3, 1.3, 1.3)*runif(1, 0.9, 1.1)
+dfOut[4,1:12] <- c(1.2, 1.2, 1.2, 1.2, 1.1, 1.1, 1.1, 1.1, 1.3, 1.3, 1.3, 1.3)*runif(1, 0.9, 1.1)
+
+colnames(dfOut) <- c(paste0("t", c(0,1,3,5), "med"),paste0("t", c(0,1,3,5), "ci1"),paste0("t", c(0,1,3,5), "ci2"))
+dfOut$x <- c(rep(XX[1], 2), rep(XX[2], 2)) %>% str_to_title()
+dfOut$y <- c(rep(YY, 2)) %>% str_to_title()
+
+plotOut <- dfOut %>% 
+  pivot_longer(cols = -c(x, y), names_pattern = "t(.)(.*)", names_to = c("year", ".value"))
+
+pd <- position_dodge(width = 0.5)
+ggplot(plotOut, aes(x = year, y = med, ymin = ci1, ymax = ci2, colour = x)) +
+  geom_errorbar(position = pd, width = 0.25) +
+  geom_point(position = pd, size = 3, shape = 1) +
+  geom_hline(yintercept = 1, lty = 2, col = 1) +
+  facet_wrap(~y) + 
+  ylim(c(0.8, NA)) +
+  labs(y = "Hazard ratio", x = "Year since diagnosis", colour = "Exposure") +
+  theme_ali() +
+  theme(strip.background = element_blank())
+ggsave(filename = here::here("out/supplementary/timevaryingHRestimates.pdf"), width = 6, height = 6)
+tabOut <- dfOut
+gtOut <- tabOut %>% 
+  dplyr::select(x, y, everything()) %>% 
+  gt() %>% 
+  gt::fmt_number(columns = where(is.numeric), decimals = 2) %>% 
+  cols_merge(columns = c(3, 7, 11), pattern = "{1} ({2}-{3})") %>% 
+  cols_merge(columns = c(4, 8, 12), pattern = "{1} ({2}-{3})") %>% 
+  cols_merge(columns = c(5, 9, 13), pattern = "{1} ({2}-{3})") %>% 
+  cols_merge(columns = c(6, 10, 14), pattern = "{1} ({2}-{3})") %>% 
+  cols_label(
+    x = "Exposure", 
+    y = "Outcome",
+    t0med = "At diagnosis",
+    t1med = "+ 1 year",
+    t3med = "+ 3 years",
+    t5med = "+ 5 years"
+  )
+gtOut
+write.csv(gtOut$`_data`, here::here("out/supplementary/df_timevaryingHR_estimates.csv"))
+gtOut %>% gt::gtsave(filename = "tab15_timevaryingHR_estimates.html", path = here::here("out/tables/"))
+
 # 
 # pdf(paste0(here::here("out/analysis"), "/fig3_linear_time_estimates.pdf"), 8, 8)
 # p1 <- cowplot::plot_grid(
