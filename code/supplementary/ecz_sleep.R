@@ -6,7 +6,9 @@ ABBRVexp <- str_sub(exposure,1 ,3)
 .dib(exposure)
 
 cohort <- haven::read_dta(paste0(datapath, "out/getmatchedcohort-", exposure, "-main-mhealth.dta"))
+patient <- haven::read_dta(paste0(datapath, "in/Patient_extract_", ABBRVexp, "_extract3_1.dta"))
 severity <- haven::read_dta(paste0(datapath, "out/variables-ecz-severity.dta"))
+eczema_dates <- haven::read_dta(paste0(datapath, "out/eczemaExposed.dta"))
 
 anxiety_cohort <- readRDS(paste0(datapath, "out/df_modelecz_anxiety.rds"))
 depression_cohort <- readRDS(paste0(datapath, "out/df_modelecz_depression.rds"))
@@ -17,7 +19,44 @@ ecz_sleep_all <- haven::read_dta(paste0(datapath, "out/variables-ecz-sleep-all.d
 
 # Get unique events in everything sleep -----------------------------------
 glimpse(ecz_sleep_everything)
-ecz_sleep_unique <- ecz_sleep_everything %>% 
+
+## censor sleep under 5 years if not after eczema
+ecz_sleep_ages <- ecz_sleep_everything %>% 
+  left_join(patient, by = "patid") %>% 
+  left_join(eczema_dates, by = "patid") %>% 
+  mutate(age_sleep = year(eventdate) - realyob,
+         age_eczema = year(indexdate) - realyob) 
+ecz_sleep_ages$age_sleep %>% hist()
+ecz_sleep_ages$age_eczema %>% hist()
+
+ecz_sleep_ages$cause <- ecz_sleep_ages$ingredient
+ecz_sleep_ages$cause[ecz_sleep_ages$src == 1] <- ecz_sleep_ages$readterm[ecz_sleep_ages$src == 1]
+ecz_sleep_ages$cause[ecz_sleep_ages$cause == ""] <- ecz_sleep_ages$bnftext[ecz_sleep_ages$cause == ""]
+ecz_sleep_ages$eczema <- factor(!is.na(ecz_sleep_ages$eczemadate), labels = c("Unexposed", "Eczema"))
+
+ecz_sleep_plot_causes <- ecz_sleep_ages %>% 
+  group_by(cause) %>% 
+  summarise(n = n()) %>% 
+  filter(n > 100)
+
+ecz_sleep_plot <- ecz_sleep_ages %>% 
+  filter(cause %in% ecz_sleep_plot_causes$cause) %>% 
+  mutate(cause_plot = str_remove(cause, "\\[d\\]|c/o - |\\[x\\]"))
+
+## replace any mention of insomnia (including nos, or possible) with "insomnia"
+ecz_sleep_plot$cause_plot[str_detect(ecz_sleep_plot$cause_plot, ".?insomnia.?")] <- "insomnia"
+ecz_sleep_plot$cause_plot[str_length(ecz_sleep_plot$cause_plot)>26] <- paste0(str_sub(ecz_sleep_plot$cause_plot[str_length(ecz_sleep_plot$cause_plot)>26], 1, 26), "...")
+
+pdf(here::here("out/supplementary/sleep_code_ages.pdf"), 18, 10)
+ggplot(ecz_sleep_plot, aes(x = age_sleep, group = eczema, fill = eczema, colour = eczema)) +
+  geom_histogram(bins = 50, alpha = 0.4) + 
+  facet_wrap(~cause_plot, scales = "free") +
+  geom_vline(xintercept = 18, lty = 2, col = 2) +
+  labs(x = "Age of sleep problems code") +
+  theme_ali()
+dev.off()
+
+ecz_sleep_unique <- ecz_sleep_ages %>% 
   group_by(patid, eventdate, sysdate, prodcode, medcode) %>% 
   slice(1)
 
