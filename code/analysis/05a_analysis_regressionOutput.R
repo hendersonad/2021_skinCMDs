@@ -304,7 +304,7 @@ dev.off()
 # add HR estimates to plot -------------------------
 pdf(here::here("out/analysis/forest_plot1_v2.pdf"), width = 6.5, height = 4.5)
 pd <- position_dodge(width = 0.75)
-p1 <- ggplot(plot_df, aes(y = model, x = hr, xmin = ciL, xmax = ciU, group = exposure, colour = exposure, alpha = a, label = text_to_plot)) +
+p1 <- ggplot(plot_df, aes(y = model, x = hr, xmin = ciL, xmax = ciU, group = outcome, colour = outcome, alpha = a, label = text_to_plot)) +
   geom_point(position = pd, size = 3, shape = 1) +
   geom_errorbar(position = pd, width = 0.25) +
   geom_vline(xintercept = 1, lty=2, col = alpha(1,0.4)) +  
@@ -312,19 +312,23 @@ p1 <- ggplot(plot_df, aes(y = model, x = hr, xmin = ciL, xmax = ciU, group = exp
             alpha = 1,
             position = pd,
             size = 3.6,
-            #colour = 1,
             show.legend = FALSE, 
             hjust = 0) +
   scale_x_log10(breaks=seq(0.5,2,0.1),limits=c(0.8,1.35)) +
   scale_y_discrete(limits=rev) +
-  facet_wrap(~outcome, ncol = 1) +
+  facet_grid(rows = vars(exposure), drop = TRUE, space = "free", scales = "free") +
   guides(colour = guide_legend("Exposure"), 
          alpha = "none") +
-  labs(y = "Hazard ratio", x = "Model", caption = "(n) HR [95% CI]") +
+  labs(x = "Hazard ratio (95% CI)", y = "Model (level of adjustment)", caption = "(n) HR [95% CI]") +
   scale_alpha_identity() +
   theme_ali() +
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
 print(p1)
+dev.off()
+
+## save as jpeg for Word compatibility
+jpeg(here::here("out/analysis/forest_plot1_v2.jpg"), width = 6.5, height = 4.5, units = "in", res = 800)
+  print(p1)
 dev.off()

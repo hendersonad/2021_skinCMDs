@@ -378,10 +378,15 @@ p1 <- ggplot(plot_df, aes(y = characteristic, x = estimate, xmin = conf.low, xma
   facet_grid(rows = vars(exposure), drop = TRUE, space = "free", scales = "free") +
   guides(colour = guide_legend("Outcome"), 
          alpha = "none") +
-  labs(y = "Hazard ratio", x = "Exposure severity", caption = "(n) HR [95% CI]") +
+  labs(x = "Hazard ratio (95% CI)", y = "Exposure severity", caption = "(n) HR [95% CI]") +
   theme_ali() +
   theme(strip.background = element_blank(),
         strip.text = element_text(face = "bold"),
         legend.position = "bottom")
 print(p1)
+dev.off()
+
+## save as jpeg for Word compatibility
+jpeg(here::here("out/analysis/forest_plot2_severity_v2.jpg"), width = 7.5, height = 4.5, units = "in", res = 800)
+  print(p1)
 dev.off()
