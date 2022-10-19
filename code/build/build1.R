@@ -3,7 +3,7 @@ source(here::here("code/file_paths.R"))
 
 samplingsmall <- F ## set to TRUE if using a small sample of cohort to build code 
 rerunSteroids <- F
-XX <- c("psoriasis", "eczema")
+XX <- c("psoriasis", "eczema")[1]
 export_datasets <- TRUE
 
 for(exposure in XX){
@@ -112,7 +112,7 @@ for(exposure in XX){
 		}
 		
 		# censor outcome ----------------------------------------------------------
-		var_dep <- var_depressionAll %>%
+		var_dep <- var_depressionDef %>%
 		  rename(depdate = eventdate) %>%
 		  left_join(var_depressionCensor, by = "patid") %>%
 		  rename(censorDepDate = eventdate) %>%
@@ -128,7 +128,7 @@ for(exposure in XX){
 		depression_censoring <- var_dep %>% 
 		  filter(censorDepDate == eventdate)
 		
-		var_anx <- var_anxietyAll %>%
+		var_anx <- var_anxietyDef %>%
 		  rename(anxdate = eventdate) %>%
 		  left_join(var_anxietyCensor, by = "patid") %>%
 		  rename(censorAnxDate = eventdate) %>%
@@ -613,9 +613,10 @@ for(exposure in XX){
     df_model$smokstatus_original <- df_model$smokstatus
     df_model$smokstatus <- df_model$smokstatus_nomiss
     
-    saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, ".rds"))
+    saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_definitecodes.rds"))
   }
 }
+
 
 # Filter on 2006 to increase ethnicity data -----------------------------------------------------
 for(exposure in XX){

@@ -1,7 +1,7 @@
 source(here::here("code/packages.R"))
 source(here::here("code/file_paths.R"))
 
-XX <- c("psoriasis", "eczema")
+XX <- c("psoriasis", "eczema")[1]
 #exposure <- "eczema"
 
 for (exposure in XX) {
@@ -15,9 +15,9 @@ for (exposure in XX) {
       readRDS(paste0(datapath, "out/df_modelecz_depression.rds"))
   } else if (exposure == "psoriasis") {
     df_anx_split <-
-      readRDS(paste0(datapath, "out/df_modelpso_anxiety.rds"))
+      readRDS(paste0(datapath, "out/df_modelpso_anxiety_definitecodes.rds"))
     df_dep_split <-
-      readRDS(paste0(datapath, "out/df_modelpso_depression.rds"))
+      readRDS(paste0(datapath, "out/df_modelpso_depression_definitecodes.rds"))
   }
   
   # psoriasis
@@ -108,9 +108,10 @@ for (exposure in XX) {
   table1 %>%
     as_gt() %>%
     gt::gtsave(
-      filename = paste0("tab1_", ABBRVexp, ".html"),
+      filename = paste0("tab1_", ABBRVexp, "_definitecodes.html"),
       path = here::here("out/tables")
     )
+}
   
   # Build table 2 - any exposure during follow up ---------------------------
   build_followup <- function(df_in) {
