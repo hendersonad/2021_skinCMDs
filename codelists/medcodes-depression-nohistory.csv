@@ -1,0 +1,396 @@
+readcode,medcode,readterm,definitedepression,possibledepression,censoring,incident
+16ZB100,101422,feeling low or worried,0,1,0,1
+1B17.00,1996,depressed,1,0,0,1
+1B17.11,4824,c/o - feeling depressed,1,0,0,1
+1B17.12,2930,c/o - feeling unhappy,0,1,0,1
+1B1I100,22264,c/o tearfulness,0,1,0,1
+1B1J.11,3502,emotional upset,0,1,0,1
+1B1U.00,9796,symptoms of depression,1,0,0,1
+1B1U.11,10438,depressive symptoms,1,0,0,1
+1BP..00,30740,loss of interest,0,1,0,1
+1BP0.00,59869,loss of interest in previously enjoyable activity,0,1,0,1
+1BQ..00,25435,loss of capacity for enjoyment,0,1,0,1
+1BT..00,10015,depressed mood,1,0,0,1
+1BT..11,8928,low mood,1,0,0,1
+1BT..12,26028,sad mood,1,0,0,1
+1BU..00,53148,loss of hope for the future,0,1,0,1
+1JJ..00,100977,suspected depression,1,0,0,1
+1S40.00,48349,dysphoric mood,1,0,0,1
+212S.00,19439,depression resolved,1,0,0,1
+2257.00,1908,o/e - depressed,1,0,0,1
+6658000,108741,antidepressant drug treatment changed,1,0,0,1
+6659000,102632,antidepressant drug treatment started,1,0,0,1
+665A000,100179,antidepressant drug treatment stopped,1,0,0,1
+8BK0.00,44848,depression management programme,1,0,0,1
+8CAa.00,30483,patient given advice about management of depression,1,0,0,1
+8HHq.00,32841,referral for guided self-help for depression,1,0,0,1
+8IH5200,112682,referral for guided self-help for depression declined,1,0,0,1
+9H90.00,12399,depression annual review,1,0,0,1
+9H91.00,12122,depression medication review,1,0,0,1
+9H92.00,30405,depression interim review,1,0,0,1
+9HA0.00,42931,on depression register,1,0,0,1
+9ON..11,58610,stress clinic administration,0,1,0,1
+9ON1.00,63249,attends stress monitoring,0,1,0,1
+9ON4.00,35648,stress monitoring 1st letter,0,1,0,1
+9ON6.00,106542,stress monitoring 3rd letter,0,1,0,1
+9ON8.00,96503,stress monitoring phone invite,0,1,0,1
+9ONA.00,37248,stress monitoring check done,0,1,0,1
+9Ov..00,51258,depression monitoring administration,1,0,0,1
+9Ov0.00,71009,depression monitoring first letter,1,0,0,1
+9Ov1.00,72966,depression monitoring second letter,1,0,0,1
+9Ov2.00,91105,depression monitoring third letter,1,0,0,1
+9Ov3.00,88644,depression monitoring verbal invite,1,0,0,1
+9Ov4.00,85852,depression monitoring telephone invite,1,0,0,1
+9hC..00,48970,exception reporting: depression quality indicators,1,0,0,1
+9hC0.00,28970,excepted from depression quality indicators: patient unsuita,1,0,0,1
+9hC1.00,43239,excepted from depression quality indicators: informed dissen,1,0,0,1
+9k4..00,30583,depression - enhanced services administration,1,0,0,1
+9k40.00,65435,depression - enhanced service completed,1,0,0,1
+9kQ..00,96995,on full dose long term treatment depression - enh serv admin,1,0,0,1
+E11..12,2560,depressive psychoses,1,0,0,1
+E112.00,10610,single major depressive episode,1,0,0,1
+E112.11,5879,agitated depression,1,0,0,1
+E112.12,6546,endogenous depression first episode,1,0,0,1
+E112.13,6950,endogenous depression first episode,1,0,0,1
+E112.14,595,endogenous depression,1,0,0,1
+E112000,34390,"single major depressive episode, unspecified",1,0,0,1
+E112100,16506,"single major depressive episode, mild",1,0,0,1
+E112200,15155,"single major depressive episode, moderate",1,0,0,1
+E112300,15219,"single major depressive episode, severe, without psychosis",1,0,0,1
+E112400,32159,"single major depressive episode, severe, with psychosis",1,0,0,1
+E112500,43324,"single major depressive episode, partial or unspec remission",1,0,0,1
+E112600,57409,"single major depressive episode, in full remission",1,0,0,1
+E112z00,7011,single major depressive episode nos,1,0,0,1
+E113.00,15099,recurrent major depressive episode,1,0,0,1
+E113.11,6932,endogenous depression - recurrent,1,0,0,1
+E113000,35671,"recurrent major depressive episodes, unspecified",1,0,0,1
+E113100,29342,"recurrent major depressive episodes, mild",1,0,0,1
+E113200,14709,"recurrent major depressive episodes, moderate",1,0,0,1
+E113300,25697,"recurrent major depressive episodes, severe, no psychosis",1,0,0,1
+E113400,24171,"recurrent major depressive episodes, severe, with psychosis",1,0,0,1
+E113500,56273,"recurrent major depressive episodes,partial/unspec remission",1,0,0,1
+E113600,55384,"recurrent major depressive episodes, in full remission",1,0,0,1
+E113700,6482,recurrent depression,1,0,0,1
+E113z00,25563,recurrent major depressive episode nos,1,0,0,1
+E118.00,10825,seasonal affective disorder,1,0,0,1
+E11y200,27491,atypical depressive disorder,1,0,0,1
+E11z.00,41992,other and unspecified affective psychoses,1,0,0,1
+E11z100,3489,rebound mood swings,1,0,0,1
+E11z200,9183,masked depression,1,0,0,1
+E130.00,8478,reactive depressive psychosis,1,0,0,1
+E130.11,17770,psychotic reactive depression,1,0,0,1
+E135.00,1055,agitated depression,1,0,0,1
+E200300,655,anxiety with depression,1,0,0,1
+E204.00,1131,neurotic depression reactive type,1,0,0,1
+E211200,10455,depressive personality disorder,1,0,0,1
+E290.00,1533,brief depressive reaction,1,0,0,1
+E290z00,36246,brief depressive reaction nos,1,0,0,1
+E291.00,16632,prolonged depressive reaction,1,0,0,1
+E2B..00,324,depressive disorder nec,1,0,0,1
+E2B1.00,4323,chronic depression,1,0,0,1
+Eu3..00,5726,[x]mood - affective disorders,1,0,0,1
+Eu32.00,4639,[x]depressive episode,1,0,0,1
+Eu32.11,9055,[x]single episode of depressive reaction,1,0,0,1
+Eu32.12,18510,[x]single episode of psychogenic depression,1,0,0,1
+Eu32.13,7604,[x]single episode of reactive depression,1,0,0,1
+Eu32000,11717,[x]mild depressive episode,1,0,0,1
+Eu32100,9211,[x]moderate depressive episode,1,0,0,1
+Eu32200,9667,[x]severe depressive episode without psychotic symptoms,1,0,0,1
+Eu32211,41989,[x]single episode agitated depressn w'out psychotic symptoms,1,0,0,1
+Eu32212,22806,[x]single episode major depression w'out psychotic symptoms,1,0,0,1
+Eu32213,59386,[x]single episode vital depression w'out psychotic symptoms,1,0,0,1
+Eu32300,12099,[x]severe depressive episode with psychotic symptoms,1,0,0,1
+Eu32311,24117,[x]single episode of major depression and psychotic symptoms,1,0,0,1
+Eu32312,52678,[x]single episode of psychogenic depressive psychosis,1,0,0,1
+Eu32313,24112,[x]single episode of psychotic depression,1,0,0,1
+Eu32314,28863,[x]single episode of reactive depressive psychosis,1,0,0,1
+Eu32400,10667,[x]mild depression,1,0,0,1
+Eu32500,98346,"[x]major depression, mild",1,0,0,1
+Eu32600,98252,"[x]major depression, moderately severe",1,0,0,1
+Eu32700,98414,"[x]major depression, severe without psychotic symptoms",1,0,0,1
+Eu32800,98417,"[x]major depression, severe with psychotic symptoms",1,0,0,1
+Eu32900,101054,"[x]single major depr ep, severe with psych, psych in remiss",1,0,0,1
+Eu32A00,101153,"[x]recurr major depr ep, severe with psych, psych in remiss",1,0,0,1
+Eu32y00,6854,[x]other depressive episodes,1,0,0,1
+Eu32y11,10720,[x]atypical depression,1,0,0,1
+Eu32y12,56609,[x]single episode of masked depression nos,1,0,0,1
+Eu32z00,2970,"[x]depressive episode, unspecified",1,0,0,1
+Eu32z11,543,[x]depression nos,1,0,0,1
+Eu32z12,3291,[x]depressive disorder nos,1,0,0,1
+Eu32z13,28248,[x]prolonged single episode of reactive depression,1,0,0,1
+Eu32z14,5987,[x] reactive depression nos,1,0,0,1
+Eu33.00,3292,[x]recurrent depressive disorder,1,0,0,1
+Eu33.11,8851,[x]recurrent episodes of depressive reaction,1,0,0,1
+Eu33.12,19696,[x]recurrent episodes of psychogenic depression,1,0,0,1
+Eu33.13,8902,[x]recurrent episodes of reactive depression,1,0,0,1
+Eu33.14,28756,[x]seasonal depressive disorder,1,0,0,1
+Eu33.15,8826,[x]sad - seasonal affective disorder,1,0,0,1
+Eu33000,29784,"[x]recurrent depressive disorder, current episode mild",1,0,0,1
+Eu33100,29520,"[x]recurrent depressive disorder, current episode moderate",1,0,0,1
+Eu33200,33469,[x]recurr depress disorder cur epi severe without psyc sympt,1,0,0,1
+Eu33211,11329,[x]endogenous depression without psychotic symptoms,1,0,0,1
+Eu33212,11252,"[x]major depression, recurrent without psychotic symptoms",1,0,0,1
+Eu33213,29451,"[x]manic-depress psychosis,depressd,no psychotic symptoms",1,0,0,1
+Eu33214,73991,"[x]vital depression, recurrent without psychotic symptoms",1,0,0,1
+Eu33300,47009,[x]recurrent depress disorder cur epi severe with psyc symp,1,0,0,1
+Eu33311,23731,[x]endogenous depression with psychotic symptoms,1,0,0,1
+Eu33313,32941,[x]recurr severe episodes/major depression+psychotic symptom,1,0,0,1
+Eu33314,31757,[x]recurr severe episodes/psychogenic depressive psychosis,1,0,0,1
+Eu33315,16861,[x]recurrent severe episodes of psychotic depression,1,0,0,1
+Eu33316,37764,[x]recurrent severe episodes/reactive depressive psychosis,1,0,0,1
+Eu33400,22116,"[x]recurrent depressive disorder, currently in remission",1,0,0,1
+Eu33y00,47731,[x]other recurrent depressive disorders,1,0,0,1
+Eu33z00,44300,"[x]recurrent depressive disorder, unspecified",1,0,0,1
+Eu33z11,36616,[x]monopolar depression nos,1,0,0,1
+Eu34.00,42857,[x]persistent mood affective disorders,1,0,0,1
+Eu34100,7953,[x]dysthymia,1,0,0,1
+Eu34111,8584,[x]depressive neurosis,1,0,0,1
+Eu34112,10290,[x]depressive personality disorder,1,0,0,1
+Eu34113,7737,[x]neurotic depression,1,0,0,1
+Eu34114,15220,[x]persistant anxiety depression,1,0,0,1
+Eu34y00,50243,[x]other persistent mood affective disorders,1,0,0,1
+Eu34z00,39767,"[x]persistent mood affective disorder, unspecified",1,0,0,1
+Eu3y.00,28008,[x]other mood affective disorders,1,0,0,1
+Eu3y000,50998,[x]other single mood affective disorders,1,0,0,1
+Eu3y100,29921,[x]other recurrent mood affective disorders,1,0,0,1
+Eu3y111,19054,[x]recurrent brief depressive episodes,1,0,0,1
+Eu3yy00,29579,[x]other specified mood affective disorders,1,0,0,1
+Eu3z.00,37090,[x]unspecified mood affective disorder,1,0,0,1
+Eu41200,11913,[x]mixed anxiety and depressive disorder,1,0,0,1
+Eu41211,7749,[x]mild anxiety depression,1,0,0,1
+R00z600,22687,[d]unhappiness,0,1,0,1
+212T.00,19345,"psychosis, schizophrenia + bipolar affective disord resolved",0,0,1,0
+212V.00,85102,bipolar affective disorder resolved,0,0,1,0
+212W.00,88275,schizophrenia resolved,0,0,1,0
+212X.00,85972,psychosis resolved,0,0,1,0
+285..11,4390,"psychotic condition, insight present",0,0,1,0
+286..11,22644,poor insight into psychotic condition,0,0,1,0
+8G13100,113612,cbtp - cognitive behavioural therapy for psychosis,0,0,1,0
+8HHs.00,26178,referral to psychosis early intervention service,0,0,1,0
+E1...00,15958,non-organic psychoses,0,0,1,0
+E10..00,854,schizophrenic disorders,0,0,1,0
+E100.00,32222,simple schizophrenia,0,0,1,0
+E100.11,73295,schizophrenia simplex,0,0,1,0
+E100000,15733,unspecified schizophrenia,0,0,1,0
+E100100,23616,subchronic schizophrenia,0,0,1,0
+E100200,3984,chronic schizophrenic,0,0,1,0
+E100300,57666,acute exacerbation of subchronic schizophrenia,0,0,1,0
+E100400,44498,acute exacerbation of chronic schizophrenia,0,0,1,0
+E100500,58687,schizophrenia in remission,0,0,1,0
+E100z00,53625,simple schizophrenia nos,0,0,1,0
+E101.00,30619,hebephrenic schizophrenia,0,0,1,0
+E101000,66506,unspecified hebephrenic schizophrenia,0,0,1,0
+E101200,113781,chronic hebephrenic schizophrenia,0,0,1,0
+E101400,97919,acute exacerbation of chronic hebephrenic schizophrenia,0,0,1,0
+E101500,67768,hebephrenic schizophrenia in remission,0,0,1,0
+E101z00,48054,hebephrenic schizophrenia nos,0,0,1,0
+E102.00,25546,catatonic schizophrenia,0,0,1,0
+E102000,58716,unspecified catatonic schizophrenia,0,0,1,0
+E102100,99199,subchronic catatonic schizophrenia,0,0,1,0
+E102200,113529,chronic catatonic schizophrenia,0,0,1,0
+E102400,107222,acute exacerbation of chronic catatonic schizophrenia,0,0,1,0
+E102500,102427,catatonic schizophrenia in remission,0,0,1,0
+E102z00,63867,catatonic schizophrenia nos,0,0,1,0
+E103.00,1494,paranoid schizophrenia,0,0,1,0
+E103000,33383,unspecified paranoid schizophrenia,0,0,1,0
+E103100,104760,subchronic paranoid schizophrenia,0,0,1,0
+E103200,31362,chronic paranoid schizophrenia,0,0,1,0
+E103300,51322,acute exacerbation of subchronic paranoid schizophrenia,0,0,1,0
+E103400,53032,acute exacerbation of chronic paranoid schizophrenia,0,0,1,0
+E103500,36172,paranoid schizophrenia in remission,0,0,1,0
+E103z00,9281,paranoid schizophrenia nos,0,0,1,0
+E104.00,576,acute schizophrenic episode,0,0,1,0
+E104.11,93167,oneirophrenia,0,0,1,0
+E105.00,66410,latent schizophrenia,0,0,1,0
+E105000,102311,unspecified latent schizophrenia,0,0,1,0
+E105200,94299,chronic latent schizophrenia,0,0,1,0
+E105400,114206,acute exacerbation of chronic latent schizophrenia,0,0,1,0
+E105500,96883,latent schizophrenia in remission,0,0,1,0
+E105z00,102446,latent schizophrenia nos,0,0,1,0
+E106.00,38063,residual schizophrenia,0,0,1,0
+E107.00,2117,schizo-affective schizophrenia,0,0,1,0
+E107.11,99000,cyclic schizophrenia,0,0,1,0
+E107000,58862,unspecified schizo-affective schizophrenia,0,0,1,0
+E107100,61098,subchronic schizo-affective schizophrenia,0,0,1,0
+E107200,43800,chronic schizo-affective schizophrenia,0,0,1,0
+E107300,58866,acute exacerbation subchronic schizo-affective schizophrenia,0,0,1,0
+E107400,63478,acute exacerbation of chronic schizo-affective schizophrenia,0,0,1,0
+E107500,56438,schizo-affective schizophrenia in remission,0,0,1,0
+E107z00,10575,schizo-affective schizophrenia nos,0,0,1,0
+E10y.00,39062,other schizophrenia,0,0,1,0
+E10y.11,92994,cenesthopathic schizophrenia,0,0,1,0
+E10y000,33338,atypical schizophrenia,0,0,1,0
+E10y100,99070,coenesthopathic schizophrenia,0,0,1,0
+E10yz00,49761,other schizophrenia nos,0,0,1,0
+E10z.00,8407,schizophrenia nos,0,0,1,0
+E11..11,8567,bipolar psychoses,0,0,1,0
+E11..13,26161,manic psychoses,0,0,1,0
+E110.00,37070,"manic disorder, single episode",0,0,1,0
+E110.11,18909,hypomanic psychoses,0,0,1,0
+E110000,20110,"single manic episode, unspecified",0,0,1,0
+E110100,14728,"single manic episode, mild",0,0,1,0
+E110200,24640,"single manic episode, moderate",0,0,1,0
+E110300,43093,"single manic episode, severe without mention of psychosis",0,0,1,0
+E110400,50218,"single manic episode, severe, with psychosis",0,0,1,0
+E110500,109485,single manic episode in partial or unspecified remission,0,0,1,0
+E110600,70000,single manic episode in full remission,0,0,1,0
+E110z00,36611,"manic disorder, single episode nos",0,0,1,0
+E111.00,26227,recurrent manic episodes,0,0,1,0
+E111000,19967,"recurrent manic episodes, unspecified",0,0,1,0
+E111100,46425,"recurrent manic episodes, mild",0,0,1,0
+E111200,27739,"recurrent manic episodes, moderate",0,0,1,0
+E111300,65811,"recurrent manic episodes, severe without mention psychosis",0,0,1,0
+E111400,32295,"recurrent manic episodes, severe, with psychosis",0,0,1,0
+E111500,58863,"recurrent manic episodes, partial or unspecified remission",0,0,1,0
+E111600,37178,"recurrent manic episodes, in full remission",0,0,1,0
+E111z00,46415,recurrent manic episode nos,0,0,1,0
+E114.00,3702,"bipolar affective disorder, currently manic",0,0,1,0
+E114.11,17385,manic-depressive - now manic,0,0,1,0
+E114000,35738,"bipolar affective disorder, currently manic, unspecified",0,0,1,0
+E114100,36126,"bipolar affective disorder, currently manic, mild",0,0,1,0
+E114200,46434,"bipolar affective disorder, currently manic, moderate",0,0,1,0
+E114300,16347,"bipolar affect disord, currently manic, severe, no psychosis",0,0,1,0
+E114400,55829,"bipolar affect disord, currently manic,severe with psychosis",0,0,1,0
+E114500,59011,"bipolar affect disord,currently manic, part/unspec remission",0,0,1,0
+E114600,63784,"bipolar affective disorder, currently manic, full remission",0,0,1,0
+E114z00,57605,"bipolar affective disorder, currently manic, nos",0,0,1,0
+E115.00,4677,"bipolar affective disorder, currently depressed",0,0,1,0
+E115.11,12831,manic-depressive - now depressed,0,0,1,0
+E115000,15923,"bipolar affective disorder, currently depressed, unspecified",0,0,1,0
+E115100,35734,"bipolar affective disorder, currently depressed, mild",0,0,1,0
+E115200,27890,"bipolar affective disorder, currently depressed, moderate",0,0,1,0
+E115300,35607,"bipolar affect disord, now depressed, severe, no psychosis",0,0,1,0
+E115400,63701,"bipolar affect disord, now depressed, severe with psychosis",0,0,1,0
+E115500,72026,"bipolar affect disord, now depressed, part/unspec remission",0,0,1,0
+E115600,57465,"bipolar affective disorder, now depressed, in full remission",0,0,1,0
+E115z00,37296,"bipolar affective disorder, currently depressed, nos",0,0,1,0
+E116.00,31316,mixed bipolar affective disorder,0,0,1,0
+E116000,31535,"mixed bipolar affective disorder, unspecified",0,0,1,0
+E116100,24689,"mixed bipolar affective disorder, mild",0,0,1,0
+E116200,63150,"mixed bipolar affective disorder, moderate",0,0,1,0
+E116300,63284,"mixed bipolar affective disorder, severe, without psychosis",0,0,1,0
+E116400,54195,"mixed bipolar affective disorder, severe, with psychosis",0,0,1,0
+E116500,63651,"mixed bipolar affective disorder, partial/unspec remission",0,0,1,0
+E116600,55064,"mixed bipolar affective disorder, in full remission",0,0,1,0
+E116z00,63583,"mixed bipolar affective disorder, nos",0,0,1,0
+E117.00,14784,unspecified bipolar affective disorder,0,0,1,0
+E117000,49763,"unspecified bipolar affective disorder, unspecified",0,0,1,0
+E117100,63698,"unspecified bipolar affective disorder, mild",0,0,1,0
+E117200,68647,"unspecified bipolar affective disorder, moderate",0,0,1,0
+E117300,73423,"unspecified bipolar affective disorder, severe, no psychosis",0,0,1,0
+E117400,68326,"unspecified bipolar affective disorder,severe with psychosis",0,0,1,0
+E117500,70721,"unspecified bipolar affect disord, partial/unspec remission",0,0,1,0
+E117600,24230,"unspecified bipolar affective disorder, in full remission",0,0,1,0
+E117z00,27986,"unspecified bipolar affective disorder, nos",0,0,1,0
+E11y.00,60178,other and unspecified manic-depressive psychoses,0,0,1,0
+E11y000,11596,unspecified manic-depressive psychoses,0,0,1,0
+E11y100,70925,atypical manic disorder,0,0,1,0
+E11y300,70399,other mixed manic-depressive psychoses,0,0,1,0
+E11yz00,33426,other and unspecified manic-depressive psychoses nos,0,0,1,0
+E11zz00,33425,other affective psychosis nos,0,0,1,0
+E12..00,4261,paranoid states,0,0,1,0
+E120.00,14743,simple paranoid state,0,0,1,0
+E121.00,3890,chronic paranoid psychosis,0,0,1,0
+E121.11,109634,sander's disease,0,0,1,0
+E122.00,14971,paraphrenia,0,0,1,0
+E123.00,62680,shared paranoid disorder,0,0,1,0
+E123.11,50868,folie a deux,0,0,1,0
+E12y.00,31589,other paranoid states,0,0,1,0
+E12y000,66766,paranoia querulans,0,0,1,0
+E12yz00,31455,other paranoid states nos,0,0,1,0
+E12z.00,12771,paranoid psychosis nos,0,0,1,0
+E13..00,31984,other nonorganic psychoses,0,0,1,0
+E13..11,20228,reactive psychoses,0,0,1,0
+E13z.00,14965,nonorganic psychosis nos,0,0,1,0
+E13z.11,3636,psychotic episode nos,0,0,1,0
+E1y..00,16537,other specified non-organic psychoses,0,0,1,0
+E1z..00,22188,non-organic psychosis nos,0,0,1,0
+E212200,61969,schizotypal personality,0,0,1,0
+Eu2..00,17281,"[x]schizophrenia, schizotypal and delusional disorders",0,0,1,0
+Eu20.00,34236,[x]schizophrenia,0,0,1,0
+Eu20000,16764,[x]paranoid schizophrenia,0,0,1,0
+Eu20011,50060,[x]paraphrenic schizophrenia,0,0,1,0
+Eu20100,43405,[x]hebephrenic schizophrenia,0,0,1,0
+Eu20111,53985,[x]disorganised schizophrenia,0,0,1,0
+Eu20200,61501,[x]catatonic schizophrenia,0,0,1,0
+Eu20211,20572,[x]catatonic stupor,0,0,1,0
+Eu20212,64533,[x]schizophrenic catalepsy,0,0,1,0
+Eu20213,35877,[x]schizophrenic catatonia,0,0,1,0
+Eu20214,31493,[x]schizophrenic flexibilatis cerea,0,0,1,0
+Eu20300,60013,[x]undifferentiated schizophrenia,0,0,1,0
+Eu20311,91547,[x]atypical schizophrenia,0,0,1,0
+Eu20400,20785,[x]post-schizophrenic depression,0,0,1,0
+Eu20500,64264,[x]residual schizophrenia,0,0,1,0
+Eu20511,24107,[x]chronic undifferentiated schizophrenia,0,0,1,0
+Eu20600,35848,[x]simple schizophrenia,0,0,1,0
+Eu20y00,49420,[x]other schizophrenia,0,0,1,0
+Eu20y12,94001,[x]schizophreniform disord nos,0,0,1,0
+Eu20y13,18053,[x]schizophrenifrm psychos nos,0,0,1,0
+Eu20z00,34966,"[x]schizophrenia, unspecified",0,0,1,0
+Eu21.00,39316,[x]schizotypal disorder,0,0,1,0
+Eu21.11,91511,[x]latent schizophrenic reaction,0,0,1,0
+Eu21.12,54387,[x]borderline schizophrenia,0,0,1,0
+Eu21.13,64993,[x]latent schizophrenia,0,0,1,0
+Eu21.14,62449,[x]prepsychotic schizophrenia,0,0,1,0
+Eu21.15,40386,[x]prodromal schizophrenia,0,0,1,0
+Eu21.16,49852,[x]pseudoneurotic schizophrenia,0,0,1,0
+Eu21.17,71250,[x]pseudopsychopathic schizophrenia,0,0,1,0
+Eu21.18,26859,[x]schizotypal personality disorder,0,0,1,0
+Eu22.00,28562,[x]persistent delusional disorders,0,0,1,0
+Eu22000,34389,[x]delusional disorder,0,0,1,0
+Eu22011,2113,[x]paranoid psychosis,0,0,1,0
+Eu22100,62405,[x]delusional misidentification syndrome,0,0,1,0
+Eu22y00,66077,[x]other persistent delusional disorders,0,0,1,0
+Eu22z00,49223,"[x]persistent delusional disorder, unspecified",0,0,1,0
+Eu25.00,9422,[x]schizoaffective disorders,0,0,1,0
+Eu25000,33847,"[x]schizoaffective disorder, manic type",0,0,1,0
+Eu25011,16905,"[x]schizoaffective psychosis, manic type",0,0,1,0
+Eu25012,51903,"[x]schizophreniform psychosis, manic type",0,0,1,0
+Eu25100,11055,"[x]schizoaffective disorder, depressive type",0,0,1,0
+Eu25111,35274,"[x]schizoaffective psychosis, depressive type",0,0,1,0
+Eu25112,41022,"[x]schizophreniform psychosis, depressive type",0,0,1,0
+Eu25200,33693,"[x]schizoaffective disorder, mixed type",0,0,1,0
+Eu25211,104763,[x]cyclic schizophrenia,0,0,1,0
+Eu25212,37580,[x]mixed schizophrenic and affective psychosis,0,0,1,0
+Eu25y00,58532,[x]other schizoaffective disorders,0,0,1,0
+Eu25z00,37681,"[x]schizoaffective disorder, unspecified",0,0,1,0
+Eu25z11,33410,[x]schizoaffective psychosis nos,0,0,1,0
+Eu26.00,101987,[x]nonorganic psychosis in remission,0,0,1,0
+Eu2y.00,30985,[x]other nonorganic psychotic disorders,0,0,1,0
+Eu2y.11,31738,[x]chronic hallucinatory psychosis,0,0,1,0
+Eu2z.00,11244,[x]unspecified nonorganic psychosis,0,0,1,0
+Eu2z.11,694,[x]psychosis nos,0,0,1,0
+Eu30.00,12173,[x]manic episode,0,0,1,0
+Eu30.11,9521,"[x]bipolar disorder, single manic episode",0,0,1,0
+Eu30000,2741,[x]hypomania,0,0,1,0
+Eu30100,13024,[x]mania without psychotic symptoms,0,0,1,0
+Eu30200,21065,[x]mania with psychotic symptoms,0,0,1,0
+Eu30211,37102,[x]mania with mood-congruent psychotic symptoms,0,0,1,0
+Eu30212,48632,[x]mania with mood-incongruent psychotic symptoms,0,0,1,0
+Eu30y00,32088,[x]other manic episodes,0,0,1,0
+Eu30z00,44513,"[x]manic episode, unspecified",0,0,1,0
+Eu30z11,4678,[x]mania nos,0,0,1,0
+Eu31.00,6874,[x]bipolar affective disorder,0,0,1,0
+Eu31.11,1531,[x]manic-depressive illness,0,0,1,0
+Eu31.12,6710,[x]manic-depressive psychosis,0,0,1,0
+Eu31.13,66153,[x]manic-depressive reaction,0,0,1,0
+Eu31000,16808,"[x]bipolar affective disorder, current episode hypomanic",0,0,1,0
+Eu31100,26299,[x]bipolar affect disorder cur epi manic wout psychotic symp,0,0,1,0
+Eu31200,28277,[x]bipolar affect disorder cur epi manic with psychotic symp,0,0,1,0
+Eu31300,16562,[x]bipolar affect disorder cur epi mild or moderate depressn,0,0,1,0
+Eu31400,23713,"[x]bipol aff disord, curr epis sev depress, no psychot symp",0,0,1,0
+Eu31500,4732,[x]bipolar affect dis cur epi severe depres with psyc symp,0,0,1,0
+Eu31600,44693,"[x]bipolar affective disorder, current episode mixed",0,0,1,0
+Eu31700,27584,"[x]bipolar affective disorder, currently in remission",0,0,1,0
+Eu31800,104065,[x]bipolar affective disorder type i,0,0,1,0
+Eu31900,103915,[x]bipolar affective disorder type ii,0,0,1,0
+Eu31911,104051,[x]bipolar ii disorder,0,0,1,0
+Eu31y00,53840,[x]other bipolar affective disorders,0,0,1,0
+Eu31y11,73924,[x]bipolar ii disorder,0,0,1,0
+Eu31y12,51032,[x]recurrent manic episodes,0,0,1,0
+Eu31z00,33751,"[x]bipolar affective disorder, unspecified",0,0,1,0
+Eu33312,28677,"[x]manic-depress psychosis,depressed type+psychotic symptoms",0,0,1,0
+ZRby100,30282,"profile of mood states, bipolar",0,0,1,0
+ZV11000,22104,[v]personal history of schizophrenia,0,0,1,0
+ZV11111,23963,[v]personal history of manic-depressive psychosis,0,0,1,0
+ZV11112,22080,[v]personal history of manic-depressive psychosis,0,0,1,0
