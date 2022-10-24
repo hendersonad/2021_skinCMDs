@@ -1,7 +1,7 @@
 source(here::here("code/packages.R"))
 source(here::here("code/file_paths.R"))
 
-XX <- c("psoriasis", "eczema")[1]
+XX <- c("psoriasis", "eczema")
 #exposure <- "eczema"
 
 for (exposure in XX) {
@@ -108,10 +108,9 @@ for (exposure in XX) {
   table1 %>%
     as_gt() %>%
     gt::gtsave(
-      filename = paste0("tab1_", ABBRVexp, "_definitecodes.html"),
+      filename = paste0("tab1_", ABBRVexp, ".html"),
       path = here::here("out/tables")
     )
-}
   
   # Build table 2 - any exposure during follow up ---------------------------
   build_followup <- function(df_in) {
