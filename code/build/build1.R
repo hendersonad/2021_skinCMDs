@@ -3,7 +3,7 @@ source(here::here("code/file_paths.R"))
 
 samplingsmall <- F ## set to TRUE if using a small sample of cohort to build code 
 rerunSteroids <- F
-XX <- c("psoriasis", "eczema")[1]
+XX <- c("psoriasis", "eczema")
 export_datasets <- TRUE
 
 for(exposure in XX){
@@ -125,9 +125,6 @@ for(exposure in XX){
 		  )) %>%
 		  select(patid, case = dep, eventdate = depdate, censorDepDate, readterm=readterm.x)
 		
-		depression_censoring <- var_dep %>% 
-		  filter(censorDepDate == eventdate)
-		
 		var_anx <- var_anxietyDef %>%
 		  rename(anxdate = eventdate) %>%
 		  left_join(var_anxietyCensor, by = "patid") %>%
@@ -141,8 +138,6 @@ for(exposure in XX){
 		  )) %>%
 		  select(patid, case = anx, eventdate = anxdate, censorAnxDate, readterm=readterm.x)
 		
-		#rm(var_depressionAll, var_depressionCensor,var_anxietyAll, var_anxietyCensor)
-		
 		ggplot(var_anx, aes(x=eventdate, group = case)) +
 		  geom_histogram(bins = 50, fill="gray80", col="gray30") +
 		  facet_wrap(~case)+
@@ -152,36 +147,10 @@ for(exposure in XX){
 		  facet_wrap(~case)+
 		  theme_bw()
 		
-		# deal with duplicate patids ----------------------------------------------
-		## people who contribute time as a control and a case 
-		# cohort_obs <- cohort %>% 
-		# 	group_by(patid) %>% 
-		# 	mutate(obs = 1:n()) 
-		# ## get those that are not duplicated
-		# cohort_nodups <- cohort_obs %>%
-		# 	filter(obs==1)
-		# ## get duplciates and rename patid for exposed period 
-		# cohort_dups <- cohort_obs %>%
-		# 	filter(max(obs)>1) %>%
-		# 	ungroup() %>%
-		# 	filter(exposed==0) %>%
-		# 	mutate(newpatid = as.numeric(paste0("9999", patid))) %>%
-		# 	select(-patid) %>%
-		# 	select(patid = newpatid, everything())
-		# 
-		# cohort_edited <- cohort_nodups %>%
-		# 	bind_rows(cohort_dups)
-		# if(nrow(cohort) != nrow(cohort_edited)){
-		# 	.dib("You've messed up")
-		# }else{
-		# 	.dib("New df same size as original...carry on")
-		# }
-		# x <- sum(duplicated(cohort_edited$patid))
-		# if(x!=0){
-		# 	.dib("Still got some duplication in your data pal")
-		# }else{
-		# 	.dib(paste0("Got rid of ", prettyNum(sum(duplicated(cohort$patid))), " duplicates"))
-		# }
+		var_anx_definite <- var_anx %>% 
+		  filter(case == 1)
+		var_dep_definite <- var_dep %>% 
+		  filter(case == 1)
 		
 		# make a decent sample of the main cohort ---------------------------------
 		if(samplingsmall == TRUE){
@@ -217,7 +186,8 @@ for(exposure in XX){
 		  left_join(var_anx, by = "patid") %>%
 		  mutate(newenddate = apply(select(., all_of(select_vars)), 1, FUN = min, na.rm = T)) %>%	
 		  filter(newenddate>indexdate) %>%
-		  select(-newenddate) ## have used this data enough now
+		  mutate(enddate = as.Date(newenddate)) %>% 
+		  select(-newenddate) ## get rid of original end date and replace it with new end date (so follow up end at censor date, not the original end date)
 		
 		## check valid sets
 		.dib(paste0("no of unique sets BEFORE filtering: ", length(unique(cohort_edited$setid))))
@@ -235,14 +205,14 @@ for(exposure in XX){
 		# and tidy (get rid of anxiety data to merge back on in a minute using tmerge)
 		an_anxiety <- an_anxiety %>% 
 		  select(setid, patid, exposed, indexdate, enddate, realyob, gender, pracid)
+		
 		if(export_datasets) {
 		  saveRDS(an_anxiety,
 		          file = paste0(datapath, "out/", ABBRVexp, "_an_anxiety.rds"))
 		}
-		if(sum(grepl(pattern = "cohort_edited", x = ls()))==0){
+		if(sum(grepl(pattern = "an_anxiety", x = ls()))==0){
 		  an_anxiety <- readRDS(paste0(datapath, "out/", ABBRVexp, "_an_anxiety.rds"))
 		}
-		
 		
 		# DEPRESSION --------------------------------------------------------------
 		## make into tmerge format
@@ -252,9 +222,9 @@ for(exposure in XX){
 		  ungroup() %>%
 		  left_join(var_dep, by = "patid") %>%
 		  mutate(newenddate = apply(select(., all_of(select_vars)), 1, FUN = min, na.rm = T)) %>%
-		  #mutate(newenddate = pmin(enddate, depdate, na.rm=T)) %>%
 		  filter(newenddate>indexdate) %>%
-		  select(-newenddate) ## have used this data enough now
+		  mutate(enddate = as.Date(newenddate)) %>% 
+		  select(-newenddate) ## get rid of original end date and replace it with new end date (so follow up end at censor date, not the original end date)
 		
 		## check valid sets
 		.dib(paste0("no of unique sets BEFORE filtering: ", length(unique(cohort_edited$setid))))
@@ -278,13 +248,13 @@ for(exposure in XX){
 		          file = paste0(datapath, "out/", ABBRVexp, "_an_depression.rds"))
 		}
 		
-		if(sum(grepl(pattern = "cohort_edited", x = ls()))==0){
+		if(sum(grepl(pattern = "an_depression", x = ls()))==0){
 		  an_depression <- readRDS(paste0(datapath, "out/", ABBRVexp, "_an_depression.rds"))
 		}
 		
 		
 		# tmerge function ---------------------------------------------------------
-		build_tmerge <- function(exp = 1, df_outcome = an_anxiety, outcome = var_anx){
+		build_tmerge <- function(exp = 1, df_outcome = an_anxiety, outcome = var_anx_definite){
 		  df_exp <- df_outcome %>%
 		    filter(exposed==exp)
 		  
@@ -315,21 +285,21 @@ for(exposure in XX){
 		    ungroup()
 		  out_tmerge9
 		}
-		anxiety_exposed   <- build_tmerge(exp=1, df_outcome = an_anxiety, outcome = var_anx)
-		anxiety_unexposed <- build_tmerge(exp=0, df_outcome = an_anxiety, outcome = var_anx)
+		anxiety_exposed   <- build_tmerge(exp=1, df_outcome = an_anxiety, outcome = var_anx_definite)
+		anxiety_unexposed <- build_tmerge(exp=0, df_outcome = an_anxiety, outcome = var_anx_definite)
 		anxiety_full <- anxiety_exposed %>%
 		  bind_rows(anxiety_unexposed)
 		dim(anxiety_full)
 		
-		depression_exposed   <- build_tmerge(exp=1, df_outcome = an_depression, outcome = var_dep)
-		depression_unexposed <- build_tmerge(exp=0, df_outcome = an_depression, outcome = var_dep)
+		depression_exposed   <- build_tmerge(exp=1, df_outcome = an_depression, outcome = var_dep_definite)
+		depression_unexposed <- build_tmerge(exp=0, df_outcome = an_depression, outcome = var_dep_definite)
 		depression_full <- depression_exposed %>%
 		  bind_rows(depression_unexposed)
 		dim(depression_full)
 		
 		if(export_datasets){
-		  saveRDS(anxiety_full, file = paste0(datapath, "out/", ABBRVexp, "-anxiety_full.rds")) ## some temp stats from wrong run of tmerge commands - 3541262 (16 cols). Now 7234333 (because I forgot to change exp=0 in the unexposed run like a fool)
-		  saveRDS(depression_full, file = paste0(datapath, "out/", ABBRVexp, "-depression_full.rds")) ## some temp stats from wrong run of tmerge commands - 6286583 (16 cols)		
+		  saveRDS(anxiety_full, file = paste0(datapath, "out/", ABBRVexp, "-anxiety_full.rds")) 
+		  saveRDS(depression_full, file = paste0(datapath, "out/", ABBRVexp, "-depression_full.rds")) 
 		}	
 		
 		## age as underlying timescale
@@ -353,14 +323,6 @@ for(exposure in XX){
 		rm(an_anxiety, an_depression, anxiety_exposed, anxiety_split, anxiety_unexposed, depression_exposed, depression_split, depression_unexposed,
 		   cohort, cohort_edited, 
 		   KM)
-		
-		## temp fix - delete later when run full code
-		# depression_full <- depression_full %>%
-		# 	mutate(gender=as_factor(gender)) %>% 
-		# 	mutate(severity = as_factor(severity))
-		# anxiety_full <- anxiety_full %>%
-		# 	mutate(gender=as_factor(gender)) %>% 
-		# 	mutate(severity = as_factor(severity))
 		
 		if(sum(grepl(pattern = "anxiety_full", x = ls()))==0){
 		  anxiety_full <- readRDS(paste0(datapath, "out/", ABBRVexp, "-anxiety_full.rds"))
@@ -613,7 +575,7 @@ for(exposure in XX){
     df_model$smokstatus_original <- df_model$smokstatus
     df_model$smokstatus <- df_model$smokstatus_nomiss
     
-    saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, "_definitecodes.rds"))
+    saveRDS(df_model, file = paste0(datapath, "out/df_model", ABBRVexp, "_", outcome, ".rds"))
   }
 }
 
