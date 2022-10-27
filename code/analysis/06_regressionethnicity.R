@@ -119,9 +119,9 @@ for (exposure in XX) {
           data = df_model_small
         ) 
     }
-    lr1 <- lrtest(mod1_small, modEth)
-    lr2 <- lrtest(mod2_small, modEth2)
-    lr3 <- lrtest(modEth, modEth3)
+    lr1 <- lmtest::lrtest(mod1_small, modEth)
+    lr2 <- lmtest::lrtest(mod2_small, modEth2)
+    lr3 <- lmtest::lrtest(modEth, modEth3)
     
     .dib(paste0(outcome, "~", exposure))
     

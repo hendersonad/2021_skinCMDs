@@ -57,8 +57,8 @@ pval_interactions <- function(exposure, outcome) {
         "_mod2_modeldata.rds"
       )
     )
-  lr1 <- lrtest(simple_model, mod5)
-  lr2 <- lrtest(simple_model, mod6)
+  lr1 <- lmtest::lrtest(simple_model, mod5)
+  lr2 <- lmtest::lrtest(simple_model, mod6)
   
   interactions <- c("Age group", "Sex")
   inter_pval <- cbind.data.frame(interactions = interactions,
@@ -166,7 +166,7 @@ for(exposure in XX) {
       coeffs <- tidy(interaction_model) %>% drop_na() %>% pull(term)
       int_var <- ZZ
       int_levels_tbl <- table(df_model[, int_var]) %>% as.data.frame()
-      int_levels <- int_levels_tbl %>% filter(Freq>0) %>% pull(ZZ) %>% as.character()
+      int_levels <- int_levels_tbl %>% filter(Freq>0) %>% pull(Var1) %>% as.character()
       n_int_levels <- length(int_levels) - 1 # -1 because of reference category
       coeffs_interaction <- coeffs[str_detect(coeffs, paste0(":", int_var))]
       
@@ -230,7 +230,7 @@ int_table_merge <- int_table %>%
   mutate(y = ifelse(outcome == "anx", "Anxiety", "Depression")) %>% 
   mutate(z = ifelse(interactions == "Age group", "Agegroup", "Gender")) %>% 
   mutate(p = as.numeric(value)) %>% 
-  mutate(nice_p = ifelse(p<0.001, "*", paste0("p=", signif(p, digits = 1))))
+  mutate(nice_p = ifelse(p<0.01, "*", paste0("p=", signif(p, digits = 1))))
 tibble_plot3 <- tibble_plot2 %>% 
   left_join(int_table_merge, by = c("z", "x", "y"))
 write.csv(tibble_plot3, here::here("out/supplementary/interaction_HRs.csv"))
@@ -248,7 +248,7 @@ tibble_plot3$text_to_plot <- paste0(tibble_plot3$text_hr,
 # add pvalue
 tibble_plot3$text_to_plot <- str_pad(paste(tibble_plot3$text_to_plot, tibble_plot3$nice_p), 23, pad = " ", side = "right")
 
-pdf(here::here("out/analysis/forest_plot3_interactions_v2.pdf"), width = 8, height = 6)
+pdf(here::here("out/analysis/forest_plot3_interactions_v2.pdf"), width = 10, height = 6)
 pd <- position_dodge(width = 0.3)
 p1 <- ggplot(tibble_plot3, aes(x = nice_z_level, group = z, colour = z, label = text_to_plot)) + 
   geom_point(aes(y = estimate), position = pd, size = 3, shape = 1) +
@@ -259,13 +259,13 @@ p1 <- ggplot(tibble_plot3, aes(x = nice_z_level, group = z, colour = z, label = 
             colour = 1,
             show.legend = FALSE, 
             hjust = 1) +
-  scale_y_log10(breaks=seq(0,4,0.1), limits = c(0.9, NA)) +
+  scale_y_log10(breaks=seq(0,4,0.1), limits = c(0.8, NA)) +
   scale_x_discrete(limits=rev) +
   coord_flip() +
   facet_grid(y~x, drop = TRUE, space = "free", scales = "free") +
   guides(colour = "none") +
   labs(y = "Hazard ratio", x = "Level") +
-  labs(caption = "* p<0.001") + 
+  labs(caption = "* p<0.01") + 
   scale_alpha_identity() +
   theme_ali() +
   theme(strip.background = element_blank(),
