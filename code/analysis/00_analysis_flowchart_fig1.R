@@ -33,49 +33,56 @@ for(exposure in XX){
 	print(total_matched_cohort)
 	
 	# excluded based on outcome  ----------------------------------------------
-	var_depressionAll <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp, "-depression-all.dta"))
-	var_anxietyAll <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp, "-anxiety-all.dta"))
+	var_depressionDef <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp, "-depression-definite.dta"))
+	var_anxietyDef <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp, "-anxiety-definite.dta"))
 	var_depressionCensor <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp, "-depression-censor.dta"))
 	var_anxietyCensor <- haven::read_dta(paste0(datapath, "out/variables-", ABBRVexp, "-anxiety-censor.dta"))
 	
 	## censor depression/anxiety based on censor codes (SMI)
-	var_dep <- var_depressionAll %>%
-		rename(depdate = eventdate) %>%
-		left_join(var_depressionCensor, by = "patid") %>%
-		rename(censorDepDate = eventdate) %>%
-		mutate_at("censorDepDate", ~ifelse(is.na(.), as.Date("3000-01-01"), as.Date(.))) %>%
-		mutate_at("censorDepDate", ~as.Date(., origin = "1970-01-01")) %>%
-		mutate(dep = case_when(
-			depdate < censorDepDate &
-				!is.na(depdate) ~ 1,
-			TRUE ~ 0
-		)) %>%
-		select(patid, case = dep, eventdate = depdate)
+	var_dep <- var_depressionDef %>%
+	  rename(depdate = eventdate) %>%
+	  left_join(var_depressionCensor, by = "patid") %>%
+	  rename(censorDepDate = eventdate) %>%
+	  mutate_at("censorDepDate", ~ifelse(is.na(.), as.Date("3000-01-01"), as.Date(.))) %>%
+	  mutate_at("censorDepDate", ~as.Date(., origin = "1970-01-01")) %>%
+	  mutate(dep = case_when(
+	    depdate < censorDepDate &
+	      !is.na(depdate) ~ 1,
+	    TRUE ~ 0
+	  )) %>%
+	  select(patid, case = dep, eventdate = depdate, censorDepDate, readterm=readterm.x) 
 	
-	var_anx <- var_anxietyAll %>%
-		rename(anxdate = eventdate) %>%
-		left_join(var_anxietyCensor, by = "patid") %>%
-		rename(censorAnxDate = eventdate) %>%
-		mutate_at("censorAnxDate", ~ifelse(is.na(.), as.Date("3000-01-01"), as.Date(.))) %>%
-		mutate_at("censorAnxDate", ~as.Date(., origin = "1970-01-01")) %>%
-		mutate(anx = case_when(
-			anxdate < censorAnxDate &
-				!is.na(anxdate) ~ 1,
-			TRUE ~ 0
-		)) %>%
-		select(patid, case = anx, eventdate = anxdate)
+	var_anx <- var_anxietyDef %>%
+	  rename(anxdate = eventdate) %>%
+	  left_join(var_anxietyCensor, by = "patid") %>%
+	  rename(censorAnxDate = eventdate) %>%
+	  mutate_at("censorAnxDate", ~ifelse(is.na(.), as.Date("3000-01-01"), as.Date(.))) %>%
+	  mutate_at("censorAnxDate", ~as.Date(., origin = "1970-01-01")) %>%
+	  mutate(anx = case_when(
+	    anxdate < censorAnxDate &
+	      !is.na(anxdate) ~ 1,
+	    TRUE ~ 0
+	  )) %>%
+	  select(patid, case = anx, eventdate = anxdate, censorAnxDate, readterm=readterm.x) 
+	
+	var_anx_definite <- var_anx %>%
+	  filter(case == 1)
+	var_dep_definite <- var_dep %>%
+	  filter(case == 1)
 	
 	## ANXIETY
 	select_vars <- c("enddate", "eventdate")
 	
-	an_anxiety <- matched_cohort %>% 
-		ungroup() %>%
-		left_join(var_anx, by = "patid") %>%
-		mutate(newenddate = apply(select(., all_of(select_vars)), 1, FUN = min, na.rm = T)) %>%	
-		filter(newenddate>indexdate) %>%
-		select(-newenddate) ## have used this data enough now
+	### First got to censor all the sets
+	an_anxiety <- matched_cohort %>%
+	  ungroup() %>%
+	  left_join(var_anx, by = "patid") %>%
+	  mutate(newenddate = apply(select(., all_of(select_vars)), 1, FUN = min, na.rm = T)) %>%
+	  filter(newenddate>indexdate) %>%
+	  mutate(enddate = as.Date(newenddate)) %>%
+	  select(-newenddate) ## get rid of original end date and replace it with new end date (so follow up end at censor date, not the original end date)
 	
-	## check valid sets
+	#check valid sets
 	invalid_sets <- an_anxiety %>%
 		group_by(setid) %>%
 		summarise(valid=max(exposed)) %>%
@@ -99,9 +106,10 @@ for(exposure in XX){
 	an_depression <- matched_cohort %>% 
 		ungroup() %>%
 		left_join(var_dep, by = "patid") %>%
-		mutate(newenddate = apply(select(., all_of(select_vars)), 1, FUN = min, na.rm = T)) %>%
-		filter(newenddate>indexdate) %>%
-		select(-newenddate) ## have used this data enough now
+	  mutate(newenddate = apply(select(., all_of(select_vars)), 1, FUN = min, na.rm = T)) %>%
+	  filter(newenddate>indexdate) %>%
+	  mutate(enddate = as.Date(newenddate)) %>%
+	  select(-newenddate) ## get rid of original end date and replace it with new end date (so follow up end at censor date, not the original end date)
 	
 	## check valid sets
 	invalid_sets <- an_depression %>%
