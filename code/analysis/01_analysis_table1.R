@@ -15,9 +15,9 @@ for (exposure in XX) {
       readRDS(paste0(datapath, "out/df_modelecz_depression.rds"))
   } else if (exposure == "psoriasis") {
     df_anx_split <-
-      readRDS(paste0(datapath, "out/df_modelpso_anxiety_definitecodes.rds"))
+      readRDS(paste0(datapath, "out/df_modelpso_anxiety.rds"))
     df_dep_split <-
-      readRDS(paste0(datapath, "out/df_modelpso_depression_definitecodes.rds"))
+      readRDS(paste0(datapath, "out/df_modelpso_depression.rds"))
   }
   
   # psoriasis
